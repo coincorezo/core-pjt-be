@@ -2,6 +2,9 @@ package com.pjt.core.example.service;
 
 import com.pjt.core.example.dto.CreateBookRequest;
 import com.pjt.core.example.dto.CreateBookResponse;
+import com.pjt.core.example.dto.CreateBookInventoryRequest;
+import com.pjt.core.example.dto.CreateBookInventoryResponse;
+import com.pjt.core.example.repository.BookInventoryRepository;
 import com.pjt.core.example.repository.BookRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,8 +27,12 @@ class BookServiceTest {
 	@Autowired
 	private BookRepository bookRepository;
 
+	@Autowired
+	private BookInventoryRepository bookInventoryRepository;
+
 	@AfterEach
 	void tearDown() {
+		bookInventoryRepository.deleteAllInBatch();
 		bookRepository.deleteAllInBatch();
 	}
 
@@ -52,6 +59,45 @@ class BookServiceTest {
 		assertThat(createBookResponse)
 				.extracting("title", "subtitle", "writer", "registeredDateTime")
 				.contains(title, subtitle, writer, registeredDateTime);
+	}
+
+	@DisplayName("등록된 책의 재고를 생성한다.")
+	@Test
+	void registerBookInventory() {
+	    // given
+		// 책 등록
+		LocalDateTime registeredDateTime = LocalDateTime.now();
+
+		String title = "객체지향의 사실과 오해";
+		String subtitle = "역할, 책임, 협력 관점에서 본 객체지향";
+		String writer = "조영호";
+		CreateBookRequest createBookRequest = CreateBookRequest.builder()
+				.title(title)
+				.subtitle(subtitle)
+				.writer(writer)
+				.build();
+
+		CreateBookResponse createBookResponse = bookService.registerBook(createBookRequest, registeredDateTime);
+
+		// when
+		// 책 재고 등록
+		int quantity = 10;
+		CreateBookInventoryRequest createBookInventoryRequest = CreateBookInventoryRequest.builder()
+				.bookCode(createBookResponse.getId())
+				.quantity(quantity)
+				.build();
+
+		CreateBookInventoryResponse createBookInventoryResponse = bookService.registerBookInventory(createBookInventoryRequest, registeredDateTime);
+
+	    // then
+		assertThat(createBookResponse.getId()).isNotNull();
+		assertThat(createBookResponse)
+				.extracting("title", "subtitle", "writer", "registeredDateTime")
+				.contains(title, subtitle, writer, registeredDateTime);
+		assertThat(createBookInventoryResponse.getId()).isNotNull();
+		assertThat(createBookInventoryResponse)
+				.extracting("bookCode", "quantity", "registeredDateTime")
+				.contains(createBookResponse.getId(), quantity, registeredDateTime);
 	}
 
 }
