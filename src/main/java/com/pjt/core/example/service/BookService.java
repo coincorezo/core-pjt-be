@@ -6,6 +6,7 @@ import com.pjt.core.example.entity.Book;
 import com.pjt.core.example.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -21,6 +22,7 @@ public class BookService {
 	 * @param registeredDateTime
 	 * @return
 	 */
+	@Transactional
 	public CreateBookResponse registerBook(CreateBookRequest request, LocalDateTime registeredDateTime) {
 		Book book = CreateBookRequest.toEntity(request, registeredDateTime);
 		Book savedBook = bookRepository.save(book);
