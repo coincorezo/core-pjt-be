@@ -1,9 +1,6 @@
 package com.pjt.core.example.service;
 
-import com.pjt.core.example.dto.CreateBookRequest;
-import com.pjt.core.example.dto.CreateBookResponse;
-import com.pjt.core.example.dto.CreateBookInventoryRequest;
-import com.pjt.core.example.dto.CreateBookInventoryResponse;
+import com.pjt.core.example.dto.*;
 import com.pjt.core.example.repository.BookInventoryRepository;
 import com.pjt.core.example.repository.BookRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -102,6 +99,39 @@ class BookServiceTest {
 		assertThat(createBookInventoryResponse)
 				.extracting("bookCode", "quantity", "registeredDateTime")
 				.contains(createBookResponse.getBookCode(), quantity, registeredDateTime);
+	}
+
+	@DisplayName("등록된 책을 조회한다.")
+	@Test
+	void getBookById() {
+	    // given
+		// 책 등록
+		LocalDateTime registeredDateTime = LocalDateTime.now();
+
+		String bookCode = "A00001";
+		String title = "객체지향의 사실과 오해";
+		String subtitle = "역할, 책임, 협력 관점에서 본 객체지향";
+		String writer = "조영호";
+		CreateBookRequest createBookRequest = CreateBookRequest.builder()
+				.bookCode(bookCode)
+				.title(title)
+				.subtitle(subtitle)
+				.writer(writer)
+				.build();
+
+	    // when
+		CreateBookResponse createBookResponse = bookService.registerBook(createBookRequest, registeredDateTime);
+		BookResponse bookResponse = bookService.getBookById(createBookResponse.getId());
+
+		// then
+		assertThat(createBookResponse.getId()).isNotNull();
+		assertThat(createBookResponse)
+				.extracting("bookCode", "title", "subtitle", "writer", "registeredDateTime")
+				.contains(bookCode, title, subtitle, writer, registeredDateTime);
+		assertThat(bookResponse.getId()).isNotNull();
+		assertThat(bookResponse)
+				.extracting("bookCode", "title", "subtitle", "writer", "registeredDateTime")
+				.contains(bookCode, title, subtitle, writer, registeredDateTime);
 	}
 
 }
