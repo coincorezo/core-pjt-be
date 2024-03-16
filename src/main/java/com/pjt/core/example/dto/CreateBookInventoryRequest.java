@@ -1,13 +1,12 @@
 package com.pjt.core.example.dto;
 
 import com.pjt.core.example.entity.BookInventory;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class CreateBookInventoryRequest {
@@ -15,10 +14,6 @@ public class CreateBookInventoryRequest {
 	private String bookCode;
 
 	private int quantity;
-
-	private LocalDateTime registeredDateTime;
-
-	private LocalDateTime updateDateTime;
 
 	public static BookInventory toEntity(CreateBookInventoryRequest request, LocalDateTime registeredDateTime) {
 		return BookInventory.builder()

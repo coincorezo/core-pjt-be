@@ -1,5 +1,7 @@
 package com.pjt.core.example.controller;
 
+import com.pjt.core.example.dto.CreateBookInventoryRequest;
+import com.pjt.core.example.dto.CreateBookInventoryResponse;
 import com.pjt.core.example.dto.CreateBookRequest;
 import com.pjt.core.example.dto.CreateBookResponse;
 import com.pjt.core.example.service.BookService;
@@ -27,6 +29,19 @@ public class BookController {
 	public ResponseEntity<CreateBookResponse> registerBook(@RequestBody CreateBookRequest request) {
 		LocalDateTime registeredDateTime = LocalDateTime.now();
 		CreateBookResponse response = bookService.registerBook(request, registeredDateTime);
+
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
+	}
+
+	/**
+	 * 책 재고 등록 API
+	 * @param request
+	 * @return
+	 */
+	@PostMapping("/api/book-invt")
+	public ResponseEntity<CreateBookInventoryResponse> registerBookInventory(@RequestBody CreateBookInventoryRequest request) {
+		LocalDateTime registeredDateTime = LocalDateTime.now();
+		CreateBookInventoryResponse response = bookService.registerBookInventory(request, registeredDateTime);
 
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
