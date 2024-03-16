@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 @Builder
 public class CreateBookRequest {
 
+	private String bookCode;
+
 	private String title;
 
 	private String subtitle;
@@ -21,6 +23,7 @@ public class CreateBookRequest {
 
 	public static Book toEntity(CreateBookRequest request, LocalDateTime registeredDateTime) {
 		return Book.builder()
+				.bookCode(request.getBookCode())
 				.title(request.getTitle())
 				.subtitle(request.getSubtitle())
 				.writer(request.getWriter())

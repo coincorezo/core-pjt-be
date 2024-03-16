@@ -15,6 +15,8 @@ public class CreateBookResponse {
 
 	private Long id;
 
+	private String bookCode;
+
 	private String title;
 
 	private String subtitle;
@@ -26,6 +28,7 @@ public class CreateBookResponse {
 	public static CreateBookResponse fromEntity(Book book) {
 		return CreateBookResponse.builder()
 				.id(book.getId())
+				.bookCode(book.getBookCode())
 				.title(book.getTitle())
 				.subtitle(book.getSubtitle())
 				.writer(book.getWriter())

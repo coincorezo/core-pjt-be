@@ -21,6 +21,9 @@ public class Book {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Comment("책코드")
+	private String bookCode;
+
 	@Comment("제목")
 	private String title;
 
