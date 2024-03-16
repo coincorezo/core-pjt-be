@@ -21,7 +21,7 @@ public class BookInventory {
 	private Long id;
 
 	@Comment("책코드")
-	private Long bookCode;
+	private String bookCode;
 
 	@Comment("수량")
 	private int quantity;

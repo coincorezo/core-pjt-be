@@ -14,7 +14,7 @@ public class CreateBookInventoryResponse {
 
 	private Long id;
 
-	private Long bookCode;
+	private String bookCode;
 
 	private int quantity;
 

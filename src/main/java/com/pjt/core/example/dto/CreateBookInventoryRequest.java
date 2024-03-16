@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 public class CreateBookInventoryRequest {
 
-	private Long bookCode;
+	private String bookCode;
 
 	private int quantity;
 
