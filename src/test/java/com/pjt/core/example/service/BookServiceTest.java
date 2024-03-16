@@ -1,5 +1,6 @@
 package com.pjt.core.example.service;
 
+import com.pjt.core.example.IntegrationTestSupport;
 import com.pjt.core.example.dto.*;
 import com.pjt.core.example.repository.BookInventoryRepository;
 import com.pjt.core.example.repository.BookRepository;
@@ -7,16 +8,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ActiveProfiles("test")
-@SpringBootTest
-class BookServiceTest {
+class BookServiceTest extends IntegrationTestSupport {
 	
 	@Autowired
 	private BookService bookService;
