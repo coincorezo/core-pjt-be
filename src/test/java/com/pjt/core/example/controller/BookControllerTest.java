@@ -1,6 +1,7 @@
 package com.pjt.core.example.controller;
 
 import com.pjt.core.example.ControllerTestSupport;
+import com.pjt.core.example.dto.CreateBookInventoryRequest;
 import com.pjt.core.example.dto.CreateBookRequest;
 import com.pjt.core.example.service.BookService;
 import org.junit.jupiter.api.DisplayName;
@@ -38,6 +39,26 @@ class BookControllerTest extends ControllerTestSupport {
 		// when then
 		mockMvc.perform(post("/api/book")
 						.content(objectMapper.writeValueAsString(createBookRequest))
+						.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print())
+				.andExpect(status().isCreated());
+	}
+
+	@DisplayName("등록된 책의 재고를 생성한다.")
+	@Test
+	void registerBookInventory() throws Exception {
+	    // given
+		String bookCode = "A00001";
+		int quantity = 10;
+
+		CreateBookInventoryRequest createBookInventoryRequest = CreateBookInventoryRequest.builder()
+				.bookCode(bookCode)
+				.quantity(quantity)
+				.build();
+
+		// when then
+		mockMvc.perform(post("/api/book-invt")
+						.content(objectMapper.writeValueAsString(createBookInventoryRequest))
 						.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print())
 				.andExpect(status().isCreated());
