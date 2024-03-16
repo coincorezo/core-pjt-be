@@ -1,12 +1,10 @@
 package com.pjt.core.example.service;
 
-import com.pjt.core.example.dto.CreateBookRequest;
-import com.pjt.core.example.dto.CreateBookResponse;
-import com.pjt.core.example.dto.CreateBookInventoryRequest;
-import com.pjt.core.example.dto.CreateBookInventoryResponse;
+import com.pjt.core.example.dto.*;
 import com.pjt.core.example.entity.Book;
 import com.pjt.core.example.entity.BookInventory;
 import com.pjt.core.example.repository.BookInventoryRepository;
+import com.pjt.core.example.repository.BookMapper;
 import com.pjt.core.example.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +19,8 @@ public class BookService {
 	private final BookRepository bookRepository;
 
 	private final BookInventoryRepository bookInventoryRepository;
+
+	private final BookMapper bookMapper;
 
 	/**
 	 * 책 등록하기
@@ -49,6 +49,17 @@ public class BookService {
 		BookInventory savedBookInventory = bookInventoryRepository.save(bookInventory);
 
 		return CreateBookInventoryResponse.fromEntity(savedBookInventory);
+	}
+
+	/**
+	 * 등록된 책 조회
+	 * @param id
+	 * @return
+	 */
+	public BookResponse getBookById(Long id) {
+		Book book = bookMapper.selectBookById(id);
+
+		return BookResponse.fromEntity(book);
 	}
 
 }

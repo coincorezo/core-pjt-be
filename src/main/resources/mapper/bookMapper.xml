@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pjt.core.example.repository.BookMapper">
+
+    <select id="selectBookById" parameterType="Long" resultType="com.pjt.core.example.entity.Book">
+        select a.id
+             , a.book_code
+             , a.title
+             , a.subtitle
+             , a.writer
+             , a.registered_date_time
+        from book a
+        where id = #{id}
+    </select>
+
+</mapper>
