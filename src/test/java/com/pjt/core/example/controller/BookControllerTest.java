@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -42,6 +43,16 @@ class BookControllerTest extends ControllerTestSupport {
 						.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print())
 				.andExpect(status().isCreated());
+	}
+
+	@DisplayName("등록된 책을 조회한다.")
+	@Test
+	void getBookById() throws Exception {
+		Long id = 10L;
+		
+		mockMvc.perform(get("/api/book/{id}", id))
+				.andDo(print())
+				.andExpect(status().isOk());
 	}
 
 	@DisplayName("등록된 책의 재고를 생성한다.")
