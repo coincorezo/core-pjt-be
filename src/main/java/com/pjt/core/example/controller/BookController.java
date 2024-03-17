@@ -1,16 +1,11 @@
 package com.pjt.core.example.controller;
 
-import com.pjt.core.example.dto.CreateBookInventoryRequest;
-import com.pjt.core.example.dto.CreateBookInventoryResponse;
-import com.pjt.core.example.dto.CreateBookRequest;
-import com.pjt.core.example.dto.CreateBookResponse;
+import com.pjt.core.example.dto.*;
 import com.pjt.core.example.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
@@ -31,6 +26,18 @@ public class BookController {
 		CreateBookResponse response = bookService.registerBook(request, registeredDateTime);
 
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
+	}
+
+	/**
+	 * 등록된 책 조회 API
+	 * @param id
+	 * @return
+	 */
+	@GetMapping("/api/book/{id}")
+	public ResponseEntity<BookResponse> getBookById(@PathVariable Long id) {
+		BookResponse response = bookService.getBookById(id);
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	/**
