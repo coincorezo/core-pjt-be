@@ -9,6 +9,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        # 데이터베이스 엔진 종류 설정 (MySQL 8.0.1이상에서는 MySQLDialect로 사용, 버전명 X)
+        dialect: org.hibernate.dialect.MySQLDialect
 
 mybatis:
   mapper-locations: classpath:mapper/**.xml
