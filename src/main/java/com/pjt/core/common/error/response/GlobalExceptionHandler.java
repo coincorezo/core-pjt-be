@@ -1,5 +1,6 @@
 package com.pjt.core.common.error.response;
 
+import com.pjt.core.common.error.exception.NoDataException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+	@ExceptionHandler(NoDataException.class)
+	public ResponseEntity<EmptyDto> handleNoDataException(NoDataException e) {
+		log.debug("::handleNoDataException::", e);
+		return new ResponseEntity<>(new EmptyDto(), HttpStatus.OK);
+	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ExceptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
