@@ -1,5 +1,7 @@
 package com.pjt.core.example.service;
 
+import com.pjt.core.common.error.exception.NoDataException;
+import com.pjt.core.common.error.response.ErrorCode;
 import com.pjt.core.example.IntegrationTestSupport;
 import com.pjt.core.example.dto.*;
 import com.pjt.core.example.repository.BookInventoryRepository;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class BookServiceTest extends IntegrationTestSupport {
 	
@@ -129,6 +132,35 @@ class BookServiceTest extends IntegrationTestSupport {
 		assertThat(bookResponse)
 				.extracting("bookCode", "title", "subtitle", "writer", "registeredDateTime")
 				.contains(bookCode, title, subtitle, writer, registeredDateTime);
+	}
+
+	@DisplayName("등록되지 않은 책을 조회할 시 예외를 발생시킨다.")
+	@Test
+	void getEmptyBookById() {
+		// given
+		// 책 등록
+		LocalDateTime registeredDateTime = LocalDateTime.now();
+
+		String bookCode = "A00001";
+		String title = "객체지향의 사실과 오해";
+		String subtitle = "역할, 책임, 협력 관점에서 본 객체지향";
+		String writer = "조영호";
+		CreateBookRequest createBookRequest = CreateBookRequest.builder()
+				.bookCode(bookCode)
+				.title(title)
+				.subtitle(subtitle)
+				.writer(writer)
+				.build();
+
+		// when
+		bookService.registerBook(createBookRequest, registeredDateTime);
+
+		// then
+		assertThatThrownBy(() -> {
+			bookService.getBookById(529L);
+		})
+				.isExactlyInstanceOf(NoDataException.class)
+				.hasMessage(ErrorCode.NO_DATA.getMessage());
 	}
 
 }
