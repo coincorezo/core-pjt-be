@@ -1,5 +1,7 @@
 package com.pjt.core.example.service;
 
+import com.pjt.core.common.error.exception.NoDataException;
+import com.pjt.core.common.error.response.ErrorCode;
 import com.pjt.core.example.dto.*;
 import com.pjt.core.example.entity.Book;
 import com.pjt.core.example.entity.BookInventory;
@@ -58,6 +60,8 @@ public class BookService {
 	 */
 	public BookResponse getBookById(Long id) {
 		Book book = bookMapper.selectBookById(id);
+
+		if (book == null) throw new NoDataException(ErrorCode.NO_DATA);
 
 		return BookResponse.fromEntity(book);
 	}
