@@ -1,4 +1,4 @@
-package com.pjt.core.common.exception;
+package com.pjt.core.common.error.response;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

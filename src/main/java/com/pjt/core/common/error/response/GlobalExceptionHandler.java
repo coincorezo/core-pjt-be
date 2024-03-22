@@ -1,4 +1,4 @@
-package com.pjt.core.common.exception;
+package com.pjt.core.common.error.response;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
