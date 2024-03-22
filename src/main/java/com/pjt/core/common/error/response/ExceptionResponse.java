@@ -5,6 +5,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,12 +15,14 @@ public class ExceptionResponse {
 	private final String code;
 	private final String message;
 	private final List<FieldError> errors;
+	private final LocalDateTime errorDateTime;
 
 	private ExceptionResponse(ErrorCode errorCode) {
 		this.path = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI();
 		this.code = errorCode.getCode();
 		this.message = errorCode.getMessage();
 		this.errors = new ArrayList<>();
+		this.errorDateTime = LocalDateTime.now();
 	}
 
 	private ExceptionResponse(ErrorCode errorCode, List<FieldError> errors) {
@@ -27,6 +30,7 @@ public class ExceptionResponse {
 		this.code = errorCode.getCode();
 		this.message = errorCode.getMessage();
 		this.errors = errors;
+		this.errorDateTime = LocalDateTime.now();
 	}
 
 	public static ExceptionResponse of(ErrorCode errorCode) {
