@@ -57,3 +57,28 @@ create table group_code
     upt_dt                 date comment '수정일자',
     upt_id                 varchar(100) comment '수정자'
 );
+
+/* 카테고리 포인트 */
+create table category_points
+(
+    category_code varchar(60) not null primary key comment '카테고리ID',
+    points        int         not null comment '카테고리포인트'
+);
+
+/* 사용자 포인트 */
+create table user_points
+(
+    user_id     varchar(100) not null primary key comment '사용자ID',
+    total_point int          not null comment '총포인트'
+);
+
+/* 포인트 내역 */
+create table points_history
+(
+    history_id    bigint       not null primary key comment '포인트내역ID',
+    user_id       varchar(100) not null comment '사용자ID',
+    points_change int          not null comment '변경된포인트',
+    points_amount int          not null comment '총포인트',
+    reason        varchar(100) not null comment '변경사유',
+    reg_dt        date comment '변경일자'
+);
