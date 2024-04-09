@@ -1,84 +1,190 @@
-/*사용자 table */
-create table user
+DROP TABLE IF EXISTS `board`;
+
+CREATE TABLE `board`
 (
-    user_id         varchar(100) not null comment '아이디',
-    user_password   varchar(100) not null comment '비밀번호',
-    email           varchar(100) /*not null*/comment '이메일',
-    birth           date comment '생일',
-    gender          char(5) comment '성별',
-    phone_number    varchar(100) comment '연락처',
-    address         varchar(255) comment '주소',
-    reg_dt          date comment '가입일자',
-    use_yn          char(5)      not null comment '사용여부',
-    user_level      varchar(100) not null comment '사용자 레벨',
-    profile_picture varchar(255) comment '사용자 프로필',
-    primary key (user_id)
+    `board_id`       int(4)       NOT NULL COMMENT '게시판 아이디',
+    `board_title`    varchar(60)  NOT NULL COMMENT '게시판 제목',
+    `board_content`  varchar(225) NOT NULL COMMENT '내용',
+    `board_writer`   varchar(60)  NOT NULL COMMENT '작성자',
+    `board_view_cnt` int(4)       NULL COMMENT '조회수',
+    `category`       varchar(60)  NOT NULL COMMENT '게시글 카테고리',
+    `board_status`   varchar(10)  NOT NULL COMMENT '게시글 상태값(비공개/공개/삭제)',
+    `reg_dt`         timestamp    NOT NULL COMMENT '등록일',
+    `upt_dt`         timestamp    NOT NULL COMMENT '수정일'
 );
 
-/* 카테고리별 게시판 */
-create table board
+DROP TABLE IF EXISTS `points_history`;
+
+CREATE TABLE `points_history`
 (
-    board_id        int(4)       not null comment '게시판 아이디',
-    board_title     varchar(60)  not null comment '게시판 제목',
-    board_content   varchar(255) not null comment '내용',
-    board_writer    varchar(60)  not null comment '작성자',
-    board_view_cnt  int(4) comment '조회수',
-    board_update_dt date comment '수정일',
-    board_reg_dt    date comment '등록일',
-    board_type      varchar(60) comment '게시판 카테고리',
-    use_yn          char(5) comment '공개여부',
-    primary key (board_id)
+    `history_id`    bigint       NOT NULL COMMENT '히스토리ID',
+    `user_id`       varchar(100) NOT NULL COMMENT '아이디',
+    `points_change` int          NOT NULL COMMENT '변경포인트',
+    `points_amount` int          NOT NULL COMMENT '최종포인트',
+    `reason`        varchar(100) NOT NULL COMMENT '변경사유',
+    `reg_dt`        timestamp    NULL COMMENT '사용일자'
 );
 
-/* 공통코드 */
-create table common_code
+DROP TABLE IF EXISTS `reply`;
+
+CREATE TABLE `reply`
 (
-    common_code             varchar(60) not null comment '공통코드',
-    common_code_name        varchar(60) comment '공통코드명',
-    common_code_description varchar(255) comment '공통코드설명',
-    use_yn                  char(1) comment '사용여부',
-    reg_dt                  date comment '등록일자',
-    reg_id                  varchar(100) comment '등록자',
-    upt_dt                  date comment '수정일자',
-    upt_id                  varchar(100) comment '수정자',
-    primary key (common_code)
+    `reply_id`      varchar(255) NOT NULL COMMENT '댓글아이디',
+    `board_id`      int(4)       NOT NULL COMMENT '게시판 아이디',
+    `reply_comment` varchar(200) NOT NULL COMMENT '댓글내용',
+    `reg_dt`        timestamp    NOT NULL COMMENT '등록날짜',
+    `update_dt`     timestamp    NOT NULL COMMENT '수정날짜',
+    `use_yn`        char(2)      NULL COMMENT '삭제여부'
 );
 
-/* 그룹코드 */
-create table group_code
+DROP TABLE IF EXISTS `common_code`;
+
+CREATE TABLE `common_code`
 (
-    common_code            varchar(60) not null comment '공통코드',
-    group_code             varchar(60) not null comment '그룹코드',
-    group_code_name        varchar(60) comment '그룹코드명',
-    group_code_description varchar(255) comment '그룹코드설명',
-    use_yn                 char(1) comment '사용여부',
-    reg_dt                 date comment '등록일자',
-    reg_id                 varchar(100) comment '등록자',
-    upt_dt                 date comment '수정일자',
-    upt_id                 varchar(100) comment '수정자'
+    `common_code`             varchar(60)  NOT NULL COMMENT '공통코드',
+    `common_code_name`        varchar(60)  NULL COMMENT '공통코드명',
+    `common_code_description` varchar(255) NULL COMMENT '공통코드설명',
+    `use_yn`                  char(1)      NULL COMMENT '사용여부',
+    `reg_dt`                  date         NULL COMMENT '등록일',
+    `reg_id`                  varchar(100) NULL COMMENT '등록자',
+    `upt_dt`                  date         NULL COMMENT '수정일',
+    `upt_id`                  varchar(100) NULL COMMENT '수정자'
 );
 
-/* 카테고리 포인트 */
-create table category_points
+DROP TABLE IF EXISTS `group_code`;
+
+CREATE TABLE `group_code`
 (
-    category_code varchar(60) not null primary key comment '카테고리ID',
-    points        int         not null comment '카테고리포인트'
+    `common_code`            varchar(60)  NOT NULL COMMENT '공통코드',
+    `group_code`             varchar(60)  NOT NULL COMMENT '그룹코드',
+    `group_code_name`        varchar(60)  NULL COMMENT '그룹코드명',
+    `group_code_description` varchar(255) NULL COMMENT '그룹코드설명',
+    `use_yn`                 char(1)      NULL COMMENT '사용여부',
+    `reg_dt`                 timestamp    NOT NULL COMMENT '등록일',
+    `reg_id`                 varchar(100) NOT NULL COMMENT '등록자',
+    `upt_dt`                 timestamp    NOT NULL COMMENT '수정일',
+    `upt_id`                 varchar(100) NOT NULL COMMENT '수정자'
 );
 
-/* 사용자 포인트 */
-create table user_points
+DROP TABLE IF EXISTS `emoticon`;
+
+CREATE TABLE `emoticon`
 (
-    user_id     varchar(100) not null primary key comment '사용자ID',
-    total_point int          not null comment '총포인트'
+    `emoticon_id`    int          NOT NULL COMMENT '이모티콘 ID',
+    `emoticon_title` varchar(255) NULL COMMENT '이모티콘제목',
+    `emoticon_price` int          NULL COMMENT '이모티콘가격',
+    `reg_dt`         timestamp    NOT NULL COMMENT '등록일자',
+    `reg_id`         varchar(100) NOT NULL COMMENT '등록자',
+    `upd_dt`         timestamp    NOT NULL COMMENT '수정일자',
+    `upd_id`         varchar(100) NOT NULL COMMENT '수정자'
 );
 
-/* 포인트 내역 */
-create table points_history
+DROP TABLE IF EXISTS `user`;
+
+CREATE TABLE `user`
 (
-    history_id    bigint       not null primary key comment '포인트내역ID',
-    user_id       varchar(100) not null comment '사용자ID',
-    points_change int          not null comment '변경된포인트',
-    points_amount int          not null comment '총포인트',
-    reason        varchar(100) not null comment '변경사유',
-    reg_dt        date comment '변경일자'
+    `user_id`         varchar(100) NOT NULL COMMENT '아이디',
+    `user_password`   varchar(100) NOT NULL COMMENT '비밀번호',
+    `email`           varchar(100) NULL COMMENT '이메일',
+    `birth`           timestamp    NULL COMMENT '생일',
+    `gender`          char(5)      NULL COMMENT '성별',
+    `phone_number`    varchar(100) NULL COMMENT '연락처',
+    `address`         varchar(255) NULL COMMENT '주소',
+    `reg_dt`          timestamp    NOT NULL COMMENT '가입일자',
+    `use_yn`          char(5)      NOT NULL COMMENT '사용여부',
+    `user_level`      varchar(100) NOT NULL COMMENT '사용자레밸',
+    `profile_picture` varchar(255) NULL COMMENT '사용자프로필'
 );
+
+DROP TABLE IF EXISTS `emoticon_detail`;
+
+CREATE TABLE `emoticon_detail`
+(
+    `emoticon_detail_id` varchar(100) NOT NULL COMMENT '이모티콘상세ID',
+    `emoticon_id`        int          NOT NULL COMMENT '이모티콘 ID',
+    `emoticon_nm`        varchar(255) NULL COMMENT '이모티콘명',
+    `reg_dt`             timestamp    NOT NULL COMMENT '등록일자',
+    `reg_id`             varchar(100) NOT NULL COMMENT '등록자'
+);
+
+DROP TABLE IF EXISTS `profile_img`;
+
+CREATE TABLE `profile_img`
+(
+    `img_no`        varchar(225) NOT NULL COMMENT '이미지번호',
+    `user_id`       varchar(100) NOT NULL COMMENT '아이디',
+    `img_nm`        varchar(225) NOT NULL COMMENT '이미지이름',
+    `img_ext_nm`    varchar(100) NOT NULL COMMENT '이미지 확장자',
+    `img_file_size` varchar(100) NOT NULL COMMENT '파일사이즈',
+    `file_url_path` varchar(225) NULL COMMENT '이미지 물리경로'
+);
+
+DROP TABLE IF EXISTS `emoticon_img`;
+
+CREATE TABLE `emoticon_img`
+(
+    `emoticon_img_no`    varchar(225) NOT NULL COMMENT '이미지번호',
+    `emoticon_detail_id` varchar(100) NOT NULL COMMENT '이모티콘상세ID',
+    `emoticon_img_nm`    varchar(225) NOT NULL COMMENT '이미지이름',
+    `img_ext_nm`         varchar(100) NOT NULL COMMENT '이미지 확장자',
+    `img_file_size`      varchar(100) NOT NULL COMMENT '파일사이즈',
+    `file_url_path`      varchar(225) NULL COMMENT '이미지 물리경로'
+);
+
+DROP TABLE IF EXISTS `login_history`;
+
+CREATE TABLE `login_history`
+(
+    `user_id`  varchar(100) NOT NULL COMMENT '아이디',
+    `login_dt` timestamp    NULL COMMENT '로그인시간',
+    `login_ip` varchar(100) NULL COMMENT 'ip'
+);
+
+DROP TABLE IF EXISTS `user_emoticon`;
+
+CREATE TABLE `user_emoticon`
+(
+    `emoticon_id` int          NOT NULL COMMENT '이모티콘 ID',
+    `user_id`     varchar(100) NOT NULL COMMENT '아이디',
+    `reg_dt`      timestamp    NULL COMMENT '등록일시'
+);
+
+DROP TABLE IF EXISTS `emoticon_history`;
+
+CREATE TABLE `emoticon_history`
+(
+    `history_id`     bigint       NOT NULL COMMENT '히스토리ID',
+    `user_id`        varchar(100) NOT NULL COMMENT '아이디',
+    `emoticon_id`    int          NOT NULL COMMENT '이모티콘ID',
+    `emoticon_price` int          NULL COMMENT '이모티콘 가격',
+    `reg_dt`         timestamp    NULL COMMENT '구입일자'
+);
+
+DROP TABLE IF EXISTS `favorite`;
+
+CREATE TABLE `favorite`
+(
+    `emoticon_id` int          NOT NULL COMMENT '이모티콘 ID',
+    `user_id`     varchar(100) NOT NULL COMMENT '사용자 ID',
+    `reg_dt`      timestamp    NOT NULL COMMENT '등록일'
+);
+
+ALTER TABLE `board` ADD CONSTRAINT `PK_BOARD` PRIMARY KEY (`board_id`);
+
+ALTER TABLE `points_history` ADD CONSTRAINT `PK_POINTS_HISTORY` PRIMARY KEY (`history_id`);
+
+ALTER TABLE `reply` ADD CONSTRAINT `PK_REPLY` PRIMARY KEY (`reply_id`);
+
+ALTER TABLE `common_code` ADD CONSTRAINT `PK_COMMON_CODE` PRIMARY KEY (`common_code`);
+
+ALTER TABLE `emoticon` ADD CONSTRAINT `PK_EMOTICON` PRIMARY KEY (`emoticon_id`);
+
+ALTER TABLE `user` ADD CONSTRAINT `PK_USER` PRIMARY KEY (`user_id`);
+
+ALTER TABLE `emoticon_detail` ADD CONSTRAINT `PK_EMOTICON_DETAIL` PRIMARY KEY (`emoticon_detail_id`);
+
+ALTER TABLE `profile_img` ADD CONSTRAINT `PK_PROFILE_IMG` PRIMARY KEY (`img_no`);
+
+ALTER TABLE `emoticon_img` ADD CONSTRAINT `PK_EMOTICON_IMG` PRIMARY KEY (`emoticon_img_no`);
+
+ALTER TABLE `emoticon_history` ADD CONSTRAINT `PK_EMOTICON_HISTORY` PRIMARY KEY (`history_id`);
