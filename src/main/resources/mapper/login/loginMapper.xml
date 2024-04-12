@@ -3,6 +3,7 @@
 <mapper namespace="com.pjt.core.login.LoginMapper">
 
 	<select id="login" parameterType="com.pjt.core.login.dto.LoginReqDto" resultType="com.pjt.core.login.dto.UserResDto">
+		/*로그인 정보 조회 */
 		select
 			user_id
 			,user_password
@@ -20,6 +21,7 @@
 	</select>
 
 	<insert id="insertLoginLog" parameterType="com.pjt.core.login.dto.LoginHistory" >
+		/*로그인히스토리 저장 */
 	 	insert into
 	 	 login_history
 		 	 (user_id
