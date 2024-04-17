@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -23,7 +25,8 @@ public class FileSystemStorageService implements StorageService {
 	@Autowired
 	public FileSystemStorageService(StorageProperties properties) {
 		if (properties.getLocation().trim().isEmpty()) {
-			throw new StorageException(ErrorCode.INTERNAL_SERVER_ERROR);
+			// 파일 디렉토리 생성 중 에러가 발생하였습니다.
+			throw new StorageException(ErrorCode.CREATE_DIRECTORY_ERROR);
 		}
 
 		// 파일업로드 경로 설정 초기화
@@ -37,7 +40,8 @@ public class FileSystemStorageService implements StorageService {
 			// 디렉토리 생성
 			Files.createDirectories(rootLocation);
 		} catch (IOException e) {
-			throw new StorageException(ErrorCode.INTERNAL_SERVER_ERROR);
+			// 파일 디렉토리 생성 중 에러가 발생하였습니다.
+			throw new StorageException(ErrorCode.CREATE_DIRECTORY_ERROR);
 		}
 	}
 
@@ -45,7 +49,8 @@ public class FileSystemStorageService implements StorageService {
 	public void store(MultipartFile file) {
 		// 빈 파일 체크
 		if (file.isEmpty()) {
-			throw new StorageException(ErrorCode.INTERNAL_SERVER_ERROR);
+			// 파일 정보가 존재하지 않습니다.
+			throw new StorageException(ErrorCode.FILE_NOT_EXIST);
 		}
 
 		// 파일 정보
@@ -61,7 +66,8 @@ public class FileSystemStorageService implements StorageService {
 			// 로컬 파일 저장
 			file.transferTo(storeAbsolutePath);
 		} catch (IOException e) {
-			throw new StorageException(ErrorCode.INTERNAL_SERVER_ERROR);
+			// 파일 저장 중 에러가 발생하였습니다.
+			throw new StorageException(ErrorCode.SAVE_FILE_ERROR);
 		}
 	}
 
@@ -78,10 +84,24 @@ public class FileSystemStorageService implements StorageService {
 			if (resource.exists() || resource.isReadable()) {
 				return resource;
 			} else {
-				throw new StorageException(ErrorCode.INTERNAL_SERVER_ERROR);
+				// 존재하지 않는 파일이거나 유효한 파일이 아닙니다.
+				throw new StorageException(ErrorCode.INVALID_FILE);
 			}
 		} catch (MalformedURLException e) {
-			throw new StorageException(ErrorCode.INTERNAL_SERVER_ERROR);
+			// 유효하지 않는 파일 경로입니다.
+			throw new StorageException(ErrorCode.INVALID_DIRECTORY);
+		}
+	}
+
+	@Override
+	public void delete(String filename) {
+		File file = rootLocation.resolve(Paths.get(filename)).toFile();
+
+		if (file.exists() || file.isFile()) {
+			FileSystemUtils.deleteRecursively(file);
+		} else {
+			// 존재하지 않는 파일이거나 유효한 파일이 아닙니다.
+			throw new StorageException(ErrorCode.INVALID_FILE);
 		}
 	}
 

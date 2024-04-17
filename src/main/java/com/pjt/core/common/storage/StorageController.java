@@ -28,12 +28,18 @@ public class StorageController {
 
 	@GetMapping("/api/upload/{filename}")
 	public ResponseEntity<Resource> upload(
-			@PathVariable String filename
+			@PathVariable(value = "filename") String filename
 	) {
 		Resource file = storageService.loadAsResource(filename);
 		String encodedFilename = URLEncoder.encode(file.getFilename(), StandardCharsets.UTF_8);
 		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
 				"attachment; filename=\"" + encodedFilename + "\"").body(file);
+	}
+
+	@DeleteMapping("/api/upload/{filename}")
+	public ResponseEntity<Void> delete(@PathVariable(value = "filename") String filename) {
+		storageService.delete(filename);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 }
