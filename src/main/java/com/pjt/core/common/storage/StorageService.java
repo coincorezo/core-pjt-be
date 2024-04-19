@@ -10,9 +10,9 @@ public interface StorageService {
 
 	void init();
 
-	void store(MultipartFile file);
+	void store(MultipartFile file, StorageImageType storageImageType, String typeKey);
 
-	void storeAll(List<MultipartFile> files);
+	void storeAll(List<MultipartFile> files, StorageImageType storageImageType, String typeKey);
 
 	Path load(String filename);
 

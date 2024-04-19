@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,9 +23,10 @@ import java.util.UUID;
 public class FileSystemStorageService implements StorageService {
 
 	private final Path rootLocation;
+	private final StorageMapper storageMapper;
 
 	@Autowired
-	public FileSystemStorageService(StorageProperties properties) {
+	public FileSystemStorageService(StorageProperties properties, StorageMapper storageMapper) {
 		if (properties.getLocation().trim().isEmpty()) {
 			// 파일 디렉토리 생성 중 에러가 발생하였습니다.
 			throw new StorageException(ErrorCode.CREATE_DIRECTORY_ERROR);
@@ -33,6 +35,8 @@ public class FileSystemStorageService implements StorageService {
 		// 파일업로드 경로 설정 초기화
 		rootLocation = Paths.get(properties.getLocation()).normalize().toAbsolutePath();
 		init();
+
+		this.storageMapper = storageMapper;
 	}
 
 	@Override
@@ -46,8 +50,9 @@ public class FileSystemStorageService implements StorageService {
 		}
 	}
 
+	@Transactional
 	@Override
-	public void store(MultipartFile file) {
+	public void store(MultipartFile file, StorageImageType storageImageType, String typeKey) {
 		// 빈 파일 체크
 		if (file.isEmpty()) {
 			// 파일 정보가 존재하지 않습니다.
@@ -64,6 +69,23 @@ public class FileSystemStorageService implements StorageService {
 		Path storeAbsolutePath = rootLocation.resolve(storeFilename).normalize().toAbsolutePath();
 
 		try {
+			// DB 저장
+			Storage storage = Storage.builder()
+					.typeKey(typeKey)
+					.imagRealNm(originalFilename)
+					.imgSaveNm(storeFilename)
+					.imgExtNm(extension)
+					.imgFileSize(file.getSize())
+					.fileUrlPath(storeAbsolutePath.toString())
+					.build();
+
+			switch (storageImageType) {
+				case BOARD -> storageMapper.insertBoardImage(storage);
+				case PROFILE -> storageMapper.insertProfileImage(storage);
+				case EMOTICON -> storageMapper.insertEmotionImage(storage);
+				default -> throw new StorageException(ErrorCode.INVALID_IMAGE_TYPE);
+			}
+
 			// 로컬 파일 저장
 			file.transferTo(storeAbsolutePath);
 		} catch (IOException e) {
@@ -72,9 +94,10 @@ public class FileSystemStorageService implements StorageService {
 		}
 	}
 
+	@Transactional
 	@Override
-	public void storeAll(List<MultipartFile> files) {
-		files.forEach(this::store);
+	public void storeAll(List<MultipartFile> files , StorageImageType storageImageType, String typeKey) {
+		files.forEach(file -> store(file, storageImageType, typeKey));
 	}
 
 	@Override

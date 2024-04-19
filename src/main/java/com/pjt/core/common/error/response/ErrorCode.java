@@ -17,7 +17,7 @@ public enum ErrorCode {
 	SAVE_FILE_ERROR("file", "파일 저장 중 에러가 발생하였습니다."),
 	INVALID_FILE("file", "존재하지 않는 파일이거나 유효한 파일이 아닙니다."),
 	INVALID_DIRECTORY("file", "유효하지 않는 파일 경로입니다."),
-	;
+    INVALID_IMAGE_TYPE("file", "유효하지 않는 이미지 타입입니다."),;
 
 	private final String code;
 	private final String message;
