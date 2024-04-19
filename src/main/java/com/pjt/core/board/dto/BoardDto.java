@@ -9,7 +9,7 @@ import lombok.Data;
 public class BoardDto {
 
 	@Schema(description = "게시판 ID")
-	private String boardId;
+	private int boardId;
 
 	@Schema(description = "게시판 제목")
 	private String boardTitle;

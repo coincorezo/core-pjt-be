@@ -9,7 +9,7 @@ import lombok.Data;
 public class ReadBoardReqDto {
 
 	@Schema(description = "게시판 ID")
-	private String boardId;
+	private int boardId;
 
 	@Schema(description = "게시판 제목")
 	@NotBlank(message = "게시판 제목 필수입니다.")
@@ -21,7 +21,7 @@ public class ReadBoardReqDto {
 
 	@Schema(description = "작성자")
 	@NotBlank(message = "작성자 필수입니다.")
-	private String boardWiter;
+	private String boardWriter;
 
 	@Schema(description = "조회수")
 	private String boardViewCnt;

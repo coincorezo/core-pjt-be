@@ -8,6 +8,6 @@ import lombok.Data;
 public class ReadBoardResDto {
 
 	@Schema(description = "게시글 ID")
-	private String boardId;
+	private int boardId;
 
 }
