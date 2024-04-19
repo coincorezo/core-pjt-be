@@ -15,6 +15,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -72,6 +73,11 @@ public class FileSystemStorageService implements StorageService {
 	}
 
 	@Override
+	public void storeAll(List<MultipartFile> files) {
+		files.forEach(this::store);
+	}
+
+	@Override
 	public Path load(String filename) {
 		return rootLocation.resolve(filename);
 	}
@@ -103,6 +109,11 @@ public class FileSystemStorageService implements StorageService {
 			// 존재하지 않는 파일이거나 유효한 파일이 아닙니다.
 			throw new StorageException(ErrorCode.INVALID_FILE);
 		}
+	}
+
+	@Override
+	public void deleteAll(List<String> filenames) {
+		filenames.forEach(this::delete);
 	}
 
 }
