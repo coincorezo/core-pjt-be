@@ -1,7 +1,6 @@
 package com.pjt.core.common.storage.controller;
 
 import com.pjt.core.common.error.response.EmptyDto;
-import com.pjt.core.common.storage.entity.StorageImageType;
 import com.pjt.core.common.storage.service.StorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -16,20 +15,21 @@ import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/upload")
 public class StorageController {
 
 	private final StorageService storageService;
 
-	@PostMapping("/api/storage")
+	@PostMapping
 	public ResponseEntity<EmptyDto> upload(
 			@RequestParam(value = "file") MultipartFile file
 	) {
-		storageService.store(file, StorageImageType.BOARD, "2");
+		storageService.store(file);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
-	@GetMapping("/api/storage/{filename}")
-	public ResponseEntity<Resource> upload(
+	@GetMapping("/{filename}")
+	public ResponseEntity<Resource> getFileByFilename(
 			@PathVariable(value = "filename") String filename
 	) {
 		Resource file = storageService.loadAsResource(filename);
@@ -38,8 +38,10 @@ public class StorageController {
 				"attachment; filename=\"" + encodedFilename + "\"").body(file);
 	}
 
-	@DeleteMapping("/api/storage/{filename}")
-	public ResponseEntity<Void> delete(@PathVariable(value = "filename") String filename) {
+	@DeleteMapping("/{filename}")
+	public ResponseEntity<Void> deleteByFilename(
+			@PathVariable(value = "filename") String filename
+	) {
 		storageService.delete(filename);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
