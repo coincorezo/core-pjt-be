@@ -18,7 +18,7 @@ public class StorageController {
 
 	private final StorageService storageService;
 
-	@PostMapping("/api/upload")
+	@PostMapping("/api/storage")
 	public ResponseEntity<EmptyDto> upload(
 			@RequestParam(value = "file") MultipartFile file
 	) {
@@ -26,7 +26,7 @@ public class StorageController {
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
-	@GetMapping("/api/upload/{filename}")
+	@GetMapping("/api/storage/{filename}")
 	public ResponseEntity<Resource> upload(
 			@PathVariable(value = "filename") String filename
 	) {
@@ -36,7 +36,7 @@ public class StorageController {
 				"attachment; filename=\"" + encodedFilename + "\"").body(file);
 	}
 
-	@DeleteMapping("/api/upload/{filename}")
+	@DeleteMapping("/api/storage/{filename}")
 	public ResponseEntity<Void> delete(@PathVariable(value = "filename") String filename) {
 		storageService.delete(filename);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
