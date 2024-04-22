@@ -1,6 +1,6 @@
 package com.pjt.core;
 
-import com.pjt.core.common.storage.StorageProperties;
+import com.pjt.core.common.storage.service.StorageProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

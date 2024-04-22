@@ -1,4 +1,4 @@
-package com.pjt.core.common.storage;
+package com.pjt.core.common.storage.service;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,5 +1,6 @@
-package com.pjt.core.common.storage;
+package com.pjt.core.common.storage.service;
 
+import com.pjt.core.common.storage.entity.StorageImageType;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 

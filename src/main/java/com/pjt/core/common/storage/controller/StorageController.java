@@ -1,6 +1,8 @@
-package com.pjt.core.common.storage;
+package com.pjt.core.common.storage.controller;
 
 import com.pjt.core.common.error.response.EmptyDto;
+import com.pjt.core.common.storage.entity.StorageImageType;
+import com.pjt.core.common.storage.service.StorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;

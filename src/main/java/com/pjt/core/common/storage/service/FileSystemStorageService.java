@@ -1,7 +1,10 @@
-package com.pjt.core.common.storage;
+package com.pjt.core.common.storage.service;
 
 import com.pjt.core.common.error.exception.StorageException;
 import com.pjt.core.common.error.response.ErrorCode;
+import com.pjt.core.common.storage.entity.Storage;
+import com.pjt.core.common.storage.entity.StorageImageType;
+import com.pjt.core.common.storage.mapper.StorageMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
