@@ -1,7 +1,6 @@
 package com.pjt.core.login.dto;
 
-import com.pjt.core.common.util.Schema;
-
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data

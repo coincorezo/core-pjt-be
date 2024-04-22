@@ -2,8 +2,6 @@ package com.pjt.core.board.entity;
 
 import org.hibernate.annotations.Comment;
 
-import com.pjt.core.common.util.Schema;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

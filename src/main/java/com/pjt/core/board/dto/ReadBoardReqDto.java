@@ -1,7 +1,6 @@
 package com.pjt.core.board.dto;
 
-import com.pjt.core.common.util.Schema;
-
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;

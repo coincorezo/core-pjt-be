@@ -2,9 +2,9 @@ package com.pjt.core.board.entity;
 
 import java.time.LocalDateTime;
 
-import com.pjt.core.common.util.Schema;
 import com.pjt.core.example.entity.Book;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
