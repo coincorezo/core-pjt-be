@@ -29,4 +29,67 @@
 		 limit 5
 		</if>
 	</select>
+
+	<!--  <insert id="insertBoard" parameterType ="com.pjt.core.board.dto.ReadBoardReqDto"  useGeneratedKeys="true" keyColumn="board_id" keyProperty="bardId">
+	-->
+		<insert id="insertBoard" parameterType ="com.pjt.core.board.dto.ReadBoardReqDto" >
+	<!-- 	<selectKey resultType="int" keyProperty="boardId" order="BEFORE">
+			select MAX(coalesce(board_id,0))+1 from board
+		</selectKey>
+	-->
+		insert
+			into board
+				(
+				board_title
+				,board_content
+				,board_writer
+				,board_view_cnt
+				,category
+				,board_status
+				,reg_dt
+				,upt_dt)
+			values(
+				#{boardTitle}
+				,#{boardContent}
+				,#{boardWriter}
+				,#{boardViewCnt}
+				,#{category}
+				,#{boardStatus}
+				,now()
+				,now()
+			)
+	 	<selectKey keyProperty="boardId" resultType="int" order="AFTER">
+       			 SELECT LAST_INSERT_ID()
+   			 </selectKey>
+
+	</insert>
+
+	<insert id="insertBoardImg" parameterType="com.pjt.core.board.dto.ReadBoardImgReqDto" >
+			<!--<selectKey resultType="int" keyProperty="boardImgNo" order="BEFORE">
+				select (coalesce(MAX(board_img_no) ,0) +1) from board_img
+				</selectKey>
+			-->
+
+		insert into
+				board_img
+				(
+				board_id
+				,emoticon_img_nm
+				,img_ext_nm
+				,img_file_size
+				,file_url_path
+				,emoticon_physical_nm)
+				values(
+				#{boardId}
+				,#{emoticonImgNm}
+				,#{imgExtNm}
+				,#{imgFileSize}
+				,#{fileUrlPath}
+				,#{emoticonPhysicalNm}
+				)
+
+
+
+	</insert>
+
 </mapper>

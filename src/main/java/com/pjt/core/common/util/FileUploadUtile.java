@@ -20,7 +20,8 @@ public class FileUploadUtile {
 
 	public Map<String, Object> fileUpload(MultipartHttpServletRequest multiRequest)
 			throws IllegalStateException, IOException {
-		String filePath = "C:\\core\\corebeack\\src\\main\\resources\\dowload";
+//		String filePath = "C:\\core\\corebeack\\src\\main\\resources\\dowload";
+		String filePath = "C:\\core-pjt\\imgDowload";
 
 		Map<String, Object> fileInfo = new HashMap<String, Object>();
 		// 파라미터 이름을 키로 파일 정보를 값으로 하는 MAP을 가져온다
@@ -43,6 +44,7 @@ public class FileUploadUtile {
 		fileInfo.put("extension", extension); // 확장자
 		fileInfo.put("emoticonPhysicalNm", saveName); // 물리적 name
 		fileInfo.put("imgFileSize", file.getSize()); // 이미지 사이즈
+		fileInfo.put("filePath", filePath);
 
 		// 읽어 올 요소가 있으면 true , 없으면 false 를 반환
 		while (itr.hasNext()) {

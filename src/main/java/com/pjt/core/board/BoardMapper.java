@@ -1,11 +1,13 @@
 package com.pjt.core.board;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
 import com.pjt.core.board.dto.BoardDto;
 import com.pjt.core.board.dto.CreateBoardReqDto;
+import com.pjt.core.board.dto.ReadBoardImgReqDto;
 import com.pjt.core.board.dto.ReadBoardReqDto;
 
 @Mapper
@@ -15,5 +17,7 @@ public interface BoardMapper {
 
 	/* 게시물 등록 */
 	int insertBoard(ReadBoardReqDto boardReqDto);
+
+	int insertBoardImg(ReadBoardImgReqDto boardImgDto);
 
 }
