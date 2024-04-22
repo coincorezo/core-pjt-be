@@ -2,12 +2,17 @@ package com.pjt.core.board.dto;
 
 import com.pjt.core.common.util.Schema;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
 public class ReadBoardReqDto {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Schema(description = "게시판 ID")
 	private int boardId;
 

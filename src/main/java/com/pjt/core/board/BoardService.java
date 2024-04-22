@@ -36,7 +36,6 @@ public class BoardService {
 		// board insert
 		//int saveCount = boardMapper.insertBoard(boardReqDto);
 		//boardResDto = boardMapper.insertBoard(boardReqDto);
-		boardReqDto.setBoardId(0);
 		boardMapper.insertBoard(boardReqDto);
 		System.out.println(boardReqDto.getBoardId());
 		FileUploadUtile fileUploadUtile = new FileUploadUtile();
@@ -51,8 +50,8 @@ public class BoardService {
 		boardImgDto.setImgExtNm((String) fileInfo.get("extension"));
 		System.out.println(fileInfo.get("imgFileSize"));
 		boardImgDto.setImgFileSize((Long) fileInfo.get("imgFileSize"));
-		int fileSaveCount = boardMapper.insertBoardImg(boardImgDto);
-
+		boardMapper.insertBoardImg(boardImgDto);
+//
 
 		return null;
 	}

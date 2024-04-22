@@ -23,9 +23,8 @@ import lombok.NoArgsConstructor;
 public class BoardImg {
 
 	@Id @GeneratedValue
-	@Column(name = "board_img_no")
-	@Comment("이미지 번호")
-	private String boardImgNo;
+	@Column(name = "img_no")
+	private String imgNo;
 
 	@Comment("게시판 아이디")
 	private int boardId;

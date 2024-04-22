@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 public class Board {
 	@Id @GeneratedValue
 	@Column(name = "board_id")
-	private String boardId;
+	private int boardId;
 
 	@Schema(description = "게시판 제목")
 	private String boardTitle;

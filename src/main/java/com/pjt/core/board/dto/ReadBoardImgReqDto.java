@@ -4,13 +4,17 @@ import org.hibernate.annotations.Comment;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Data;
 
 @Data
 public class ReadBoardImgReqDto {
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Schema(description ="이미지 번호")
-	private String boardImgNo;
+	private int imgNo;
 
 	@Schema(description ="게시판 아이디")
 	private int boardId;
