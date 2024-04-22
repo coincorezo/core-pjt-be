@@ -1,6 +1,7 @@
 package com.pjt.core.common.error.response;
 
 import com.pjt.core.common.error.exception.NoDataException;
+import com.pjt.core.common.error.exception.StorageException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,13 @@ public class GlobalExceptionHandler {
 		log.error("::handleMethodArgumentNotValidException::", e);
 		ExceptionResponse exceptionResponse = ExceptionResponse.of(ErrorCode.INVALID_INPUT_VALUE, e.getBindingResult());
 		return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(StorageException.class)
+	public ResponseEntity<ExceptionResponse> handleStorageException(StorageException e) {
+		log.error("::handleStorageException::", e);
+		ExceptionResponse exceptionResponse = ExceptionResponse.of(ErrorCode.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@ExceptionHandler(Exception.class)
