@@ -22,7 +22,7 @@ public class StorageController {
 	public ResponseEntity<EmptyDto> upload(
 			@RequestParam(value = "file") MultipartFile file
 	) {
-		storageService.store(file, StorageImageType.BOARD, "default");
+		storageService.store(file, StorageImageType.BOARD, "2");
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
