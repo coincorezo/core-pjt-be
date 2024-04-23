@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pjt.core.board.repository.BoardMapper">
+
+<select id="getBoard" parameterType="string" resultType="com.pjt.core.board.dto.ReadBoardResponseDto">
+   select
+        board_id
+      , board_title
+      , board_writer
+      , board_view_cnt
+      , coalesce(upt_dt, reg_dt) as reg_dt
+    from board
+   where category = #{category}
+  /* and board_status = '' --공개만 조회(공통코드값 필요) */
+</select>
+
+<select id="getDetail" parameterType="string" resultType="com.pjt.core.board.dto.ReadBoardResponseDto">
+	 select
+          board_id
+        , board_title
+        , board_content
+        , board_writer
+        , board_view_cnt
+        , category
+        , board_status
+        , coalesce(upt_dt, reg_dt)
+     from board
+    where board_id = #{boardId}
+</select>
+
+<select id="getImage" parameterType="string" resultType="com.pjt.core.board.dto.ReadBoardImgResponseDto">
+ select
+       img_no
+     , board_id
+     , emoticon_img_nm
+     , img_ext_nm
+     , img_file_size
+     , file_url_path
+   from board_img
+  where board_id = #{boardId}
+</select>
+
+
+</mapper>
