@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(StorageException.class)
 	public ResponseEntity<ExceptionResponse> handleStorageException(StorageException e) {
 		log.error("::handleStorageException::", e);
-		ExceptionResponse exceptionResponse = ExceptionResponse.of(ErrorCode.INTERNAL_SERVER_ERROR);
+		ExceptionResponse exceptionResponse = ExceptionResponse.of(e.getErrorCode());
 		return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 

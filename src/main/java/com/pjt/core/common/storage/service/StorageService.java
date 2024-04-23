@@ -1,6 +1,6 @@
 package com.pjt.core.common.storage.service;
 
-import com.pjt.core.common.storage.entity.Storage;
+import com.pjt.core.common.storage.dto.StorageResponse;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,9 +11,9 @@ public interface StorageService {
 
 	void init();
 
-	Storage store(MultipartFile file);
+	StorageResponse store(MultipartFile file);
 
-	List<Storage> storeAll(List<MultipartFile> files);
+	List<StorageResponse> storeAll(List<MultipartFile> files);
 
 	Path load(String filename);
 

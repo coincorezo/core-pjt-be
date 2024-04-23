@@ -1,6 +1,6 @@
 package com.pjt.core.common.storage.controller;
 
-import com.pjt.core.common.error.response.EmptyDto;
+import com.pjt.core.common.storage.dto.StorageResponse;
 import com.pjt.core.common.storage.service.StorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -21,11 +21,11 @@ public class StorageController {
 	private final StorageService storageService;
 
 	@PostMapping
-	public ResponseEntity<EmptyDto> upload(
+	public ResponseEntity<StorageResponse> upload(
 			@RequestParam(value = "file") MultipartFile file
 	) {
-		storageService.store(file);
-		return new ResponseEntity<>(HttpStatus.CREATED);
+		StorageResponse storageResponse = storageService.store(file);
+		return new ResponseEntity<>(storageResponse, HttpStatus.CREATED);
 	}
 
 	@GetMapping("/{filename}")

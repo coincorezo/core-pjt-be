@@ -41,4 +41,8 @@ public class Storage {
     @Comment("등록일자")
     private LocalDateTime regDt;
 
+    public String getFilenameWithExtension() {
+        return String.join(".", imgSaveNm, imgExt);
+    }
+
 }
