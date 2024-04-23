@@ -42,6 +42,10 @@ public class FileSystemStorageService implements StorageService {
 		this.storageRepository = storageRepository;
 	}
 
+	/**
+	 * 파일 저장 경로 초기화
+	 * @throws StorageException 파일 디렉토리 생성 중 에러가 발생하였습니다.
+	 */
 	@Override
 	public void init() {
 		try {
@@ -53,6 +57,13 @@ public class FileSystemStorageService implements StorageService {
 		}
 	}
 
+	/**
+	 * 파일 저장
+	 * @param file 파일
+	 * @return 저장 파일 정보
+	 * @throws StorageException 파일 정보가 존재하지 않습니다.
+	 * @throws StorageException 파일 저장 중 에러가 발생하였습니다.
+	 */
 	@Transactional
 	@Override
 	public StorageResponse store(MultipartFile file) {
@@ -94,17 +105,36 @@ public class FileSystemStorageService implements StorageService {
 		}
 	}
 
+	/**
+	 * 파일 다중 저장
+	 * @param files 파일 리스트
+	 * @return 저장 파일 정보 리스트
+	 * @throws StorageException 파일 정보가 존재하지 않습니다.
+	 * @throws StorageException 파일 저장 중 에러가 발생하였습니다.
+	 */
 	@Transactional
 	@Override
 	public List<StorageResponse> storeAll(List<MultipartFile> files) {
 		return files.stream().map(this::store).toList();
 	}
 
+	/**
+	 * 파일 조회
+	 * @param filename 파일명
+	 * @return 파일 경로
+	 */
 	@Override
 	public Path load(String filename) {
 		return rootLocation.resolve(filename);
 	}
 
+	/**
+	 * 파일 조회
+	 * @param filename 파일명
+	 * @return 파일
+	 * @throws StorageException 유효하지 않는 파일 경로입니다.
+	 * @throws StorageException 존재하지 않는 파일이거나 유효한 파일이 아닙니다.
+	 */
 	@Override
 	public Resource loadAsResource(String filename) {
 		try {
@@ -128,6 +158,11 @@ public class FileSystemStorageService implements StorageService {
 		}
 	}
 
+	/**
+	 * 파일 삭제
+	 * @param filename 파일명
+	 * @throws StorageException 존재하지 않는 파일이거나 유효한 파일이 아닙니다.
+	 */
 	@Transactional
 	@Override
 	public void delete(String filename) {
@@ -149,6 +184,11 @@ public class FileSystemStorageService implements StorageService {
 		}
 	}
 
+	/**
+	 * 파일 다중 삭제
+	 * @param filenames 파일명 리스트
+	 * @throws StorageException 존재하지 않는 파일이거나 유효한 파일이 아닙니다.
+	 */
 	@Override
 	public void deleteAll(List<String> filenames) {
 		filenames.forEach(this::delete);
