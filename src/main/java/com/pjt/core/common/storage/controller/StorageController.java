@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,13 +34,28 @@ public class StorageController {
 	 * @param file 파일
 	 * @return 업로드 파일 정보
 	 */
-	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PostMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	@Operation(summary = "파일 업로드", description = "파일 업로드")
-	public ResponseEntity<StorageResponse> upload(
+	public ResponseEntity<StorageResponse> uploadFile(
 			@Parameter(description = "multipart/form-data 형식의 이미지", content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE))
-			@RequestParam(value = "file") MultipartFile file
+			@RequestPart(value = "file") MultipartFile file
 	) {
 		StorageResponse storageResponse = storageService.store(file);
+		return new ResponseEntity<>(storageResponse, HttpStatus.CREATED);
+	}
+
+	/**
+	 * 다중 파일 업로드
+	 * @param files 파일 리스트
+	 * @return 업로드 파일 정보 리스트
+	 */
+	@PostMapping(value = "/file-list", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@Operation(summary = "다중 파일 업로드", description = "다중 파일 업로드")
+	public ResponseEntity<List<StorageResponse>> uploadFileList(
+			@Parameter(description = "multipart/form-data 형식의 이미지", content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE))
+			@RequestPart(value = "file") List<MultipartFile> files
+	) {
+		List<StorageResponse> storageResponse = storageService.storeAll(files);
 		return new ResponseEntity<>(storageResponse, HttpStatus.CREATED);
 	}
 
