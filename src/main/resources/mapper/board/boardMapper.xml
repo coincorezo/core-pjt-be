@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pjt.core.board.BoardMapper">
 	<select id="getBoardList" parameterType="com.pjt.core.board.dto.CreateBoardReqDto" resultType="com.pjt.core.board.dto.BoardDto">
-			/*게시판 리스트 (메인 조회시 mainFlg 넣기 ) */
+		/*게시판 리스트 (메인 조회시 mainFlg 넣기 ) */
 		select
 			board_id
 			, board_title
@@ -12,64 +12,55 @@
 			, category
 			, board_status
 			, reg_dt
-	  from board
-		where 1=1
-		<if test="category != null and category !=''">
-			and category = #{category}
-		</if>
-		<if test="searchText !=null and searchText !='' ">
-			<if test="searchFlg ==1 ">and board_title like concat('%' , #{searchText}, '%')</if>
-			<if test="searchFlg ==2 ">and ((board_title like concat('%' , #{searchText}, '%')) or (board_content like concat('%' , #{searchText}, '%')))</if>
-			<if test="searchFlg ==3 ">and board_content like concat('%' , #{searchText}, '%')</if>
-		</if>
-		and board_status ='Y'
-		order by reg_dt desc
+		from board
+			where 1=1
+			<if test="category != null and category !=''">
+				and category = #{category}
+			</if>
+			<if test="searchText !=null and searchText !='' ">
+				<if test="searchFlg ==1 ">and board_title like concat('%' , #{searchText}, '%')</if>
+				<if test="searchFlg ==2 ">and ((board_title like concat('%' , #{searchText}, '%')) or (board_content like concat('%' , #{searchText}, '%')))</if>
+				<if test="searchFlg ==3 ">and board_content like concat('%' , #{searchText}, '%')</if>
+			</if>
+			and board_status ='Y'
+			order by reg_dt desc
 
-		<if test="mainFlg =='main'">
-		 limit 5
-		</if>
+			<if test="mainFlg =='main'">
+			 limit 5
+			</if>
 	</select>
 
-	<!--  <insert id="insertBoard" parameterType ="com.pjt.core.board.dto.ReadBoardReqDto"  useGeneratedKeys="true" keyColumn="board_id" keyProperty="bardId">
-	-->
-		<insert id="insertBoard" parameterType ="com.pjt.core.board.dto.ReadBoardReqDto" >
-	<!-- 	<selectKey resultType="int" keyProperty="boardId" order="BEFORE">
-			select MAX(coalesce(board_id,0))+1 from board
-		</selectKey>
-	-->
-		insert
-			into board
-				(
-				board_title
-				,board_content
-				,board_writer
-				,board_view_cnt
-				,category
-				,board_status
-				,reg_dt
-				,upt_dt)
-			values(
-				#{boardTitle}
-				,#{boardContent}
-				,#{boardWriter}
-				,#{boardViewCnt}
-				,#{category}
-				,#{boardStatus}
-				,now()
-				,now()
-			)
-	 	<selectKey keyProperty="boardId" resultType="int" order="AFTER">
-       			 SELECT LAST_INSERT_ID()
-   			 </selectKey>
+	<insert id="insertBoard" parameterType ="com.pjt.core.board.dto.CreateBoardReqDto" >
+	/* 게시판 등록 */
+	insert
+		into board
+			(
+			board_title
+			,board_content
+			,board_writer
+			,board_view_cnt
+			,category
+			,board_status
+			,reg_dt
+			,upt_dt)
+		values(
+			#{boardTitle}
+			,#{boardContent}
+			,#{boardWriter}
+			,#{boardViewCnt}
+			,#{category}
+			,#{boardStatus}
+			,now()
+			,now()
+		)
+	<selectKey keyProperty="boardId" resultType="int" order="AFTER">
+		SELECT LAST_INSERT_ID()
+	</selectKey>
 
 	</insert>
 
-	<insert id="insertBoardImg" parameterType="com.pjt.core.board.dto.ReadBoardImgReqDto" >
-			<!--<selectKey resultType="int" keyProperty="boardImgNo" order="BEFORE">
-				select (coalesce(MAX(board_img_no) ,0) +1) from board_img
-				</selectKey>
-			-->
-
+	<insert id="insertBoardImg" parameterType="com.pjt.core.board.dto.CreateBoardImgReqDto" >
+		/* 게시판 파일업로드 등록 */
 		insert into
 				board_img
 				(
@@ -87,9 +78,46 @@
 				,#{fileUrlPath}
 				,#{emoticonPhysicalNm}
 				)
-
-
-
 	</insert>
+
+	<select id="getBoardDtl" parameterType="com.pjt.core.board.dto.ReadBoardDtlReqDto" resultType="com.pjt.core.board.dto.ReadBoardDtlResDto">
+		/* 게시판 상세 */
+		select
+			board_title
+			, board_content
+			, board_writer
+			, board_view_cnt
+			, category
+			, board_status
+			, reg_dt
+			, upt_dt
+		from board
+		where board_id= #{boardId}
+	</select>
+
+	<select id="getBoardDtlImg" parameterType="com.pjt.core.board.dto.ReadBoardDtlReqDto" resultType="com.pjt.core.board.dto.CreateBoardImgReqDto">
+		/* 게시판 파일업로드 상세 */
+		select
+			img_no
+			,emoticon_img_nm
+			,img_ext_nm
+			,img_file_size
+			,file_url_path
+			,emoticon_physical_nm
+		from board_img
+		where board_id= #{boardId}
+	</select>
+
+	<update id="updateBoard" parameterType="com.pjt.core.board.dto.UpdateBoardReqDto">
+		/* 게시판 수정 */
+		update board
+		 set board_title =#{boardTitle}
+		 	, board_content = #{boardContent}
+			, board_writer =#{boardWriter}
+			, category =#{category}
+			, board_status =#{boardStatus}
+			, upt_dt = now()
+		where board_id = #{boardId}
+	</update>
 
 </mapper>

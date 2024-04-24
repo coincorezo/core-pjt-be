@@ -1,19 +1,14 @@
 package com.pjt.core.board.dto;
 
-
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class CreateBoardReqDto {
+public class UpdateBoardReqDto {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Schema(description = "게시판 ID")
+	@NotBlank(message = "게시판 ID 필수입니다.")
 	private int boardId;
 
 	@Schema(description = "게시판 제목")
