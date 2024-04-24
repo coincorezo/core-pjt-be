@@ -21,7 +21,7 @@ public class FileUploadUtile {
 	public Map<String, Object> fileUpload(MultipartHttpServletRequest multiRequest)
 			throws IllegalStateException, IOException {
 //		String filePath = "C:\\core\\corebeack\\src\\main\\resources\\dowload";
-		String filePath = "C:\\core-pjt\\imgDowload";
+		String filePath = "C:\\core-pjt\\imgDownload";
 
 		Map<String, Object> fileInfo = new HashMap<String, Object>();
 		// 파라미터 이름을 키로 파일 정보를 값으로 하는 MAP을 가져온다
@@ -29,9 +29,6 @@ public class FileUploadUtile {
 
 		// files.entrySet()의 요소를 가져온다.
 		Iterator<Map.Entry<String, MultipartFile>> itr = files.entrySet().iterator();
-
-		// MultipartFile 초기화
-		// MultipartFile file =
 
 		MultipartFile file = multiRequest.getFile("file");
 		System.out.println(file.getOriginalFilename());
@@ -80,7 +77,7 @@ public class FileUploadUtile {
 		// 파일명 랜덤 생성 메서드
 		UUID uuid = UUID.randomUUID(); // 범용고유식별자
 		String saveName = uuid.toString() + "_" + originalName;
-
+		//rootLocation.resolve
 		File target = new File(uploadPath, saveName);
 		// 임시디렉토리에 저장된 업로드된 파일을 지정된 디렉토리로 복사
 		FileCopyUtils.copy(fileData, target);

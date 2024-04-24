@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 import lombok.Data;
 
 @Data
-public class ReadBoardImgReqDto {
+public class CreateBoardImgReqDto {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Schema(description ="이미지 번호")
