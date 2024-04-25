@@ -1,5 +1,7 @@
 package com.pjt.core.board.dto;
 
+import java.util.List;
+
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,6 +18,6 @@ public class ReadBoardResponseDto {
 	private String boardStatus;
 	private String regDt;
 	private String updDt;
-	private ReadBoardImgResponseDto boardImg;
+	private List<ReadBoardImgResponseDto> boardImg;
 	
 }

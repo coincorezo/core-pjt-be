@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.pjt.core.board.repository.BoardMapper">
+<mapper namespace="com.pjt.core.board.mapper.BoardMapper">
 
 <select id="getBoard" parameterType="string" resultType="com.pjt.core.board.dto.ReadBoardResponseDto">
    select
@@ -40,5 +40,30 @@
   where board_id = #{boardId}
 </select>
 
-
+<insert id="createBoard" parameterType="com.pjt.core.board.dto.CreateBoardRequestDto">
+  insert into board
+  (
+     board_id 
+   , board_title
+   , board_content
+   , board_writer
+   , board_view_cnt
+   , category
+   , board_status
+   , reg_dt
+   , upt_dt
+  )
+ values 
+ (
+    #{boardId}
+  , #{boardTitle}
+  , #{boardContent}
+  , #{boardWriter}
+  , 0
+  , #{category}
+  , #{boardStatus}
+  , localtimestamp
+  , localtimestamp
+ )
+</insert>
 </mapper>
