@@ -64,7 +64,7 @@ public class BoardController {
 	@PostMapping("/board")
 	@Operation(summary = "게시판 등록", description = "게시판 등록합니다.")
 	//@RequestMapping(value="/", method = {RequestMethod.POST})
-	public CreateBoardResDto insertBoard(@Validated CreateBoardReqDto boardReqDto)
+	public CreateBoardResDto insertBoard(@RequestBody @Validated CreateBoardReqDto boardReqDto)
 			throws Exception {
 		return boardSevice.insertBoard(boardReqDto);
 	}
@@ -81,7 +81,7 @@ public class BoardController {
 	 * @return ReadBoardDtlResDto
 	 */
 	@GetMapping("/board/{boardId}")
-	@Operation(summary = "게시판 조회", description = "게시판 리스트가 조회됩니다.")
+	@Operation(summary = "게시판 상세 조회", description = "게시판 상세 조회됩니다.")
 	public ReadBoardDtlResDto getBoard(/*@RequestParam(value="boardId", required=true) int boardId , */ReadBoardDtlReqDto  boardReqDto, @PathVariable(value="boardId") Integer boardId) {
 		//ReadBoardDtlReqDto boardReqDto = new ReadBoardDtlReqDto();
 		return boardSevice.getBoardDtl(boardReqDto);
@@ -98,7 +98,7 @@ public class BoardController {
 	 */
 	@PutMapping("/board")
 	@Operation(summary="게시판 수정", description ="게시판 수정이 됩니다")
-	public CreateBoardResDto updateBoard(UpdateBoardReqDto updateBoardReqDto) {
+	public CreateBoardResDto updateBoard(@RequestBody  UpdateBoardReqDto updateBoardReqDto) {
 //응용
 		return boardSevice.updateBoard(updateBoardReqDto);
 
@@ -115,13 +115,14 @@ public class BoardController {
 	 * @return CreateBoardResDto
 	 */
 	@DeleteMapping("/board")
-	@Operation(summary="게시판 수정", description ="게시판 수정이 됩니다")
-	public CreateBoardResDto deleteBoard(UpdateBoardReqDto updateBoardReqDto) {
+	@Operation(summary="게시판 삭제", description ="게시판 삭제가 됩니다")
+	public CreateBoardResDto deleteBoard(@RequestBody  UpdateBoardReqDto updateBoardReqDto) {
 		return boardSevice.deleteBoard(updateBoardReqDto);
 
-
-
 	}
+
+
+
 
 
 

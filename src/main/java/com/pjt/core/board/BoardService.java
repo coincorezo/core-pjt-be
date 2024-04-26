@@ -18,6 +18,7 @@ import com.pjt.core.board.dto.CreateBoardResDto;
 import com.pjt.core.board.dto.ReadBoardDtlReqDto;
 import com.pjt.core.board.dto.ReadBoardDtlResDto;
 import com.pjt.core.board.dto.ReadBoardListReqDto;
+import com.pjt.core.board.dto.ReadReplyReqDto;
 import com.pjt.core.board.dto.UpdateBoardReqDto;
 import com.pjt.core.common.util.FileUploadUtile;
 
@@ -51,7 +52,7 @@ public class BoardService {
 	 * @param CreateBoardReqDto
 	 * @return CreateBoardResDto
 	 */
-	public CreateBoardResDto insertBoard( @Validated CreateBoardReqDto boardReqDto
+	public CreateBoardResDto insertBoard( CreateBoardReqDto boardReqDto
 			/*,MultipartHttpServletRequest multiRequest*/) throws Exception {
 		CreateBoardResDto boardResDto = new CreateBoardResDto();
 		/*insert*/
@@ -127,4 +128,21 @@ public class BoardService {
 		return updateBoard;
 	}
 
+	/**
+	 * <pre>
+	 * 게시판 댓글 조회
+	 * @param ReadBoardDtlReqDto
+	 * @return ReadBoardDtlResDto
+	 */
+	public ReadReplyResDto getReply(ReadReplyReqDto boardReqDto) {
+
+		ReadBoardDtlResDto boardResDto = new ReadBoardDtlResDto();
+		boardResDto = boardMapper.getReply(boardReqDto);
+
+		List<CreateBoardImgReqDto> boardImgDtoList = new ArrayList<CreateBoardImgReqDto>();
+
+		boardImgDtoList = boardMapper.getBoardDtlImg(boardReqDto);
+		boardResDto.setBoardImgdto(boardImgDtoList);
+		return boardResDto;
+	}
 }
