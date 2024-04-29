@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pjt.core.common.code.mapper.CommonMapper">
+
+    <!-- 공통코드 조회 -->
+    <select id="selectCommonCode">
+        select common_code
+             , common_code_name
+             , common_code_description
+             , ref
+             , depth
+             , use_yn
+             , reg_dt
+             , reg_id
+             , upt_dt
+             , upt_id
+        from common_code a
+        <choose>
+            <when test='commonCode != null and commonCode != ""'>
+                where a.common_code = #{code}
+                and ref is not null
+            </when>
+            <otherwise>
+                where a.depth = 1
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>
