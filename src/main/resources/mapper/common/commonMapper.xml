@@ -17,8 +17,7 @@
         from common_code a
         <choose>
             <when test='commonCode != null and commonCode != ""'>
-                where a.common_code = #{code}
-                and ref is not null
+                where a.ref = #{commonCode}
             </when>
             <otherwise>
                 where a.depth = 1
