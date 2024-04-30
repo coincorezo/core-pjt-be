@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.pjt.core.board.dto.CreateBoardRequestDto;
-import com.pjt.core.board.dto.FileRequestDto;
 import com.pjt.core.board.dto.FileResponseDto;
 import com.pjt.core.board.dto.ReadBoardImgResponseDto;
 import com.pjt.core.board.dto.ReadBoardResponseDto;
@@ -24,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BoardService {
 	
 	private final BoardMapper boardMapper;
@@ -55,21 +56,9 @@ public String createBoard(CreateBoardRequestDto dto, List<MultipartFile> files) 
 
 	List<FileResponseDto> savedFiles = new ArrayList<>();
 	// 필수값 체크
-	if(dto != null) {
-		if(!StringUtils.hasText(dto.getBoardTitle())) {
-			throw new NoDataException(ErrorCode.INVALID_INPUT_VALUE);
-		}
-		
-		if(!StringUtils.hasText(dto.getBoardContent())) {
-			throw new NoDataException(ErrorCode.INVALID_INPUT_VALUE);
-		}
-		
-		if(!StringUtils.hasText(dto.getBoardWriter())) {
-			throw new NoDataException(ErrorCode.INVALID_INPUT_VALUE);
-		}
-	} else {
-		throw new NoDataException(ErrorCode.INVALID_INPUT_VALUE);
-	}
+	if(dto == null) {
+		throw new NoDataException(ErrorCode.INTERNAL_SERVER_ERROR);
+	} 
 	
 	// 게시글 저장
 	int result = boardMapper.createBoard(dto);
@@ -82,7 +71,12 @@ public String createBoard(CreateBoardRequestDto dto, List<MultipartFile> files) 
 	if(!CollectionUtils.isEmpty(files)) {
 				try {
 					// 파일 저장
-					savedFiles = fileService.uploadFile(dto.getCategory(), files);
+					savedFiles = fileService.uploadFile(dto.getBoardId(), files);
+					
+					// DB 파일 저장
+					for(FileResponseDto savedFile : savedFiles) {
+						boardMapper.createBoardImg(savedFile);
+					}
 				} catch (IllegalStateException | IOException e) {
 					for(FileResponseDto file : savedFiles) {
 						// 업로드 실패시 파일 삭제
@@ -90,6 +84,7 @@ public String createBoard(CreateBoardRequestDto dto, List<MultipartFile> files) 
 					}
 				}
 	}
+
 	
 	return "저장완료";
 

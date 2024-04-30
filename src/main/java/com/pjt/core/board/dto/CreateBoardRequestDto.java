@@ -1,15 +1,18 @@
 package com.pjt.core.board.dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
 public class CreateBoardRequestDto {
 	
-	@NotNull
+	@NotBlank
 	private Integer boardId;
+	@NotBlank
 	private String boardTitle;
+	@NotBlank
 	private String boardContent;
+	@NotBlank
 	private String boardWriter;
 	private Integer boardViewCnt;
 	private String category;
