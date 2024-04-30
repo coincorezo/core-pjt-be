@@ -28,7 +28,7 @@ public class FileService {
 	
 	private final BoardMapper boardMapper;
 	
-	public List<FileResponseDto> uploadFile(String category, List<MultipartFile> files) throws IllegalStateException, IOException {
+	public List<FileResponseDto> uploadFile(Integer boardId, List<MultipartFile> files) throws IllegalStateException, IOException {
 		
 		List<FileResponseDto> savedFiles = new ArrayList<FileResponseDto>();
 		
@@ -51,8 +51,10 @@ public class FileService {
 			}
 
 			for(MultipartFile file : files) {
+				int index = file.getOriginalFilename().indexOf(".");
+				
 				// 원본 파일명
-				String originalFileName = file.getOriginalFilename();
+				String originalFileName = file.getOriginalFilename().substring(0,index);
 				// 파일 type
 				String type = file.getContentType();
 				
@@ -67,18 +69,12 @@ public class FileService {
 				save.setUploadFilePath(saveFile.getAbsolutePath());
 				save.setSavedName(newFileName);
 				save.setImgFileSize(file.getSize());
-				save.setEmoticonImgNm(file.getOriginalFilename()); 
+				save.setEmoticonImgNm(originalFileName); 
 				save.setImgExtNm(file.getContentType());
+				save.setBoardId(boardId);
 
 				savedFiles.add(save);
-				
-				
-				// DB 저장
-				// TODO 카테고리 코드 따라 분기 (코드값 설정 필요함)
-				if("001".equals(category)) {
-					
-					// boardMapper.insertBoardImg(savedFiles);
-				}
+			
 				
 			}
 		}
