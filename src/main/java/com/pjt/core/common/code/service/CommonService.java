@@ -9,6 +9,7 @@ import com.pjt.core.common.error.exception.NoDataException;
 import com.pjt.core.common.error.response.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class CommonService {
 	 * @param commonCode 공통코드
 	 * @return 공통코드 목록
 	 */
+	@Transactional(readOnly = true)
 	public List<ReadCommonCodeResponse> getCommonCode(String commonCode) {
 		return commonMapper.selectCommonCode(commonCode);
 	}
@@ -31,6 +33,7 @@ public class CommonService {
 	 * 공통코드 등록
 	 * @param request 공통코드 등록 DTO
 	 */
+	@Transactional
 	public void createCommonCode(CreateCommonCodeRequest request) {
 		commonMapper.insertCommonCode(request);
 	}
@@ -39,6 +42,7 @@ public class CommonService {
 	 * 공통코드 수정
 	 * @param request 공통코드 수정 DTO
 	 */
+	@Transactional
 	public void updateCommonCode(UpdateCommonCodeRequest request) {
 		// 공통코드 존재 여부 확인
 		checkExistCommonCode(request.getRef(), request.getCommonCode());
@@ -50,6 +54,7 @@ public class CommonService {
 	 * 공통코드 삭제
 	 * @param request 공통코드 삭제 DTO
 	 */
+	@Transactional
 	public void deleteCommonCode(DeleteCommonCodeRequest request) {
 		// 공통코드 존재 여부 확인
 		checkExistCommonCode(request.getRef(), request.getCommonCode());
