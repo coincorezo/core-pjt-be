@@ -1,6 +1,7 @@
 package com.pjt.core.common.code.controller;
 
 import com.pjt.core.common.code.dto.CreateCommonCodeRequest;
+import com.pjt.core.common.code.dto.DeleteCommonCodeRequest;
 import com.pjt.core.common.code.dto.ReadCommonCodeResponse;
 import com.pjt.core.common.code.dto.UpdateCommonCodeRequest;
 import com.pjt.core.common.code.service.CommonService;
@@ -41,6 +42,14 @@ public class CommonController {
 	) {
 		commonService.updateCommonCode(request);
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@DeleteMapping("/code")
+	public ResponseEntity<Void> deleteCommonCode(
+			@Valid @RequestBody DeleteCommonCodeRequest request
+	) {
+		commonService.deleteCommonCode(request);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 }
