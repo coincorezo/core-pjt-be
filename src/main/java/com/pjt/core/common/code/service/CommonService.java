@@ -18,14 +18,27 @@ public class CommonService {
 
 	private final CommonMapper commonMapper;
 
+	/**
+	 * 공통코드 조회
+	 * @param commonCode 공통코드
+	 * @return 공통코드 목록
+	 */
 	public List<ReadCommonCodeResponse> getCommonCode(String commonCode) {
 		return commonMapper.selectCommonCode(commonCode);
 	}
 
+	/**
+	 * 공통코드 등록
+	 * @param request 공통코드 등록 DTO
+	 */
 	public void createCommonCode(CreateCommonCodeRequest request) {
 		commonMapper.insertCommonCode(request);
 	}
 
+	/**
+	 * 공통코드 수정
+	 * @param request 공통코드 수정 DTO
+	 */
 	public void updateCommonCode(UpdateCommonCodeRequest request) {
 		// 공통코드 존재 여부 확인
 		checkExistCommonCode(request.getRef(), request.getCommonCode());
@@ -33,6 +46,10 @@ public class CommonService {
 		commonMapper.updateCommonCode(request);
 	}
 
+	/**
+	 * 공통코드 삭제
+	 * @param request 공통코드 삭제 DTO
+	 */
 	public void deleteCommonCode(DeleteCommonCodeRequest request) {
 		// 공통코드 존재 여부 확인
 		checkExistCommonCode(request.getRef(), request.getCommonCode());
