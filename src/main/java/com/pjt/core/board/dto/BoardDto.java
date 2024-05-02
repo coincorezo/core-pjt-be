@@ -17,7 +17,7 @@ public class BoardDto {
 	private String boardContent;
 
 	@Schema(description = "작성자")
-	private String boardWiter;
+	private String boardWriter;
 
 	@Schema(description = "조회수")
 	private String boardViewCnt;

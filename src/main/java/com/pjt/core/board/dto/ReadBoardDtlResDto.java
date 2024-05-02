@@ -40,5 +40,7 @@ public class ReadBoardDtlResDto {
 	@Schema(description ="이미지 리스트")
 	private List<CreateBoardImgReqDto> boardImgdto;
 
+	@Schema(description ="댓글 리스트")
+	private List<ReadReplyResDto> replyList;
 
 }

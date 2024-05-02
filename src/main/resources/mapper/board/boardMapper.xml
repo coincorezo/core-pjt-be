@@ -122,4 +122,32 @@
 		where board_id = #{boardId}
 	</update>
 
+	<select id="getReply" parameterType="int" resultType="com.pjt.core.board.dto.ReadReplyResDto">
+		SELECT
+			reply_id	,board_id	,reply_comment
+			,reg_dt
+			,update_dt
+			,use_yn
+		FROM  reply
+		where board_id = #{boardId}
+	</select>
+
+	<insert id="insertReply" parameterType="com.pjt.core.board.dto.CreateReplyReqDto">
+		INSERT
+			INTO reply
+			(board_id
+			 ,reply_comment
+			,reg_dt
+			,update_dt
+			,use_yn
+			)
+		VALUES(
+			 #{boardId}
+			,#{replyComment}
+			,now()
+			,now()
+			,#{useYn}
+		)
+
+	</insert>
 </mapper>

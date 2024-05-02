@@ -82,6 +82,9 @@ public class BoardService {
 
 		boardImgDtoList = boardMapper.getBoardDtlImg(boardReqDto);
 		boardResDto.setBoardImgdto(boardImgDtoList);
+		List<ReadReplyResDto> replyList = this.getReplyList(boardReqDto.getBoardId());
+		boardResDto.setReplyList(replyList);
+
 		return boardResDto;
 	}
 
@@ -117,12 +120,17 @@ public class BoardService {
 		return updateBoard;
 	}
 
-	public List<ReadReplyResDto> getReplyList (ReadReplyReqDto readReplyReqDto) {
+	public List<ReadReplyResDto> getReplyList (int boardId) {
 		List<ReadReplyResDto> resDto = new ArrayList<ReadReplyResDto>();
 
-		resDto = boardMapper.getReply(readReplyReqDto);
+		resDto = boardMapper.getReply(boardId);
 		return resDto;
 
 	}
 
+	public String insertReply(CreateReplyReqDto replyReqDto) {
+ 	int saveCount = boardMapper.insertReply(replyReqDto);
+
+		return "저장되었습니다";
+	}
 }

@@ -21,5 +21,7 @@ public interface BoardMapper {
 	/* 게시물 수정 & 삭제 */
 	int updateBoard(UpdateBoardReqDto updateBoardReqDto);
 
-	List<ReadReplyResDto> getReply(ReadReplyReqDto boardReqDto);
+	List<ReadReplyResDto> getReply(int boardId);
+
+	int insertReply(CreateReplyReqDto replyReqDto);
 }

@@ -2,6 +2,8 @@ package com.pjt.core.board;
 
 import java.util.List;
 
+import com.pjt.core.board.dto.*;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -16,15 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-
-import com.pjt.core.board.dto.BoardDto;
-import com.pjt.core.board.dto.CreateBoardReqDto;
-import com.pjt.core.board.dto.CreateBoardResDto;
-import com.pjt.core.board.dto.ReadBoardDtlReqDto;
-import com.pjt.core.board.dto.ReadBoardDtlResDto;
-import com.pjt.core.board.dto.ReadBoardListReqDto;
-import com.pjt.core.board.dto.UpdateBoardReqDto;
-import com.pjt.core.board.dto.CreateBoardImgReqDto;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -64,7 +57,7 @@ public class BoardController {
 	@PostMapping("/board")
 	@Operation(summary = "게시판 등록", description = "게시판 등록합니다.")
 	//@RequestMapping(value="/", method = {RequestMethod.POST})
-	public CreateBoardResDto insertBoard(@RequestBody @Validated CreateBoardReqDto boardReqDto)
+	public CreateBoardResDto insertBoard(@RequestBody @Valid CreateBoardReqDto boardReqDto)
 			throws Exception {
 		return boardService.insertBoard(boardReqDto);
 	}
@@ -119,6 +112,21 @@ public class BoardController {
 	public CreateBoardResDto deleteBoard(@RequestBody  UpdateBoardReqDto updateBoardReqDto) {
 		return boardService.deleteBoard(updateBoardReqDto);
 
+	}
+
+
+	/*<pre>
+	*게시판 댓글
+	* </pre>
+	*
+	* @author KangMinJi
+	* @param CreateReplyReqDto
+	 */
+	@PostMapping("/board/reply")
+	@Operation(summary="게시판 댓글 등록", description ="게시판 댓글 등록됩니다")
+	public String insertReply( @RequestBody @Valid CreateReplyReqDto replyReqDto){
+
+		return boardService.insertReply(replyReqDto);
 	}
 
 

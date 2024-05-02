@@ -6,7 +6,7 @@ import lombok.Data;
 import java.security.Timestamp;
 
 @Data
-public class ReadReplyResDto {
+public class CreateReplyReqDto {
     @Schema(description="댓글 아이디")
     private int replyId;
 
@@ -23,6 +23,6 @@ public class ReadReplyResDto {
     private Timestamp updateDt;
 
     @Schema(description="삭제 여부")
-    private String delYn;
+    private String useYn;
 
 }
