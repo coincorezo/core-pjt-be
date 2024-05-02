@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(NoDataException.class)
-	public ResponseEntity<EmptyDto> handleNoDataException(NoDataException e) {
+	public ResponseEntity<ExceptionResponse> handleNoDataException(NoDataException e) {
 		log.debug("::handleNoDataException::", e);
-		return new ResponseEntity<>(new EmptyDto(), HttpStatus.OK);
+		ExceptionResponse exceptionResponse = ExceptionResponse.of(ErrorCode.NO_DATA);
+		return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
