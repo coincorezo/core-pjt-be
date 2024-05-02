@@ -2,7 +2,6 @@ package com.pjt.core.board.controller;
 
 import java.util.List;
 
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +14,7 @@ import com.pjt.core.board.dto.CreateBoardRequestDto;
 import com.pjt.core.board.dto.ReadBoardResponseDto;
 import com.pjt.core.board.service.BoardService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -27,17 +27,17 @@ public class BoardController {
 	
 
 	@GetMapping("/board")
-	public List<ReadBoardResponseDto> getBoard(@RequestParam(value="category") String category) {
+	public List<ReadBoardResponseDto> getBoard(@Valid @RequestParam(value="category") String category) {
 		return boardService.getBoard(category);
 	}
 
 	@GetMapping("/detail")
-	public ReadBoardResponseDto getDetail(@RequestParam(value="boardId")String boardId) throws Exception {
+	public ReadBoardResponseDto getDetail(@Valid @RequestParam(value="boardId")String boardId) throws Exception {
 		return boardService.getDetail(boardId);
 	}
 
 	@PostMapping("/board")
-	public String createBoard(@RequestPart("dto") CreateBoardRequestDto dto, @RequestPart(value="files", required=false) List<MultipartFile> files) throws Exception {
+	public String createBoard(@Valid @RequestPart("dto") CreateBoardRequestDto dto, @RequestPart(value="files", required=false) List<MultipartFile> files) throws Exception {
 		return boardService.createBoard(dto, files);
 	}
 	
