@@ -3,15 +3,8 @@ package com.pjt.core.board;
 import java.util.List;
 import java.util.Map;
 
+import com.pjt.core.board.dto.*;
 import org.apache.ibatis.annotations.Mapper;
-
-import com.pjt.core.board.dto.BoardDto;
-import com.pjt.core.board.dto.ReadBoardListReqDto;
-import com.pjt.core.board.dto.UpdateBoardReqDto;
-import com.pjt.core.board.dto.CreateBoardImgReqDto;
-import com.pjt.core.board.dto.CreateBoardReqDto;
-import com.pjt.core.board.dto.ReadBoardDtlReqDto;
-import com.pjt.core.board.dto.ReadBoardDtlResDto;
 
 @Mapper
 public interface BoardMapper {
@@ -28,4 +21,5 @@ public interface BoardMapper {
 	/* 게시물 수정 & 삭제 */
 	int updateBoard(UpdateBoardReqDto updateBoardReqDto);
 
+	List<ReadReplyResDto> getReply(ReadReplyReqDto boardReqDto);
 }

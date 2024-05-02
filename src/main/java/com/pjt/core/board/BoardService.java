@@ -2,29 +2,18 @@ package com.pjt.core.board;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+import com.pjt.core.board.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.pjt.core.board.dto.BoardDto;
-import com.pjt.core.board.dto.CreateBoardImgReqDto;
-import com.pjt.core.board.dto.CreateBoardReqDto;
-import com.pjt.core.board.dto.CreateBoardResDto;
-import com.pjt.core.board.dto.ReadBoardDtlReqDto;
-import com.pjt.core.board.dto.ReadBoardDtlResDto;
-import com.pjt.core.board.dto.ReadBoardListReqDto;
-import com.pjt.core.board.dto.ReadReplyReqDto;
-import com.pjt.core.board.dto.UpdateBoardReqDto;
 import com.pjt.core.common.util.FileUploadUtile;
 
 @Service
 public class BoardService {
-//	@Autowired
+	@Autowired
 	private BoardMapper boardMapper;
 
 	@Autowired
@@ -114,7 +103,7 @@ public class BoardService {
 
 	/**
 	 * <pre>
-	 * 게시판 삭세(delete)
+	 * 게시판 삭제(delete)
 	 * @param UpdateBoardReqDto
 	 * @return CreateBoardResDto
 	 */
@@ -128,21 +117,12 @@ public class BoardService {
 		return updateBoard;
 	}
 
-	/**
-	 * <pre>
-	 * 게시판 댓글 조회
-	 * @param ReadBoardDtlReqDto
-	 * @return ReadBoardDtlResDto
-	 */
-	public ReadReplyResDto getReply(ReadReplyReqDto boardReqDto) {
+	public List<ReadReplyResDto> getReplyList (ReadReplyReqDto readReplyReqDto) {
+		List<ReadReplyResDto> resDto = new ArrayList<ReadReplyResDto>();
 
-		ReadBoardDtlResDto boardResDto = new ReadBoardDtlResDto();
-		boardResDto = boardMapper.getReply(boardReqDto);
+		resDto = boardMapper.getReply(readReplyReqDto);
+		return resDto;
 
-		List<CreateBoardImgReqDto> boardImgDtoList = new ArrayList<CreateBoardImgReqDto>();
-
-		boardImgDtoList = boardMapper.getBoardDtlImg(boardReqDto);
-		boardResDto.setBoardImgdto(boardImgDtoList);
-		return boardResDto;
 	}
+
 }

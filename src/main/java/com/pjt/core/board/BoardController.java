@@ -35,7 +35,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class BoardController {
 
 	@Autowired
-	BoardService boardSevice;
+	BoardService boardService;
 
 	/**
 	 * <pre>
@@ -49,7 +49,7 @@ public class BoardController {
 	@GetMapping("/board")
 	@Operation(summary = "게시판 조회", description = "게시판 리스트가 조회됩니다.")
 	public List<BoardDto> getBoardList(ReadBoardListReqDto boardReqDto) {
-		return boardSevice.getBoardList(boardReqDto);
+		return boardService.getBoardList(boardReqDto);
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class BoardController {
 	//@RequestMapping(value="/", method = {RequestMethod.POST})
 	public CreateBoardResDto insertBoard(@RequestBody @Validated CreateBoardReqDto boardReqDto)
 			throws Exception {
-		return boardSevice.insertBoard(boardReqDto);
+		return boardService.insertBoard(boardReqDto);
 	}
 
 
@@ -84,7 +84,7 @@ public class BoardController {
 	@Operation(summary = "게시판 상세 조회", description = "게시판 상세 조회됩니다.")
 	public ReadBoardDtlResDto getBoard(/*@RequestParam(value="boardId", required=true) int boardId , */ReadBoardDtlReqDto  boardReqDto, @PathVariable(value="boardId") Integer boardId) {
 		//ReadBoardDtlReqDto boardReqDto = new ReadBoardDtlReqDto();
-		return boardSevice.getBoardDtl(boardReqDto);
+		return boardService.getBoardDtl(boardReqDto);
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class BoardController {
 	@Operation(summary="게시판 수정", description ="게시판 수정이 됩니다")
 	public CreateBoardResDto updateBoard(@RequestBody  UpdateBoardReqDto updateBoardReqDto) {
 //응용
-		return boardSevice.updateBoard(updateBoardReqDto);
+		return boardService.updateBoard(updateBoardReqDto);
 
 
 
@@ -117,7 +117,7 @@ public class BoardController {
 	@DeleteMapping("/board")
 	@Operation(summary="게시판 삭제", description ="게시판 삭제가 됩니다")
 	public CreateBoardResDto deleteBoard(@RequestBody  UpdateBoardReqDto updateBoardReqDto) {
-		return boardSevice.deleteBoard(updateBoardReqDto);
+		return boardService.deleteBoard(updateBoardReqDto);
 
 	}
 
