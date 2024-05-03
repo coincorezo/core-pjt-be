@@ -2,28 +2,18 @@ package com.pjt.core.board;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+import com.pjt.core.board.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.pjt.core.board.dto.BoardDto;
-import com.pjt.core.board.dto.CreateBoardImgReqDto;
-import com.pjt.core.board.dto.CreateBoardReqDto;
-import com.pjt.core.board.dto.CreateBoardResDto;
-import com.pjt.core.board.dto.ReadBoardDtlReqDto;
-import com.pjt.core.board.dto.ReadBoardDtlResDto;
-import com.pjt.core.board.dto.ReadBoardListReqDto;
-import com.pjt.core.board.dto.UpdateBoardReqDto;
 import com.pjt.core.common.util.FileUploadUtile;
 
 @Service
 public class BoardService {
-//	@Autowired
+	@Autowired
 	private BoardMapper boardMapper;
 
 	@Autowired
@@ -51,7 +41,7 @@ public class BoardService {
 	 * @param CreateBoardReqDto
 	 * @return CreateBoardResDto
 	 */
-	public CreateBoardResDto insertBoard( @Validated CreateBoardReqDto boardReqDto
+	public CreateBoardResDto insertBoard( CreateBoardReqDto boardReqDto
 			/*,MultipartHttpServletRequest multiRequest*/) throws Exception {
 		CreateBoardResDto boardResDto = new CreateBoardResDto();
 		/*insert*/
@@ -92,6 +82,9 @@ public class BoardService {
 
 		boardImgDtoList = boardMapper.getBoardDtlImg(boardReqDto);
 		boardResDto.setBoardImgdto(boardImgDtoList);
+		List<ReadReplyResDto> replyList = this.getReplyList(boardReqDto.getBoardId());
+		boardResDto.setReplyList(replyList);
+
 		return boardResDto;
 	}
 
@@ -113,7 +106,7 @@ public class BoardService {
 
 	/**
 	 * <pre>
-	 * 게시판 삭세(delete)
+	 * 게시판 삭제(delete)
 	 * @param UpdateBoardReqDto
 	 * @return CreateBoardResDto
 	 */
@@ -127,4 +120,17 @@ public class BoardService {
 		return updateBoard;
 	}
 
+	public List<ReadReplyResDto> getReplyList (int boardId) {
+		List<ReadReplyResDto> resDto = new ArrayList<ReadReplyResDto>();
+
+		resDto = boardMapper.getReply(boardId);
+		return resDto;
+
+	}
+
+	public String insertReply(CreateReplyReqDto replyReqDto) {
+ 	int saveCount = boardMapper.insertReply(replyReqDto);
+
+		return "저장되었습니다";
+	}
 }

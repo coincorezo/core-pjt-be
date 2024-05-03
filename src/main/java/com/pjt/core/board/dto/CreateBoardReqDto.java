@@ -7,13 +7,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-
+import com.pjt.core.common.error.valid.Enum;
 @Data
 public class CreateBoardReqDto {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Schema(description = "게시판 ID")
+	@Schema(description  = "게시판 ID")
 	private int boardId;
 
 	@Schema(description = "게시판 제목")
@@ -36,8 +36,7 @@ public class CreateBoardReqDto {
 	private String category;
 
 	@Schema(description = "게시글 상태값(비공개/공개/삭제")
-	//@NotBlank(message = "게시글 공개여부는 필수입니다.")
-	//private BoardStatus boardStatus;
+	@Enum(enumClass = BoardStatus.class, ignoreCase = true, message ="게시글 상태값은 공개/비공개/삭제 중 하나여야합니다")
 	private String boardStatus;
 
 	@Schema(description = "등록일")

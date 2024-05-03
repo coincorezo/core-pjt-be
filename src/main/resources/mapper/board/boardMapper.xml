@@ -13,7 +13,9 @@
 			, board_status
 			, reg_dt
 		from board
-			where 1=1
+			 <!-- <where> 문 -->
+			 <where>
+			 and board_status ='PUBLIC'
 			<if test="category != null and category !=''">
 				and category = #{category}
 			</if>
@@ -22,7 +24,7 @@
 				<if test="searchFlg ==2 ">and ((board_title like concat('%' , #{searchText}, '%')) or (board_content like concat('%' , #{searchText}, '%')))</if>
 				<if test="searchFlg ==3 ">and board_content like concat('%' , #{searchText}, '%')</if>
 			</if>
-			and board_status ='Y'
+			</where>
 			order by reg_dt desc
 
 			<if test="mainFlg =='main'">
@@ -120,4 +122,32 @@
 		where board_id = #{boardId}
 	</update>
 
+	<select id="getReply" parameterType="int" resultType="com.pjt.core.board.dto.ReadReplyResDto">
+		SELECT
+			reply_id	,board_id	,reply_comment
+			,reg_dt
+			,update_dt
+			,use_yn
+		FROM  reply
+		where board_id = #{boardId}
+	</select>
+
+	<insert id="insertReply" parameterType="com.pjt.core.board.dto.CreateReplyReqDto">
+		INSERT
+			INTO reply
+			(board_id
+			 ,reply_comment
+			,reg_dt
+			,update_dt
+			,use_yn
+			)
+		VALUES(
+			 #{boardId}
+			,#{replyComment}
+			,now()
+			,now()
+			,#{useYn}
+		)
+
+	</insert>
 </mapper>
