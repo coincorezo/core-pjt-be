@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -61,6 +63,8 @@ public String createBoard(CreateBoardRequestDto dto, List<MultipartFile> files) 
 	} 
 	
 	// 게시글 저장
+	dto.setBoardContent(Jsoup.clean(dto.getBoardContent(), Safelist.basic()));
+	
 	int result = boardMapper.createBoard(dto);
 	
 	if(result == 0) {
