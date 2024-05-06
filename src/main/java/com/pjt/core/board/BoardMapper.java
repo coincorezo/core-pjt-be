@@ -24,4 +24,6 @@ public interface BoardMapper {
 	List<ReadReplyResDto> getReply(int boardId);
 
 	int insertReply(CreateReplyReqDto replyReqDto);
+
+    int updateReply(UpdateReplyReqDto replyReqDto);
 }

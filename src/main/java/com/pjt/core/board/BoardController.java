@@ -129,6 +129,35 @@ public class BoardController {
 		return boardService.insertReply(replyReqDto);
 	}
 
+	/*<pre>
+	 *게시판 댓글 수정
+	 * </pre>
+	 *
+	 * @author KangMinJi
+	 * @param CreateReplyReqDto
+	 */
+	@PutMapping("/board/reply")
+	@Operation(summary="게시판 댓글 등록", description ="게시판 댓글 수정됩니다")
+	public String updateReply( @RequestBody @Valid UpdateReplyReqDto replyReqDto){
+
+		return boardService.updateReply(replyReqDto);
+	}
+
+
+	/*<pre>
+	 *게시판 댓글 삭제
+	 * </pre>
+	 *
+	 * @author KangMinJi
+	 * @param CreateReplyReqDto
+	 */
+	@DeleteMapping("/board/reply")
+	@Operation(summary="게시판 댓글 삭제", description ="게시판 댓글 삭제됩니다")
+	public String deleteReply( @RequestBody @Valid UpdateReplyReqDto replyReqDto){
+
+		return boardService.updateReply(replyReqDto);
+	}
+
 
 
 

@@ -125,11 +125,12 @@
 	<select id="getReply" parameterType="int" resultType="com.pjt.core.board.dto.ReadReplyResDto">
 		SELECT
 			reply_id	,board_id	,reply_comment
-			,reg_dt
-			,update_dt
+			,DATE_FORMAT(reg_dt, '%Y-%m-%d %H:%i:%s') AS reg_dt
+			,DATE_FORMAT(update_dt, '%Y-%m-%d %H:%i:%s') AS update_dt
 			,use_yn
 		FROM  reply
 		where board_id = #{boardId}
+			and use_yn = 'Y'
 	</select>
 
 	<insert id="insertReply" parameterType="com.pjt.core.board.dto.CreateReplyReqDto">
@@ -150,4 +151,13 @@
 		)
 
 	</insert>
+
+	<update id="updateReply" parameterType="com.pjt.core.board.dto.UpdateReplyReqDto">
+		update reply
+		set reply_comment =#{replyComment}
+		, use_yn =#{useYn}
+		, update_dt = now()
+		where board_id= #{boardId}
+		and reply_id = #{replyId}
+	</update>
 </mapper>
