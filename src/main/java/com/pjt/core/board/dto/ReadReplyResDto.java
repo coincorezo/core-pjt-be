@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.security.Timestamp;
+import java.util.Date;
 
 @Data
 public class ReadReplyResDto {
@@ -17,12 +18,12 @@ public class ReadReplyResDto {
     private String replyComment;
 
     @Schema(description="등록일자")
-    private Timestamp regDt;
+    private Date regDt;
 
     @Schema(description="수정일자")
-    private Timestamp updateDt;
+    private Date updateDt;
 
     @Schema(description="삭제 여부")
-    private String delYn;
+    private String useYn;
 
 }

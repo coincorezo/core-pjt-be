@@ -133,4 +133,16 @@ public class BoardService {
 
 		return "저장되었습니다";
 	}
+
+    public String updateReply(UpdateReplyReqDto replyReqDto) {
+
+			int saveCount = boardMapper.updateReply(replyReqDto);
+			if(saveCount>0) {
+				return "저장되었습니다";
+			}else{
+				return "등록되지 않았습니다.";
+			}
+
+
+	}
 }
