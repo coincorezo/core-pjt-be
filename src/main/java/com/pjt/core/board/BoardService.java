@@ -95,6 +95,7 @@ public class BoardService {
 	 * @return CreateBoardResDto
 	 */
 	public CreateBoardResDto updateBoard(UpdateBoardReqDto updateBoardReqDto) {
+		// FIXME: 게시글 수정 시 없는 글은 어떻게 처리할것인지
 		CreateBoardResDto updateBoard = new CreateBoardResDto();
 
 		int saveCount = boardMapper.updateBoard(updateBoardReqDto);
@@ -111,6 +112,7 @@ public class BoardService {
 	 * @return CreateBoardResDto
 	 */
 	public CreateBoardResDto deleteBoard(UpdateBoardReqDto updateBoardReqDto) {
+		// FIXME: 게시글 삭제 시 없는 글은 어떻게 처리할것인지
 		CreateBoardResDto updateBoard = new CreateBoardResDto();
 
 		int saveCount = boardMapper.updateBoard(updateBoardReqDto);
@@ -129,6 +131,7 @@ public class BoardService {
 	}
 
 	public String insertReply(CreateReplyReqDto replyReqDto) {
+		// FIXME: 존재하지 않는 게시글에도 댓글이 작성되는건지
  	int saveCount = boardMapper.insertReply(replyReqDto);
 
 		return "저장되었습니다";
