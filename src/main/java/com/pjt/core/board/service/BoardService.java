@@ -3,7 +3,9 @@ package com.pjt.core.board.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.jsoup.Jsoup;
@@ -63,7 +65,7 @@ public String createBoard(CreateBoardRequestDto dto, List<MultipartFile> files) 
 	} 
 	
 	// 게시글 저장
-	dto.setBoardContent(Jsoup.clean(dto.getBoardContent(), Safelist.basic()));
+	// dto.setBoardContent(Jsoup.clean(dto.getBoardContent(), Safelist.basic()));
 	
 	int result = boardMapper.createBoard(dto);
 	
@@ -92,6 +94,37 @@ public String createBoard(CreateBoardRequestDto dto, List<MultipartFile> files) 
 	
 	return "저장완료";
 
+}
+
+public String test(CreateBoardRequestDto dto) {
+	String data = dto.getBoardContent();
+	convertData(data);
+	return data;
+}
+
+public String convertData(String data) {
+	
+	// 변환할 HTML 태그들
+	Map<String, String> converterMap = new HashMap<>();
+	converterMap.put("&", "&amp;");
+	converterMap.put("<", "&lt;");
+	converterMap.put(">", "&gt;");
+	converterMap.put("\\(", "&#40;");
+	converterMap.put("\\)", "&#41;");
+	converterMap.put("#", "&#35;");
+	converterMap.put("&", "&#38;");
+	converterMap.put("'", "&#39;");
+	converterMap.put(" ", "&nbsp;");
+	converterMap.put("=", "&#61;");
+	converterMap.put("[\\\\\\\"\\\\\\'][\\\\s]*javascript:(.*)[\\\\\\\"\\\\\\']", "\"\"");
+	converterMap.put("script", "");
+	converterMap.put("eval\\((.*)\\)", "");
+	
+	for(Map.Entry<String, String> entry : converterMap.entrySet()) {
+		data = data.replaceAll(entry.getKey(), entry.getValue());
+	}
+	
+	return data;
 }
 
 
