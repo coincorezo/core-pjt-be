@@ -57,7 +57,7 @@ public ReadBoardResponseDto getDetail(String boardId) throws Exception {
 	return dto;
 }
 
-public String createBoard(CreateBoardRequestDto dto, List<MultipartFile> files) throws Exception  {
+public String insertBoard(CreateBoardRequestDto dto, List<MultipartFile> files) throws Exception  {
 
 	List<FileResponseDto> savedFiles = new ArrayList<>();
 	// 필수값 체크

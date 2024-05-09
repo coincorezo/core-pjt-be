@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Component
 public class XssConvertAop {
 	
-	@Pointcut("execution( * com.pjt.core..*Controller.*(..))")
+	@Pointcut("execution( * com.pjt.core..*Service.insert*(..)) || execution(* com.core.secta9ine.*Service.update*(..))")
 	private void cut() {}
 
 

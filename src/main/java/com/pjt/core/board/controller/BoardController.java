@@ -38,7 +38,7 @@ public class BoardController {
 
 	@PostMapping("/board")
 	public String createBoard(@Valid @RequestPart("dto") CreateBoardRequestDto dto, @RequestPart(value="files", required=false) List<MultipartFile> files) throws Exception {
-		return boardService.createBoard(dto, files);
+		return boardService.insertBoard(dto, files);
 	}
 	
 	@PostMapping("/board2")
