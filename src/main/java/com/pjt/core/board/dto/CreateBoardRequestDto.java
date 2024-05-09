@@ -9,6 +9,7 @@ import lombok.Data;
 @Data
 //@AllArgsConstructor
 //@NoArgsConstructor
+
 public class CreateBoardRequestDto {
 	
 

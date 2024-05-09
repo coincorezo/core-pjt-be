@@ -13,14 +13,14 @@ import com.fasterxml.jackson.annotation.JacksonAnnotation;
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-//@Documented
+@Documented
 //@Inherited
-@Target({ElementType.ANNOTATION_TYPE,ElementType.FIELD, ElementType.PARAMETER})
+@Target({ElementType.ANNOTATION_TYPE,ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 //@JacksonAnnotationsInside
-@JsonSerialize(
-    using = XssSerializer.class
-)
+//@JsonSerialize(
+//    using = XssSerializer.class
+//)
 public @interface XssConverter {
 
 }

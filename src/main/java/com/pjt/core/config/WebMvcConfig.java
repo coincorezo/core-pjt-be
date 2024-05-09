@@ -1,5 +1,6 @@
 package com.pjt.core.config;
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -8,6 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.pjt.core.common.util.CustomObjectMapper;
+import com.pjt.core.common.util.XssFilter;
 import com.pjt.core.common.util.XssSerializer;
 
 //@Configuration
@@ -19,6 +21,15 @@ public class WebMvcConfig implements WebMvcConfigurer{
 //		ObjectMapper objectMapper = CustomObjectMapper.getInstance().get();
 //		mappingJackson2HttpMessageConverter.setObjectMapper(objectMapper);
 //		return mappingJackson2HttpMessageConverter;
+//	}
+	
+//	@Bean
+//	public FilterRegistrationBean xssFilter() {
+//		FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+//		registrationBean.setFilter(new XssFilter());
+//		registrationBean.addUrlPatterns("/");
+//		
+//		return registrationBean;
 //	}
 
 	

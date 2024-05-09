@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.boot.jackson.JsonComponent;
+import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.BeanProperty;
@@ -37,7 +37,7 @@ public class XssSerializer extends StdSerializer<String> implements ContextualSe
 			return data;
 		}
 		
-		// 변환할 HTML 태그들
+		// 변환할 HTML 태그들 (인코딩)
 		Map<String, String> converterMap = new HashMap<>();
 		converterMap.put("&", "&amp;");
 		converterMap.put("<", "&lt;");

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.stereotype.Service;
@@ -63,9 +64,6 @@ public String createBoard(CreateBoardRequestDto dto, List<MultipartFile> files) 
 	if(dto == null) {
 		throw new NoDataException(ErrorCode.INTERNAL_SERVER_ERROR);
 	} 
-	
-	// 게시글 저장
-	// dto.setBoardContent(Jsoup.clean(dto.getBoardContent(), Safelist.basic()));
 	
 	int result = boardMapper.createBoard(dto);
 	
