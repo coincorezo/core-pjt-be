@@ -18,6 +18,7 @@ public class ReadBoardResponseDto {
 	private String boardStatus;
 	private String regDt;
 	private String updDt;
+	private Integer totalCount;
 	private List<ReadBoardImgResponseDto> boardImg;
 	
 }

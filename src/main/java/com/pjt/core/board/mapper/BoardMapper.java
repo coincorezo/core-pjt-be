@@ -1,19 +1,21 @@
 package com.pjt.core.board.mapper;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.pjt.core.board.dto.BoardRequestDto;
 import com.pjt.core.board.dto.CreateBoardRequestDto;
 import com.pjt.core.board.dto.FileResponseDto;
 import com.pjt.core.board.dto.ReadBoardImgResponseDto;
 import com.pjt.core.board.dto.ReadBoardResponseDto;
 
+import jakarta.validation.Valid;
+
 @Mapper
 public interface BoardMapper {
 
-	List<ReadBoardResponseDto> getBoard(String category);
+	List<ReadBoardResponseDto> getBoard(BoardRequestDto boardRequestDto);
 
 	ReadBoardResponseDto getDetail(String boardId);
 
@@ -22,5 +24,7 @@ public interface BoardMapper {
 	int createBoard(CreateBoardRequestDto dto);
 
 	void createBoardImg(FileResponseDto savedFile);
+
+	int getBoardTotalCount(@Valid BoardRequestDto boardRequestDto);
 
 }

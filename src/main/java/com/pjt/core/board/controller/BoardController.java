@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.pjt.core.board.dto.BoardRequestDto;
 import com.pjt.core.board.dto.CreateBoardRequestDto;
 import com.pjt.core.board.dto.ReadBoardResponseDto;
 import com.pjt.core.board.service.BoardService;
@@ -24,12 +25,11 @@ import lombok.RequiredArgsConstructor;
 public class BoardController {
 	
 	private final BoardService boardService;
-	
 
-	@GetMapping("/board")
-	public List<ReadBoardResponseDto> getBoard(@Valid @RequestParam(value="category") String category) {
-		return boardService.getBoard(category);
-	}
+//	@GetMapping("/board")
+//	public List<ReadBoardResponseDto> getBoard(@Valid BoardRequestDto boardRequestDto ) {
+//		//return boardService.getBoard(boardRequestDto);
+//	}
 
 	@GetMapping("/detail")
 	public ReadBoardResponseDto getDetail(@Valid @RequestParam(value="boardId")String boardId) throws Exception {

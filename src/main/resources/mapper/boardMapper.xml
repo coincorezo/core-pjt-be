@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pjt.core.board.mapper.BoardMapper">
+	
+<select id="getBoardTotalCount"
+        parameterType="com.pjt.core.board.dto.BoardRequestDto"
+        resultType="int">
+	select 
+	   count(*) 
+	  from board
+	<if test='category != null and category != ""'>
+		where category = #{category}
+	</if>
+</select>
 
 <select id="getBoard" 
-        parameterType="string" 
+        parameterType="com.pjt.core.board.dto.BoardRequestDto" 
         resultType="com.pjt.core.board.dto.ReadBoardResponseDto">
    select
         board_id
@@ -13,7 +24,10 @@
       , coalesce(upt_dt, reg_dt) as reg_dt
     from board
    where category = #{category}
-  /* and board_status = '' --공개만 조회(공통코드값 필요) */
+  <!-- and board_status = '' //공개만 조회(공통코드값 필요)  -->
+  <if test='page != null and size != null'>
+	<include refid="pagingUtil.page"/>
+  </if>
 </select>
 
 <select id="getDetail" 

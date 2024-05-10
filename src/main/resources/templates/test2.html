@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<!-- <html lang="ko"> -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+    <title>Paging</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <link type="text/css" rel="stylesheet" href="../css/style.css">  
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	<!-- JQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+	<div id="wrap">		
+		<div id="cont">
+			<nav>
+				<h2><i class="fas fa-edit mr10"></i>게시판 생성</h2>
+				<ul>
+					<li><a href="#a"><i class="fa-regular fa-address-book mr10"></i>게시판명1</a></li>
+					<li><a href="#a"><i class="fa-regular fa-address-book mr10"></i>게시판명2</a></li>
+					<li><a href="#a"><i class="fa-regular fa-address-book mr10"></i>게시판명3</a></li>				
+				</ul>
+			</nav>
+			<div class="contents">
+				<div class="container">
+					<div class="inner">
+						<h3>게시판명1</h3>
+						<div class="new_registerframe"><button class="button_type boardregister">신규등록</button></div>
+						<div class="search_inner">            
+              <!--search fiels st-->
+              <div class="search_col">
+                <div class="row">                
+                  <span class="serch_title">제목</span>
+                    <select name="" id="" style="width:180px;margin-right:3px;">
+                      <option value="">선택하세요</option>
+                    </select>
+										<input type="text" style="width:300px" placeholder="검색어를 입력하세요.">
+                </div>               
+                <div class="row none">
+									<div>
+										<button class="button_type search"><i class="fas fa-search mr5"></i>검색</button>
+									</div>         
+                </div>
+              </div>             
+              <!--//search fiels ed--> 
+            </div>
+						<div class="list_inner">
+							<div class="table_button">
+								<button class="button_type tablebutton01 mr5">전체선택</button><button class="button_type tablebutton03">삭제</button>
+								<span><button class="button_type tablebutton02"><i class="fas fa-file-excel mr5"></i>엑셀다운로드</button></span>		
+							</div>
+              <table class="list_type">
+                <colgroup>
+                  <col width="6%">
+                  <col width="4%">
+                  <col width="*">
+                  <col width="10%">
+                  <col width="8%">
+                  <col width="13%">
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>순번</th>
+                    <th>제목</th>
+                    <th>등록일</th>
+                    <th>등록자</th>
+                    <th>조회수</th>                                  
+                  </tr>
+                </thead>
+                <tbody id="listArea">
+					<!-- ================== Board List  ======================== -->
+					<!--
+                  <tr th:each="board : ${boardList} ">
+                    <td class="center"><input type="checkbox" id="ch01"><label for="ch01"></label></td>
+                    <td th:text="${board.boardId}"></td>
+                    <td th:text="${board.boardTitle}"><a href="#a"></a></td>
+                    <td class="center" th:text="${board.regDt}"></td>
+                    <td class="center" the:text="${board.boardWriter}"></td>
+                    <td class="center" th:text="${board.boardViewCnt}"></td>
+                  </tr>
+				  -->
+                 <!-- ========================================================= -->    
+                </tbody>
+              </table>
+							<div class="paging-wrap">
+								<div class="paging network">
+									<!--
+									<a href="" class="direction first">이전</a>
+									<a href="" class="direction prev">pre</a>
+									<a href="javascript:makeList();">1</a>
+									<a href="javascript:makeList();" class="on">2</a>
+									<a href="javascript:makeList();">3</a>
+									<a href="javascript:makeList();">4</a>
+									<a href="">5</a>
+									-->
+									
+									<!--
+									<a href="">6</a>
+									<a href="">7</a>
+									<a href="">8</a>
+									<a href="">9</a>
+									<a href="">10</a>
+									-->
+									
+									<!--
+									<a href="" class="direction next">next</a>
+									<a href="" class="direction last">다음</a>
+									-->
+									
+								</div>
+							</div>
+            </div>
+					</div>				
+				</div>
+			</div>
+		</div>
+		<footer>
+			COPYRIGHT 2022 COREMETHOD. ALL RIGHTS RESERVED.
+		</footer>
+	</div>
+	
+	<script>
+		let thisPage = 1; //현재 페이지
+		let totalPage = 0; //총 페이지 수
+		let limit = 5; //페이징바 사이즈
+		let size = 10; // 페이지당 게시글 수 (이건 나중에 수정 필요)
+		
+		$(document).ready(function(){
+			makeList(thisPage);
+		});
+		
+		// 데이터 요청
+		function makeList(num) {
+			thisPage = num;
+			$("#listArea").empty();
+			
+			console.log("dddd 호출 됐음 === ", num)
+			
+			// paging data
+			let pagingData = {
+				size : size,
+				page : num,
+				pageSize : limit,
+				category : '001'
+			}
+			
+			$.ajax({
+				type: 'GET',
+				url: '/board',
+				data: pagingData,
+				dataType: 'json',
+				success: function(result) {
+
+					// List 생성
+					$.each(result.data.data, function(index, data) {
+						let listHtml = "";
+						
+						listHtml += "<tr>";
+						listHtml +=    "<td class='center'><input type='checkbox' id='ch01'><label for='ch01'></label></td>";
+						listHtml +=    "<td>" + data.boardId + "</td>";
+						listHtml +=    "<td>" + data.boardTitle + "<a href='#a'></a></td>";
+						listHtml +=    "<td class='center'>" + data.boardWriter + "</td>";
+						listHtml +=    "<td class='center'>" + data.boardViewCnt + "</td>";
+						listHtml += "</tr>";
+			  			
+						$("#listArea").append(listHtml);				  
+					});
+					
+					
+					// paging 처리
+					if(result.data.totalCount != 0) {
+						// 총 페이지 수 (총 게시글 수 / 페이지당 개수)
+						totalPage = Math.ceil(result.data.totalCount / size);	
+						
+						console.log("총 페이지수 totalPage == ", totalPage)
+						console.log("thisPage == ", thisPage)
+						
+						// paging 함수 호출
+						// 현재 페이지(thisPage), 총 페이지 수(totalPage), callback function
+						let pagingHtml = paging(thisPage, totalPage, "makeList")
+						console.log("페이징 함수 리턴 ============> ", pagingHtml);
+						$(".network").html(pagingHtml);
+					}
+					
+					
+				},
+				error: function(xhr, status) {
+					console.log("실패ㅠㅠ");
+				}
+			})
+		}
+
+		// pagination
+		function paging(thisPage, totalPage, funcName) {
+			let pageHtml = "";
+			// 시작 페이지 ((현재페이지 - 1) / 페이징 사이즈) * 페이징 사이즈 + 1;
+			let startPage = Math.floor((thisPage - 1) / limit) * limit + 1;
+
+			// 마지막 페이지 (시작 페이지 + 페이지당 게시글 수 - 1)
+			let lastPage = Math.min(startPage + limit - 1, totalPage);
+			
+			if(totalPage < lastPage) {
+				lastPage = totalPage;
+			}
+			
+			let nextPage = lastPage + 1;
+			
+			// first page
+			if(thisPage > 1 && limit < thisPage) {
+				pageHtml += "<a href='javascript:" + funcName + "(1);'" + "class='direction first'>처음</a>";
+			}
+			
+			// previous page
+			if(thisPage > limit) {
+				// pageHtml += "<a href='javascript:" + funcName + "(" + (startPage == 1 ? 1 : startPage - 1) + ");'" + "class='direction prev'>pre</a>";
+				pageHtml += "<a href='javascript:" + funcName + "(" + (startPage === 1 ? 1 : thisPage - 1) + ");'" + "class='direction prev'>pre</a>";
+			}
+			console.log(">>>startPage", startPage)
+			console.log(">>>lastPage", lastPage)
+			
+			for(let i = startPage; i <= lastPage; i++) {
+				//현재 페이지 강조 처리
+				if(i == thisPage) {
+					pageHtml += "<a href='javascript:" + funcName + "(" + i + ");'" + "class='on'>" +i  + "</a>";
+				} else {
+					pageHtml += "<a href='javascript:" + funcName + "(" + i + ");'>" +  i  + "</a>";
+				} 
+				
+			}
+			
+			// next page
+			if(nextPage <= totalPage) {
+				pageHtml += "<a href='javascript:" + funcName + "(" + (nextPage < totalPage ? nextPage : totalPage) + ");'"
+				           + "class='direction next'>next</a>";
+			}
+			
+			// last page
+			if(thisPage < totalPage && nextPage < totalPage) {
+				pageHtml += "<a href='javascript:'" + funcName + "(" + totalPage + ");'" + "class='direction last'>마지막</a>"
+			}
+			
+			
+			return pageHtml;
+		}
+		
+
+		// paging 계산 
+		function pageCalc(thisPage, totalPage) {
+			// 시작 페이지 ((현재페이지 - 1) / 페이징 사이즈) * 페이징 사이즈 + 1;
+			let startPage = Math.floor((thisPage - 1) / limit) * limit + 1;
+
+			// 마지막 페이지 (시작 페이지 + 페이지당 게시글 수 - 1)
+			let lastPage = Math.min(startPage + limit - 1, totalPage);
+			
+			if(totalPage < lastPage) {
+				lastPage = totalPage;
+			}
+			
+			// 다음 페이지
+			let nextPage = thisPage + 1;
+			// 이전 페이지
+			let prevPage = thisPage - 1;
+			// 이전페이지 존재여부
+			let hasPrevPage = totalPage > prevPage && prevPage > 0;
+			// 다음페이지 존재여부
+			let hasNextPage = totalPage >= nextPage;
+			
+			let pagingInfo = {
+				"startPage" : startPage,
+				"lastPage" : lastPage,
+				"nextPage" : nextPage,
+				"prevPage" : prevPage,
+				"hasPrevPage" : hasPrevPage,
+				"hasNextPage" : hasNextPage
+			};
+			
+			return pagingInfo;
+		}
+
+	</script>
+</body>
+
+</html>

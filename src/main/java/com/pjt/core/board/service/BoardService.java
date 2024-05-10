@@ -14,6 +14,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.pjt.core.board.dto.BoardRequestDto;
 import com.pjt.core.board.dto.CreateBoardRequestDto;
 import com.pjt.core.board.dto.FileResponseDto;
 import com.pjt.core.board.dto.ReadBoardImgResponseDto;
@@ -21,6 +22,8 @@ import com.pjt.core.board.dto.ReadBoardResponseDto;
 import com.pjt.core.board.mapper.BoardMapper;
 import com.pjt.core.common.error.exception.NoDataException;
 import com.pjt.core.common.error.response.ErrorCode;
+import com.pjt.core.common.util.ApiResponse;
+import com.pjt.core.common.util.PagingResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,8 +35,17 @@ public class BoardService {
 	private final BoardMapper boardMapper;
 	private final FileService fileService;
 
-public List<ReadBoardResponseDto> getBoard(String category) {
-		return boardMapper.getBoard(category);
+public ApiResponse<Object>  getBoard(BoardRequestDto boardRequestDto) {
+	int count = boardMapper.getBoardTotalCount(boardRequestDto);
+	List<ReadBoardResponseDto> list = boardMapper.getBoard(boardRequestDto);
+	
+	PagingResponse<Object> pagingResponse = new PagingResponse<>();
+	pagingResponse.setTotalCount(count);
+	pagingResponse.setData(list);
+	
+	
+	return ApiResponse.ok(pagingResponse);
+	
 	}
 
 public ReadBoardResponseDto getDetail(String boardId) throws Exception {
@@ -93,6 +105,9 @@ public String createBoard(CreateBoardRequestDto dto, List<MultipartFile> files) 
 	return "저장완료";
 
 }
+
+
+
 
 
 
