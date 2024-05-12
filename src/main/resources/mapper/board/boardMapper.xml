@@ -86,6 +86,7 @@
 		/* 게시판 상세 */
 		select
 			board_title
+			,board_id
 			, board_content
 			, board_writer
 			, board_view_cnt
@@ -95,6 +96,7 @@
 			, upt_dt
 		from board
 		where board_id= #{boardId}
+<!--		 and bpard_status ='PUBLIC'-->
 	</select>
 
 	<select id="getBoardDtlImg" parameterType="com.pjt.core.board.dto.ReadBoardDtlReqDto" resultType="com.pjt.core.board.dto.CreateBoardImgReqDto">
