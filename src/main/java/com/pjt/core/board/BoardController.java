@@ -125,7 +125,7 @@ public class BoardController {
 	@PostMapping("/board/reply")
 	@Operation(summary="게시판 댓글 등록", description ="게시판 댓글 등록됩니다")
 	public String insertReply( @RequestBody @Valid CreateReplyReqDto replyReqDto){
-
+		// FIXME: 게시판 댓글 작성 시 validator 에러 발생
 		return boardService.insertReply(replyReqDto);
 	}
 

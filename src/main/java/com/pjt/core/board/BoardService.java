@@ -45,9 +45,15 @@ public class BoardService {
 			/*,MultipartHttpServletRequest multiRequest*/) throws Exception {
 		CreateBoardResDto boardResDto = new CreateBoardResDto();
 		/*insert*/
-		boardMapper.insertBoard(boardReqDto);
-		boardResDto.setBoardId(boardReqDto.getBoardId());
+		int saveCount = boardMapper.insertBoard(boardReqDto);
+	 	if(saveCount > 0) {
+			boardResDto.setBoardId(boardReqDto.getBoardId());
+			boardResDto.setMessage("게시글이 등록되었습니다");
 
+		 }else{
+			 boardResDto.setMessage("게시글 등록되지 않았습니다");
+
+		}
 
 		// 물리적파일 업로드
 		FileUploadUtile fileUploadUtile = new FileUploadUtile();
@@ -81,26 +87,44 @@ public class BoardService {
 		List<CreateBoardImgReqDto> boardImgDtoList = new ArrayList<CreateBoardImgReqDto>();
 
 		boardImgDtoList = boardMapper.getBoardDtlImg(boardReqDto);
-		boardResDto.setBoardImgdto(boardImgDtoList);
+		if(!boardImgDtoList.isEmpty()) {
+			boardResDto.setBoardImgdto(boardImgDtoList);
+		}
 		List<ReadReplyResDto> replyList = this.getReplyList(boardReqDto.getBoardId());
-		boardResDto.setReplyList(replyList);
-
+		if(!replyList.isEmpty()) {
+			boardResDto.setReplyList(replyList);
+		}
 		return boardResDto;
 	}
 
-	/**
-	 * <pre>
-	 * 게시판 수정
-	 * @param UpdateBoardReqDto
-	 * @return CreateBoardResDto
-	 */
+		/**
+         * <pre>
+         * 게시판 수정
+         * @param UpdateBoardReqDto
+         * @return CreateBoardResDto
+         */
 	public CreateBoardResDto updateBoard(UpdateBoardReqDto updateBoardReqDto) {
+		// FIXME: 게시글 수정 시 없는 글은 어떻게 처리할것인지
+
+		/* 게시글 여부 확인 */
+		ReadBoardDtlReqDto readBoardDtlReqDto = new ReadBoardDtlReqDto();
+		ReadBoardDtlResDto readBoardDtlResDto = new ReadBoardDtlResDto();
+		readBoardDtlReqDto.setBoardId(updateBoardReqDto.getBoardId());
+		readBoardDtlResDto = this.getBoardDtl(readBoardDtlReqDto);
+
+		int saveCount = 0;
+		/* 게시글 여부 확인 & 게시글 ID 같은지 확인 후 게시글 수정 */
+		if(readBoardDtlResDto !=null && updateBoardReqDto.getBoardId()==readBoardDtlResDto.getBoardId()) {
+			saveCount = boardMapper.updateBoard(updateBoardReqDto);
+		}
+
 		CreateBoardResDto updateBoard = new CreateBoardResDto();
-
-		int saveCount = boardMapper.updateBoard(updateBoardReqDto);
-
-		updateBoard.setBoardId(updateBoardReqDto.getBoardId());
-
+		if(saveCount>0) {
+			updateBoard.setBoardId(updateBoardReqDto.getBoardId());
+			updateBoard.setMessage("게시물 수정완료 되었습니다.");
+		}else{
+			updateBoard.setMessage("게시물 수정 불가 .");
+		}
 		return updateBoard;
 	}
 
@@ -111,11 +135,29 @@ public class BoardService {
 	 * @return CreateBoardResDto
 	 */
 	public CreateBoardResDto deleteBoard(UpdateBoardReqDto updateBoardReqDto) {
+		// FIXME: 게시글 삭제 시 없는 글은 어떻게 처리할것인지
+
+		/* 게시글 여부 확인 */
+		ReadBoardDtlReqDto readBoardDtlReqDto = new ReadBoardDtlReqDto();
+		ReadBoardDtlResDto readBoardDtlResDto = new ReadBoardDtlResDto();
+		readBoardDtlReqDto.setBoardId(updateBoardReqDto.getBoardId());
+		readBoardDtlResDto = this.getBoardDtl(readBoardDtlReqDto);
+
+
+		/* 게시글 여부 확인 후 boardStatus DELETE 변경*/
 		CreateBoardResDto updateBoard = new CreateBoardResDto();
+		if(readBoardDtlResDto !=null  && (updateBoardReqDto.getBoardId()) ==(readBoardDtlResDto.getBoardId())) {
+			int saveCount = boardMapper.updateBoard(updateBoardReqDto);
+			
+			updateBoard.setBoardId(updateBoardReqDto.getBoardId());
+			if(saveCount >0 ) {
+				updateBoard.setMessage("삭제되었습니다.");
+			}
+		}else{
+			updateBoard.setMessage("삭제할 게시물이 없습니다.");
+		}
 
-		int saveCount = boardMapper.updateBoard(updateBoardReqDto);
 
-		updateBoard.setBoardId(updateBoardReqDto.getBoardId());
 
 		return updateBoard;
 	}
@@ -129,20 +171,48 @@ public class BoardService {
 	}
 
 	public String insertReply(CreateReplyReqDto replyReqDto) {
- 	int saveCount = boardMapper.insertReply(replyReqDto);
+		// FIXME: 존재하지 않는 게시글에도 댓글이 작성되는건지
 
-		return "저장되었습니다";
+		/*게시글 여부 확인 */
+		ReadBoardDtlReqDto readBoardReqDto = new ReadBoardDtlReqDto();
+		ReadBoardDtlResDto readBoardDtlResDto = new ReadBoardDtlResDto();
+		readBoardReqDto.setBoardId(replyReqDto.getBoardId());
+		readBoardDtlResDto =this.getBoardDtl(readBoardReqDto);
+
+		/*게시글 있으면 댓글 등록 */
+		if(readBoardDtlResDto !=null && (replyReqDto.getBoardId()) ==(readBoardDtlResDto.getBoardId())
+				&& ("PUBLIC").equals(readBoardDtlResDto.getBoardStatus())) {
+			int saveCount = boardMapper.insertReply(replyReqDto);
+
+			return "저장되었습니다";
+
+		}else{
+
+			return "없는 게시물입니다";
+
+		}
+
+
 	}
 
     public String updateReply(UpdateReplyReqDto replyReqDto) {
+		/*게시글 여부 확인 */
+		ReadBoardDtlReqDto readBoardReqDto = new ReadBoardDtlReqDto();
+		ReadBoardDtlResDto readBoardDtlResDto = new ReadBoardDtlResDto();
+		readBoardReqDto.setBoardId(replyReqDto.getBoardId());
+		readBoardDtlResDto =this.getBoardDtl(readBoardReqDto);
 
+		/*게시글 있으면 댓글  삭제 || 수정 */
+		if(readBoardDtlResDto !=null && (replyReqDto.getBoardId()) ==(readBoardDtlResDto.getBoardId())) {
 			int saveCount = boardMapper.updateReply(replyReqDto);
-			if(saveCount>0) {
-				return "저장되었습니다";
-			}else{
-				return "등록되지 않았습니다.";
+			if (saveCount > 0) {
+				return  ("N").equals(replyReqDto.getUseYn()) ? "삭제되었습니다." : "수정되었습니다";
+			} else {
+				return  (!("N").equals(replyReqDto.getUseYn())) ? "수정 되지 않았습니다." : "삭제되지 않았습니다";
 			}
-
+		}else {
+			return  ("N").equals(replyReqDto.getUseYn()) ? "삭제되지 않았습니다" : "수정 되지 않았습니다.";
+		}
 
 	}
 }

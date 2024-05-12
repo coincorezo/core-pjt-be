@@ -2,6 +2,7 @@ package com.pjt.core.board.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.security.Timestamp;
@@ -12,7 +13,7 @@ public class CreateReplyReqDto {
     private int replyId;
 
     @Schema(description="게시판 ID")
-    @NotBlank(message = "게시판 ID 필수입니다.")
+    @NotNull(message = "게시판 ID 는 필수입니다")
     private int boardId;
 
     @Schema(description="댓글 내용")
