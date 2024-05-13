@@ -3,6 +3,7 @@ package com.pjt.core.board;
 import java.util.List;
 
 import com.pjt.core.board.dto.*;
+import com.pjt.core.common.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -36,7 +37,7 @@ public class BoardController {
 	 * </pre>
 	 *
 	 * @author KangMinJi (kmj0701@coremethod.co.kr)
-	 * @param ReadBoardListReqDto
+	 * @param boardReqDto
 	 * @return
 	 */
 	@GetMapping("/board")
@@ -51,15 +52,18 @@ public class BoardController {
 	 * </pre>
 	 *
 	 * @author KangMinJi (kmj0701@coremethod.co.kr)
-	 * @param CreateBoardReqDto
+	 * @param boardReqDto
 	 * @return CreateBoardResDto
 	 */
 	@PostMapping("/board")
 	@Operation(summary = "게시판 등록", description = "게시판 등록합니다.")
 	//@RequestMapping(value="/", method = {RequestMethod.POST})
-	public CreateBoardResDto insertBoard(@RequestBody @Valid CreateBoardReqDto boardReqDto)
+	public ApiResponse<CreateBoardResDto> insertBoard(@RequestBody @Valid CreateBoardReqDto boardReqDto)
 			throws Exception {
-		return boardService.insertBoard(boardReqDto);
+
+		CreateBoardResDto createBoardResDto = boardService.insertBoard(boardReqDto);
+
+		return ApiResponse.ok(createBoardResDto);
 	}
 
 
@@ -70,14 +74,16 @@ public class BoardController {
 	 * </pre>
 	 *
 	 * @author KangMinJi (kmj0701@coremethod.co.kr)
-	 * @param ReadBoardDtlReqDto
+	 * @param boardReqDto
 	 * @return ReadBoardDtlResDto
 	 */
 	@GetMapping("/board/{boardId}")
 	@Operation(summary = "게시판 상세 조회", description = "게시판 상세 조회됩니다.")
-	public ReadBoardDtlResDto getBoard(/*@RequestParam(value="boardId", required=true) int boardId , */ReadBoardDtlReqDto  boardReqDto, @PathVariable(value="boardId") Integer boardId) {
-		//ReadBoardDtlReqDto boardReqDto = new ReadBoardDtlReqDto();
-		return boardService.getBoardDtl(boardReqDto);
+	public  ApiResponse<ReadBoardDtlResDto> getBoard(/*@RequestParam(value="boardId", required=true) int boardId , */ReadBoardDtlReqDto  boardReqDto, @PathVariable(value="boardId") Integer boardId) {
+
+		ReadBoardDtlResDto readBoardDtlResDto = boardService.getBoardDtl(boardReqDto);
+
+		return ApiResponse.ok(readBoardDtlResDto);
 	}
 
 	/**
@@ -86,17 +92,16 @@ public class BoardController {
 	 * </pre>
 	 *
 	 * @author KangMinJi (kmj0701@coremethod.co.kr)
-	 * @param UpdateBoardReqDto
+	 * @param updateBoardReqDto
 	 * @return CreateBoardResDto
 	 */
 	@PutMapping("/board")
 	@Operation(summary="게시판 수정", description ="게시판 수정이 됩니다")
-	public CreateBoardResDto updateBoard(@RequestBody  UpdateBoardReqDto updateBoardReqDto) {
-//응용
-		return boardService.updateBoard(updateBoardReqDto);
+	public ApiResponse<CreateBoardResDto> updateBoard(@RequestBody  UpdateBoardReqDto updateBoardReqDto) {
+		//응용
+		CreateBoardResDto createBoardResDto = boardService.updateBoard(updateBoardReqDto);
 
-
-
+		return ApiResponse.ok(createBoardResDto);
 	}
 	/**
 	 * <pre>
@@ -104,14 +109,16 @@ public class BoardController {
 	 * </pre>
 	 *
 	 * @author KangMinJi (kmj0701@coremethod.co.kr)
-	 * @param UpdateBoardReqDto
+	 * @param updateBoardReqDto
 	 * @return CreateBoardResDto
 	 */
 	@DeleteMapping("/board")
 	@Operation(summary="게시판 삭제", description ="게시판 삭제가 됩니다")
-	public CreateBoardResDto deleteBoard(@RequestBody  UpdateBoardReqDto updateBoardReqDto) {
-		return boardService.deleteBoard(updateBoardReqDto);
+	public ApiResponse<CreateBoardResDto> deleteBoard(@RequestBody  UpdateBoardReqDto updateBoardReqDto) {
 
+		CreateBoardResDto createBoardResDto = boardService.deleteBoard(updateBoardReqDto);
+
+		return ApiResponse.ok(createBoardResDto);
 	}
 
 
@@ -124,9 +131,9 @@ public class BoardController {
 	 */
 	@PostMapping("/board/reply")
 	@Operation(summary="게시판 댓글 등록", description ="게시판 댓글 등록됩니다")
-	public String insertReply( @RequestBody @Valid CreateReplyReqDto replyReqDto){
-		// FIXME: 게시판 댓글 작성 시 validator 에러 발생
-		return boardService.insertReply(replyReqDto);
+	public ApiResponse<CreateBoardResDto> insertReply( @RequestBody @Valid CreateReplyReqDto replyReqDto){
+		CreateBoardResDto createBoardResDto = boardService.insertReply(replyReqDto);
+		return ApiResponse.ok(createBoardResDto);
 	}
 
 	/*<pre>
@@ -138,9 +145,10 @@ public class BoardController {
 	 */
 	@PutMapping("/board/reply")
 	@Operation(summary="게시판 댓글 등록", description ="게시판 댓글 수정됩니다")
-	public String updateReply( @RequestBody @Valid UpdateReplyReqDto replyReqDto){
+	public ApiResponse<CreateBoardResDto> updateReply( @RequestBody @Valid UpdateReplyReqDto replyReqDto){
 
-		return boardService.updateReply(replyReqDto);
+		CreateBoardResDto createBoardResDto = boardService.updateReply(replyReqDto);
+		return ApiResponse.ok(createBoardResDto);
 	}
 
 
@@ -153,7 +161,7 @@ public class BoardController {
 	 */
 	@DeleteMapping("/board/reply")
 	@Operation(summary="게시판 댓글 삭제", description ="게시판 댓글 삭제됩니다")
-	public String deleteReply( @RequestBody @Valid UpdateReplyReqDto replyReqDto){
+	public CreateBoardResDto deleteReply( @RequestBody @Valid UpdateReplyReqDto replyReqDto){
 
 		return boardService.updateReply(replyReqDto);
 	}

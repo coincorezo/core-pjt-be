@@ -10,8 +10,4 @@ public class CreateBoardResDto {
 	@Schema(description = "게시글 ID")
 	private int boardId;
 
-
-	@Schema(description = "게시글 메시지")
-	private String message;
-
 }
