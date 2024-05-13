@@ -1,5 +1,6 @@
 package com.pjt.core.common.error.response;
 
+import com.pjt.core.board.exception.BoardException;
 import com.pjt.core.common.error.exception.NoDataException;
 import com.pjt.core.common.error.exception.StorageException;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,13 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ExceptionResponse> handleException(Exception e) {
 		log.error("::handleException::", e);
 		ExceptionResponse exceptionResponse = ExceptionResponse.of(ErrorCode.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@ExceptionHandler(BoardException.class)
+	public ResponseEntity<ExceptionResponse> handleNoDataException(BoardException e) {
+		log.debug("::handleNoDataException::", e);
+		ExceptionResponse exceptionResponse = ExceptionResponse.of(e.getErrorCode());
 		return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
