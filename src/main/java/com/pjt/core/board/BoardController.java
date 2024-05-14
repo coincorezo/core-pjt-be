@@ -28,147 +28,142 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "BoardController", description = "게시판 API")
 public class BoardController {
 
-	@Autowired
-	BoardService boardService;
+    @Autowired
+    BoardService boardService;
 
-	/**
-	 * <pre>
-	 * 게시판 리스트
-	 * </pre>
-	 *
-	 * @author KangMinJi (kmj0701@coremethod.co.kr)
-	 * @param boardReqDto
-	 * @return
-	 */
-	@GetMapping("/board")
-	@Operation(summary = "게시판 조회", description = "게시판 리스트가 조회됩니다.")
-	public List<BoardDto> getBoardList(ReadBoardListReqDto boardReqDto) {
-		return boardService.getBoardList(boardReqDto);
-	}
+    /**
+     * <pre>
+     * 게시판 리스트
+     * </pre>
+     *
+     * @param boardReqDto
+     * @return
+     * @author KangMinJi (kmj0701@coremethod.co.kr)
+     */
+    @GetMapping("/board")
+    @Operation(summary = "게시판 조회", description = "게시판 리스트가 조회됩니다.")
+    public List<BoardDto> getBoardList(ReadBoardListReqDto boardReqDto) {
+        return boardService.getBoardList(boardReqDto);
+    }
 
-	/**
-	 * <pre>
-	 * 게시판 등록
-	 * </pre>
-	 *
-	 * @author KangMinJi (kmj0701@coremethod.co.kr)
-	 * @param boardReqDto
-	 * @return CreateBoardResDto
-	 */
-	@PostMapping("/board")
-	@Operation(summary = "게시판 등록", description = "게시판 등록합니다.")
-	//@RequestMapping(value="/", method = {RequestMethod.POST})
-	public ApiResponse<CreateBoardResDto> insertBoard(@RequestBody @Valid CreateBoardReqDto boardReqDto)
-			throws Exception {
+    /**
+     * <pre>
+     * 게시판 등록
+     * </pre>
+     *
+     * @param boardReqDto
+     * @return CreateBoardResDto
+     * @author KangMinJi (kmj0701@coremethod.co.kr)
+     */
+    @PostMapping("/board")
+    @Operation(summary = "게시판 등록", description = "게시판 등록합니다.")
+    //@RequestMapping(value="/", method = {RequestMethod.POST})
+    public ApiResponse<CreateBoardResDto> insertBoard(@RequestBody @Valid CreateBoardReqDto boardReqDto)
+            throws Exception {
 
-		CreateBoardResDto createBoardResDto = boardService.insertBoard(boardReqDto);
+        CreateBoardResDto createBoardResDto = boardService.insertBoard(boardReqDto);
 
-		return ApiResponse.ok(createBoardResDto);
-	}
-
-
-
-	/**
-	 * <pre>
-	 * 게시판 상세
-	 * </pre>
-	 *
-	 * @author KangMinJi (kmj0701@coremethod.co.kr)
-	 * @param boardReqDto
-	 * @return ReadBoardDtlResDto
-	 */
-	@GetMapping("/board/{boardId}")
-	@Operation(summary = "게시판 상세 조회", description = "게시판 상세 조회됩니다.")
-	public  ApiResponse<ReadBoardDtlResDto> getBoard(/*@RequestParam(value="boardId", required=true) int boardId , */ReadBoardDtlReqDto  boardReqDto, @PathVariable(value="boardId") Integer boardId) {
-
-		ReadBoardDtlResDto readBoardDtlResDto = boardService.getBoardDtl(boardReqDto);
-
-		return ApiResponse.ok(readBoardDtlResDto);
-	}
-
-	/**
-	 * <pre>
-	 * 게시판 수정
-	 * </pre>
-	 *
-	 * @author KangMinJi (kmj0701@coremethod.co.kr)
-	 * @param updateBoardReqDto
-	 * @return CreateBoardResDto
-	 */
-	@PutMapping("/board")
-	@Operation(summary="게시판 수정", description ="게시판 수정이 됩니다")
-	public ApiResponse<CreateBoardResDto> updateBoard(@RequestBody  UpdateBoardReqDto updateBoardReqDto) {
-		//응용
-		CreateBoardResDto createBoardResDto = boardService.updateBoard(updateBoardReqDto);
-
-		return ApiResponse.ok(createBoardResDto);
-	}
-	/**
-	 * <pre>
-	 * 게시판 삭제
-	 * </pre>
-	 *
-	 * @author KangMinJi (kmj0701@coremethod.co.kr)
-	 * @param updateBoardReqDto
-	 * @return CreateBoardResDto
-	 */
-	@DeleteMapping("/board")
-	@Operation(summary="게시판 삭제", description ="게시판 삭제가 됩니다")
-	public ApiResponse<CreateBoardResDto> deleteBoard(@RequestBody  UpdateBoardReqDto updateBoardReqDto) {
-
-		CreateBoardResDto createBoardResDto = boardService.deleteBoard(updateBoardReqDto);
-
-		return ApiResponse.ok(createBoardResDto);
-	}
+        return ApiResponse.ok(createBoardResDto);
+    }
 
 
-	/*<pre>
-	*게시판 댓글
-	* </pre>
-	*
-	* @author KangMinJi
-	* @param CreateReplyReqDto
-	 */
-	@PostMapping("/board/reply")
-	@Operation(summary="게시판 댓글 등록", description ="게시판 댓글 등록됩니다")
-	public ApiResponse<CreateBoardResDto> insertReply( @RequestBody @Valid CreateReplyReqDto replyReqDto){
-		CreateBoardResDto createBoardResDto = boardService.insertReply(replyReqDto);
-		return ApiResponse.ok(createBoardResDto);
-	}
+    /**
+     * <pre>
+     * 게시판 상세
+     * </pre>
+     *
+     * @param boardReqDto
+     * @return ReadBoardDtlResDto
+     * @author KangMinJi (kmj0701@coremethod.co.kr)
+     */
+    @GetMapping("/board/{boardId}")
+    @Operation(summary = "게시판 상세 조회", description = "게시판 상세 조회됩니다.")
+    public ApiResponse<ReadBoardDtlResDto> getBoard(/*@RequestParam(value="boardId", required=true) int boardId , */ReadBoardDtlReqDto boardReqDto, @PathVariable(value = "boardId") Integer boardId) {
 
-	/*<pre>
-	 *게시판 댓글 수정
-	 * </pre>
-	 *
-	 * @author KangMinJi
-	 * @param CreateReplyReqDto
-	 */
-	@PutMapping("/board/reply")
-	@Operation(summary="게시판 댓글 등록", description ="게시판 댓글 수정됩니다")
-	public ApiResponse<CreateBoardResDto> updateReply( @RequestBody @Valid UpdateReplyReqDto replyReqDto){
+        ReadBoardDtlResDto readBoardDtlResDto = boardService.getBoardDtl(boardReqDto);
 
-		CreateBoardResDto createBoardResDto = boardService.updateReply(replyReqDto);
-		return ApiResponse.ok(createBoardResDto);
-	}
+        return ApiResponse.ok(readBoardDtlResDto);
+    }
+
+    /**
+     * <pre>
+     * 게시판 수정
+     * </pre>
+     *
+     * @param updateBoardReqDto
+     * @return CreateBoardResDto
+     * @author KangMinJi (kmj0701@coremethod.co.kr)
+     */
+    @PutMapping("/board")
+    @Operation(summary = "게시판 수정", description = "게시판 수정이 됩니다")
+    public ApiResponse<CreateBoardResDto> updateBoard(@RequestBody UpdateBoardReqDto updateBoardReqDto) {
+        //응용
+        CreateBoardResDto createBoardResDto = boardService.updateBoard(updateBoardReqDto);
+
+        return ApiResponse.ok(createBoardResDto);
+    }
+
+    /**
+     * <pre>
+     * 게시판 삭제
+     * </pre>
+     *
+     * @param updateBoardReqDto
+     * @return CreateBoardResDto
+     * @author KangMinJi (kmj0701@coremethod.co.kr)
+     */
+    @DeleteMapping("/board")
+    @Operation(summary = "게시판 삭제", description = "게시판 삭제가 됩니다")
+    public ApiResponse<CreateBoardResDto> deleteBoard(@RequestBody UpdateBoardReqDto updateBoardReqDto) {
+
+        CreateBoardResDto createBoardResDto = boardService.deleteBoard(updateBoardReqDto);
+
+        return ApiResponse.ok(createBoardResDto);
+    }
 
 
-	/*<pre>
-	 *게시판 댓글 삭제
-	 * </pre>
-	 *
-	 * @author KangMinJi
-	 * @param CreateReplyReqDto
-	 */
-	@DeleteMapping("/board/reply")
-	@Operation(summary="게시판 댓글 삭제", description ="게시판 댓글 삭제됩니다")
-	public CreateBoardResDto deleteReply( @RequestBody @Valid UpdateReplyReqDto replyReqDto){
+    /*<pre>
+     *게시판 댓글
+     * </pre>
+     *
+     * @author KangMinJi
+     * @param CreateReplyReqDto
+     */
+    @PostMapping("/board/reply")
+    @Operation(summary = "게시판 댓글 등록", description = "게시판 댓글 등록됩니다")
+    public ApiResponse<CreateBoardResDto> insertReply(@RequestBody @Valid CreateReplyReqDto replyReqDto) {
+        CreateBoardResDto createBoardResDto = boardService.insertReply(replyReqDto);
+        return ApiResponse.ok(createBoardResDto);
+    }
 
-		return boardService.updateReply(replyReqDto);
-	}
+    /*<pre>
+     *게시판 댓글 수정
+     * </pre>
+     *
+     * @author KangMinJi
+     * @param CreateReplyReqDto
+     */
+    @PutMapping("/board/reply")
+    @Operation(summary = "게시판 댓글 등록", description = "게시판 댓글 수정됩니다")
+    public ApiResponse<CreateBoardResDto> updateReply(@RequestBody @Valid UpdateReplyReqDto replyReqDto) {
+
+        CreateBoardResDto createBoardResDto = boardService.updateReply(replyReqDto);
+        return ApiResponse.ok(createBoardResDto);
+    }
 
 
-
-
+    /*<pre>
+     *게시판 댓글 삭제
+     * </pre>
+     *
+     * @author KangMinJi
+     * @param CreateReplyReqDto
+     */
+    @DeleteMapping("/board/reply")
+    @Operation(summary = "게시판 댓글 삭제", description = "게시판 댓글 삭제됩니다")
+    public CreateBoardResDto deleteReply(@RequestBody @Valid UpdateReplyReqDto replyReqDto) {
+        return boardService.updateReply(replyReqDto);
+    }
 
 
 }
