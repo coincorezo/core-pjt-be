@@ -24,6 +24,8 @@ public class BoardService {
     /**
      * <pre>
      * 게시판 리스트
+     * </pre>
+     *
      * @param boardReqDto
      * @return BoardDto
      */
@@ -37,6 +39,8 @@ public class BoardService {
     /**
      * <pre>
      * 게시판 등록
+     * </pre>
+     *
      * @param boardReqDto
      * @return CreateBoardResDto
      */
@@ -74,6 +78,8 @@ public class BoardService {
     /**
      * <pre>
      * 게시판 상세
+     * </pre>
+     *
      * @param boardReqDto
      * @return ReadBoardDtlResDto
      */
@@ -98,6 +104,8 @@ public class BoardService {
     /**
      * <pre>
      * 게시판 수정
+     * </pre>
+     *
      * @param updateBoardReqDto
      * @return CreateBoardResDto
      */
@@ -122,6 +130,8 @@ public class BoardService {
     /**
      * <pre>
      * 게시판 삭제(delete)
+     * </pre>
+     *
      * @param updateBoardReqDto
      * @return CreateBoardResDto
      */
@@ -143,7 +153,9 @@ public class BoardService {
     /**
      * <pre>
      * 게시판 댓글 리스트
-     * @param  boardId
+     * </pre>
+     *
+     * @param boardId
      * @return ReadReplyResDto
      */
     public List<ReadReplyResDto> getReplyList(int boardId) {
@@ -156,7 +168,9 @@ public class BoardService {
     /**
      * <pre>
      * 게시판 댓글 등록
-     * @param  replyReqDto
+     * </pre>
+     *
+     * @param replyReqDto
      * @return String
      */
     public CreateBoardResDto insertReply(CreateReplyReqDto replyReqDto) {
@@ -174,6 +188,13 @@ public class BoardService {
         return createBoardResDto;
     }
 
+    /*<pre>
+     *게시판 댓글 수정
+     * </pre>
+     * @author KangMinJi
+     * @return CreateBoardResDto
+     * @param replyReqDto
+     */
     public CreateBoardResDto updateReply(UpdateReplyReqDto replyReqDto) {
         // todo : 등록자 id정보 맞는지 확인 후 수정 & 삭제
         /* 게시글 여부 확인 */
@@ -193,13 +214,26 @@ public class BoardService {
         return resDto;
     }
 
-    /* 댓글 등록시 public만 등록할 수 있도록 체크 */
+    /*
+     * <pre>
+     * 댓글 등록시 public만 등록할 수 있도록 체크
+     * </pre>
+     * @author KangMinJi
+     * @param readBoardDtlResDto
+     */
     private static void checkStatus(ReadBoardDtlResDto readBoardDtlResDto) {
         if (!("PUBLIC").equals(readBoardDtlResDto.getBoardStatus())) {
             throw new BoardException(ErrorCode.NOT_SAVE);
         }
     }
 
+    /*
+     * <pre>
+     * 댓글 등록시 게시글이 있는지 확인 여부
+     * </pre>
+     * @author KangMinJi
+     * @param readBoardDtlResDto
+     */
     public ReadBoardDtlResDto checkValid(int boardId) {
 
         /* 게시글 여부 확인 */

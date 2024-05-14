@@ -123,10 +123,11 @@ public class BoardController {
 
 
     /*<pre>
-     *게시판 댓글
+     *게시판 댓글 등록
      * </pre>
      *
      * @author KangMinJi
+     * @return CreateBoardResDto
      * @param CreateReplyReqDto
      */
     @PostMapping("/board/reply")
