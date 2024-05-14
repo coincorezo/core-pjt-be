@@ -33,7 +33,8 @@ public class BoardController {
 
 	@GetMapping("/detail")
 	public ReadBoardResponseDto getDetail(@Valid @RequestParam(value="boardId")String boardId) throws Exception {
-		return boardService.getDetail(boardId);
+		//return boardService.getDetail(boardId);
+		return null;
 	}
 
 	@PostMapping("/board")

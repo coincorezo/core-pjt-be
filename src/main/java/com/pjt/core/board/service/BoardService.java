@@ -48,18 +48,18 @@ public ApiResponse<Object>  getBoard(BoardRequestDto boardRequestDto) {
 	
 	}
 
-public ReadBoardResponseDto getDetail(String boardId) throws Exception {
-	if(!StringUtils.hasText(boardId)) {
+public ReadBoardResponseDto getDetail(BoardRequestDto boardRequestDto) throws Exception {
+	if(!StringUtils.hasText(boardRequestDto.getBoardId())) {
 		// throw new NoDataException(ErrorCode.INVALID_INPUT_VALUE);
 		throw new Exception("게시글 ID가 없습니다.");
 	}
 	
 	// 상세 조회
-	ReadBoardResponseDto dto =  boardMapper.getDetail(boardId);
+	ReadBoardResponseDto dto =  boardMapper.getDetail(boardRequestDto.getBoardId());
 	Optional.ofNullable(dto).orElseThrow(() -> new NoDataException(ErrorCode.NO_DATA));
 	
 	// 이미지 조회
-	List<ReadBoardImgResponseDto> img = boardMapper.getImage(boardId);
+	List<ReadBoardImgResponseDto> img = boardMapper.getImage(boardRequestDto.getBoardId());
 	
 	dto.setBoardImg(img);
 	

@@ -26,10 +26,17 @@ public class TestController {
 		return "/test2";
 	}
 	
+	@GetMapping("/t")
+	public String board2() {
+		return "/test3";
+	}
+	
 	@GetMapping("/board")
 	@ResponseBody
 	public ApiResponse<Object> getBoard(@Valid BoardRequestDto boardRequestDto) {
 		ApiResponse<Object> data = boardService.getBoard(boardRequestDto);
+		
+		System.out.println("ddddddddddddd~~~~~~~~~~~~~~~~" + boardRequestDto);
 
 		return data;
 	}

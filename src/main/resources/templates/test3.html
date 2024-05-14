@@ -185,7 +185,7 @@
 			form.appendChild(keywordInput);
 			form.appendChild(searchOptionInput);
 			form.appendChild(categoryInput);
-
+			
 			makeList($("input[name='page'").val());
 		});
 		
@@ -228,11 +228,23 @@
 					if(result.data.totalCount != 0) {
 						// 총 페이지 수 (총 게시글 수 / 페이지당 개수)
 						totalPage = Math.ceil(result.data.totalCount / size);	
-
-						// paging 함수 호출
-						// 현재 페이지(thisPage), 총 페이지 수(totalPage), callback function
-						let pagingHtml = paging(thisPage, totalPage, "makeList")
+				
+						//(현재 페이지, 카운트, 페이지당 게시글 수, 페이지 사이즈)
+						let pageData = paginate(parseInt($("input[name='page'").val())
+						                        , parseInt(result.data.totalCount)
+									            , parseInt($("input[name='size'").val())
+									            , parseInt($("input[name='pageSize'").val()) );
+												
+						
+						let pagingHtml = paging1( $('input[name=page]').val()
+						                        , parseInt(result.data.totalCount)
+												, parseInt($("input[name='size'").val())
+												, parseInt($("input[name='pageSize'").val())
+												, "makeList" );
+						console.log("dddddd", pagingHtml)
 						$(".network").html(pagingHtml);
+									  
+
 					}
 					
 					
@@ -242,25 +254,86 @@
 				}
 			})
 		}
+		
+		// pagination 1 (현재 페이지, 카운트, 페이지당 게시글 수, 페이지 사이즈, callback function)
+		function paging1(thisPage, totalCount, size, limit, funcName) {
+			thisPage = parseInt(thisPage);
+			totalCount = parseInt(totalCount);
+			size = parseInt(size);
+			limit = parseInt(limit);
+			
+			// 총 페이지 수
+		    let totalPage = Math.ceil(totalCount / size);
+		    // 시작 페이지
+		    let startPage = Math.floor((parseInt(thisPage) - 1) / limit) * limit + 1;
+		    // 마지막 페이지
+		    let lastPage = Math.min((startPage + limit - 1), totalPage);
+			// 다음 페이지
+			let nextPage = lastPage + 1;
+			// 이전 페이지
+			let prevPage = thisPage - 1;
+		
+		    if(totalPage < lastPage) {
+		        lastPage = totalPage;
+		    }
 
-		// pagination
-		function paging(thisPage, totalPage, funcName) {
-			let limit = parseInt(($("input[name='pageSize'").val()));
 
 			let pageHtml = "";
-			
-			// 시작 페이지 ((현재페이지 - 1) / 페이징 사이즈) * 페이징 사이즈 + 1;
-			let startPage = Math.floor((parseInt(thisPage) - 1) / limit) * limit + 1;
 
-			// 마지막 페이지 (시작 페이지 + 페이지당 게시글 수 - 1)
-			let lastPage = Math.min((startPage + limit - 1), totalPage);
+			// first page
+			if(thisPage > 1 && limit < thisPage) {
+				pageHtml += "<a href='javascript:" + funcName + "(1);'" + "class='direction first'>처음</a>";
+			}
+			
+			// previous page
+			if(thisPage > limit) {
+				// pageHtml += "<a href='javascript:" + funcName + "(" + (startPage == 1 ? 1 : startPage - 1) + ");'" + "class='direction prev'>pre</a>";
+				pageHtml += "<a href='javascript:" + funcName + "(" + (startPage === 1 ? 1 : prevPage ) + ");'" + "class='direction prev'>pre</a>";
+			}
+			
+			for(let i = startPage; i <= lastPage; i++) {
+				//현재 페이지 강조 처리
+				if(i === thisPage) {
+					pageHtml += "<a href='javascript:" + funcName + "(" + i + ");'" + "class='on'>" +i  + "</a>";
+				} else {
+					pageHtml += "<a href='javascript:" + funcName + "(" + i + ");'>" +  i  + "</a>";
+				} 
+				
+			}
+			
+			// next page
+			if(nextPage <= totalPage) {
+				pageHtml += "<a href='javascript:" + funcName + "(" + (nextPage < totalPage ? nextPage : totalPage) + ");'"
+				           + "class='direction next'>next</a>";
+			}
+			
+			// last page
+			if(thisPage < totalPage && nextPage < totalPage) {
+				pageHtml += "<a href='javascript:'" + funcName + "(" + totalPage + ");'" + "class='direction last'>마지막</a>"
+			}
+			
+			
+			return pageHtml;
+		}
+		
+
+		// pagination 2
+		function paging(pageData, funcName) {
+			let thisPage = pageData.thisPage;
+			let limit = pageData.limit;
+			let startPage = pageData.startPage;
+			let totalPage = pageData.totalPage;
+			let lastPage = pageData.lastPage;
+			let nextPage = pageData.nextPage;
+			
+			console.log("ddddddd " , pageData);
+			
+			let pageHtml = "";
 
 			if(totalPage < lastPage) {
 				lastPage = totalPage;
 			}
-			
-			let nextPage = lastPage + 1;
-			
+
 			// first page
 			if(thisPage > 1 && limit < thisPage) {
 				pageHtml += "<a href='javascript:" + funcName + "(1);'" + "class='direction first'>처음</a>";
@@ -298,39 +371,45 @@
 		}
 		
 
-		// paging 계산 
-		function pageCalc(thisPage, totalPage) {
-			// 시작 페이지 ((현재페이지 - 1) / 페이징 사이즈) * 페이징 사이즈 + 1;
-			let startPage = Math.floor((thisPage - 1) / limit) * limit + 1;
-
-			// 마지막 페이지 (시작 페이지 + 페이지당 게시글 수 - 1)
-			let lastPage = Math.min(startPage + limit - 1, totalPage);
-			
-			if(totalPage < lastPage) {
-				lastPage = totalPage;
-			}
-			
-			// 다음 페이지
-			let nextPage = thisPage + 1;
-			// 이전 페이지
-			let prevPage = thisPage - 1;
-			// 이전페이지 존재여부
-			let hasPrevPage = totalPage > prevPage && prevPage > 0;
-			// 다음페이지 존재여부
-			let hasNextPage = totalPage >= nextPage;
-			
-			let pagingInfo = {
-				"startPage" : startPage,
-				"lastPage" : lastPage,
-				"nextPage" : nextPage,
-				"prevPage" : prevPage,
-				"hasPrevPage" : hasPrevPage,
-				"hasNextPage" : hasNextPage
-			};
-			
-			return pagingInfo;
+		// 페이징 계산 function (현재 페이지, 카운트, 페이지당 게시글 수, 페이지 사이즈)
+		function paginate(thisPage, totalCount, size, limit) {
+		
+		    // 총 페이지 수
+		    let totalPage = Math.ceil(totalCount / size);
+		    // 시작 페이지
+		    let startPage = Math.floor((parseInt(thisPage) - 1) / limit) * limit + 1;
+		    // 마지막 페이지
+		    let lastPage = Math.min((startPage + limit - 1), totalPage);
+		
+		    if(totalPage < lastPage) {
+		        lastPage = totalPage;
+		    }
+		
+		    // 다음 페이지
+		    //let nextPage = thisPage + 1;
+			let nextPage = lastPage + 1;
+		    // 이전 페이지
+		    let prevPage = thisPage - 1;
+		    // 이전페이지 존재여부
+		    let hasPrevPage = totalPage > prevPage && prevPage > 0;
+		    // 다음페이지 존재여부
+		    let hasNextPage = totalPage >= nextPage;
+		
+		    let pagingInfo = {
+		        "startPage" : startPage,
+		        "lastPage" : lastPage,
+		        "nextPage" : nextPage,
+		        "prevPage" : prevPage,
+		        "hasPrevPage" : hasPrevPage,
+		        "hasNextPage" : hasNextPage,
+				"totalPage": totalPage,
+				"thisPage": thisPage,
+				"limit": limit
+		    };
+		
+		    return pagingInfo;
+		
 		}
-
 
 	</script>
 </body>
