@@ -1,36 +1,42 @@
 package com.pjt.core.member;
 
+import com.pjt.core.member.dto.CustomUserInfoDto;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 @Getter
 public class MemberDetails implements UserDetails {
 
-    private String id;
-    private String password;
+    private final CustomUserInfoDto member;
 
-    public MemberDetails(Member member) {
-        this.id = member.getId();
-        this.password = member.getPassword();
+    public MemberDetails(CustomUserInfoDto member) {
+        this.member = member;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        List<String> roles = new ArrayList<>();
+        roles.add("ROLE_" + member.getUserLevel());
+
+        return roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .toList();
     }
 
     @Override
     public String getPassword() {
-        return this.password;
+        return member.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return this.id;
+        return member.getId();
     }
 
     @Override
@@ -52,4 +58,5 @@ public class MemberDetails implements UserDetails {
     public boolean isEnabled() {
         return false;
     }
+
 }
