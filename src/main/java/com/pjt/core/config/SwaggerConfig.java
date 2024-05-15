@@ -43,4 +43,12 @@ public class SwaggerConfig {
                 .build();
     }
 
+    @Bean
+    public GroupedOpenApi userApi() {
+        return GroupedOpenApi.builder()
+                .group("user")
+                .packagesToScan("com.pjt.core.user")
+                .build();
+    }
+
 }
