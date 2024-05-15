@@ -14,6 +14,12 @@ public class UserDetailsService implements org.springframework.security.core.use
 
 	private final UserMapper userMapper;
 
+	/**
+	 * 사용자 조회
+	 * @param id 사용자 아이디
+	 * @return 사용자 정보
+	 * @throws UsernameNotFoundException 사용자 없음
+	 */
 	@Override
 	public org.springframework.security.core.userdetails.UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
 		User user = userMapper.selectUserById(id)

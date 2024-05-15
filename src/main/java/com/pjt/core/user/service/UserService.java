@@ -21,6 +21,10 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
+    /**
+     * 회원 가입
+     * @param request 회원 가입 요청
+     */
     @Transactional
     public void save(CreateUserRequestDto request) {
         // 이미 존재하는 회원인지 확인

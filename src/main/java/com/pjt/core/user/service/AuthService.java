@@ -19,6 +19,11 @@ public class AuthService {
 	private final UserMapper userMapper;
 	private final PasswordEncoder passwordEncoder;
 
+	/**
+	 * 로그인
+	 * @param request 로그인 요청
+	 * @return Access Token
+	 */
 	public String login(LoginRequestServiceDto request) {
 		User user = userMapper.selectUserById(request.getId())
 				.orElseThrow(() -> new UserException(ErrorCode.NO_MEMBER));

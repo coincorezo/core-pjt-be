@@ -24,6 +24,12 @@ public class AuthController {
 	private final AuthService authService;
 	private final UserService userService;
 
+	/**
+	 * 로그인
+	 * @param request 로그인 요청
+	 * @param response 응답
+	 * @return 응답
+	 */
 	@PostMapping("/login")
 	public ResponseEntity<?> login(
 			@Valid @RequestBody LoginRequestDto request,
@@ -36,6 +42,11 @@ public class AuthController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	/**
+	 * 회원가입
+	 * @param request 회원가입 요청
+	 * @return 응답
+	 */
 	@PostMapping("/signup")
 	public ResponseEntity<Void> signup(@Valid @RequestBody CreateUserRequestDto request) {
 		userService.save(request);
