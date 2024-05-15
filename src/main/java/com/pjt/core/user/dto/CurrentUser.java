@@ -12,26 +12,22 @@ public class CurrentUser {
 
 	private String email;
 
-	private String name;
-
 	private String useYn;
 
 	private String userLevel;
 
 	@Builder
-	private CurrentUser(String id, String email, String name, String useYn, String userLevel) {
+	private CurrentUser(String id, String email, String useYn, String userLevel) {
 		this.id = id;
 		this.email = email;
-		this.name = name;
 		this.useYn = useYn;
 		this.userLevel = userLevel;
 	}
 
 	public static CurrentUser fromEntity(User user) {
 		return CurrentUser.builder()
-				.id(user.getId())
+				.id(user.getUserId())
 				.email(user.getEmail())
-				.name(user.getName())
 				.useYn(user.getUseYn())
 				.userLevel(user.getUserLevel())
 				.build();

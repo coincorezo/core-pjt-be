@@ -1,34 +1,36 @@
 package com.pjt.core.user.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-@Entity
+import java.time.LocalDateTime;
+
 @Getter
+@AllArgsConstructor
+@Builder
 public class User {
 
-    @Id
-    private String id;
+    private String userId;
 
-    private String password;
+    private String userPassword;
 
     private String email;
 
-    private String name;
+    private String birth;
+
+    private String gender;
+
+    private String phoneNumber;
+
+    private String address;
+
+    private LocalDateTime regDt;
 
     private String useYn;
 
     private String userLevel;
 
-    protected User() {
-    }
+    private String profilePicture;
 
-    @Builder
-    public User(String id, String password, String email) {
-        this.id = id;
-        this.password = password;
-        this.email = email;
-    }
 }

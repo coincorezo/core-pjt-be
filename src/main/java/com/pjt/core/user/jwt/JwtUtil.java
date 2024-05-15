@@ -51,7 +51,7 @@ public class JwtUtil {
 	 */
 	private String createToken(CreateUserToken member, long expireTime) {
 		Claims claims = Jwts.claims();
-		claims.put("memberId", member.getId());
+		claims.put("userId", member.getId());
 		claims.put("email", member.getEmail());
 		claims.put("role", member.getUserLevel());
 		ZonedDateTime now = ZonedDateTime.now();
@@ -70,7 +70,8 @@ public class JwtUtil {
 	 * @return 사용자 ID
 	 */
 	public String getUserId(String token) {
-		return parseClaims(token).get("memberId", String.class);
+		Claims claims = parseClaims(token);
+		return claims.get("userId", String.class);
 	}
 
 	/**

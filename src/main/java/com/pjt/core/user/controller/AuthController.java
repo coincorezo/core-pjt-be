@@ -1,7 +1,6 @@
 package com.pjt.core.user.controller;
 
-import com.pjt.core.user.dto.CreateUserRequest;
-import com.pjt.core.user.dto.CreateUserResponse;
+import com.pjt.core.user.dto.CreateUserRequestDto;
 import com.pjt.core.user.dto.LoginRequestDto;
 import com.pjt.core.user.dto.LoginRequestServiceDto;
 import com.pjt.core.user.service.AuthService;
@@ -38,10 +37,10 @@ public class AuthController {
 	}
 
 	@PostMapping("/signup")
-	public ResponseEntity<CreateUserResponse> signup(@Valid @RequestBody CreateUserRequest request) {
-		CreateUserResponse response = userService.save(request);
+	public ResponseEntity<Void> signup(@Valid @RequestBody CreateUserRequestDto request) {
+		userService.save(request);
 
-		return new ResponseEntity<>(response, HttpStatus.CREATED);
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
 }

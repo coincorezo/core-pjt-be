@@ -24,6 +24,7 @@ public enum ErrorCode {
 	INVALID_PASSWORD("member", "비밀번호가 일치하지 않습니다."),
 	EXIST_MEMBER("member", "이미 존재하는 회원입니다."),
 	NO_TOKEN("member", "토큰이 존재하지 않습니다."),
+	FAIL_CREATE_MEMBER("member", "회원 가입에 실패하였습니다.")
 	;
 
 	private final String code;

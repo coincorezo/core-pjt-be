@@ -1,11 +1,13 @@
 package com.pjt.core.user.dto;
 
+import com.pjt.core.user.entity.User;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
+@AllArgsConstructor
+@Builder
 public class CreateUserToken {
 
 	private String id;
@@ -14,20 +16,15 @@ public class CreateUserToken {
 
 	private String email;
 
-	private String name;
-
 	private String userLevel;
 
-	public CreateUserToken() {
-	}
-
-	@Builder
-	public CreateUserToken(String id, String password, String email, String name, String userLevel) {
-		this.id = id;
-		this.password = password;
-		this.email = email;
-		this.name = name;
-		this.userLevel = userLevel;
+	public static CreateUserToken fromEntity(User user) {
+		return CreateUserToken.builder()
+				.id(user.getUserId())
+				.password(user.getUserPassword())
+				.email(user.getEmail())
+				.userLevel(user.getUserLevel())
+				.build();
 	}
 
 }
