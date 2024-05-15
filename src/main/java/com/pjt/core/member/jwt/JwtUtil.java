@@ -1,11 +1,15 @@
 package com.pjt.core.member.jwt;
 
+import com.pjt.core.common.error.response.ErrorCode;
 import com.pjt.core.member.dto.CustomUserInfoDto;
+import com.pjt.core.member.exception.MemberException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -101,6 +105,20 @@ public class JwtUtil {
 		} catch (ExpiredJwtException e) {
 			return e.getClaims();
 		}
+	}
+
+	public String getAccessToken(HttpServletRequest request) {
+		String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+		if (authorization == null || !authorization.startsWith("Bearer ")) {
+			throw new MemberException(ErrorCode.NO_TOKEN);
+		}
+
+		return getAccessToken(authorization);
+	}
+
+	public String getAccessToken(String authorization) {
+		return authorization.substring(7);
 	}
 
 }

@@ -23,6 +23,7 @@ public enum ErrorCode {
 	NO_MEMBER("member", "존재하지 않는 회원입니다."),
 	INVALID_PASSWORD("member", "비밀번호가 일치하지 않습니다."),
 	EXIST_MEMBER("member", "이미 존재하는 회원입니다."),
+	NO_TOKEN("member", "토큰이 존재하지 않습니다."),
 	;
 
 	private final String code;

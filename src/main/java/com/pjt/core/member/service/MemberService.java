@@ -1,8 +1,11 @@
 package com.pjt.core.member.service;
 
 import com.pjt.core.common.error.response.ErrorCode;
+import com.pjt.core.common.util.RequestUtils;
+import com.pjt.core.member.dto.CurrentUser;
 import com.pjt.core.member.entity.Member;
 import com.pjt.core.member.exception.MemberException;
+import com.pjt.core.member.jwt.JwtUtil;
 import com.pjt.core.member.repository.MemberRepository;
 import com.pjt.core.member.dto.CreateMemberRequest;
 import com.pjt.core.member.dto.CreateMemberResponse;
@@ -17,6 +20,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     @Transactional
     public CreateMemberResponse save(CreateMemberRequest request) {
@@ -42,6 +46,21 @@ public class MemberService {
                 .ifPresent(m -> {
                     throw new MemberException(ErrorCode.EXIST_MEMBER);
                 });
+    }
+
+    /**
+     * 로그인한 사용자 정보 조회
+     * @return 로그인한 사용자 정보
+     */
+    @Transactional(readOnly = true)
+    public CurrentUser getLoginUser() {
+        String accessToken = jwtUtil.getAccessToken(RequestUtils.getHttpServletRequest());
+        String userId = jwtUtil.getUserId(accessToken);
+
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(() -> new MemberException(ErrorCode.NO_MEMBER));
+
+        return CurrentUser.fromEntity(member);
     }
 
 }
