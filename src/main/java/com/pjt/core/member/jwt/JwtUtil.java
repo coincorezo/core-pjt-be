@@ -1,4 +1,4 @@
-package com.pjt.core.member;
+package com.pjt.core.member.jwt;
 
 import com.pjt.core.member.dto.CustomUserInfoDto;
 import io.jsonwebtoken.*;

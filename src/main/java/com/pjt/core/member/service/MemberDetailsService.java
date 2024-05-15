@@ -1,5 +1,8 @@
-package com.pjt.core.member;
+package com.pjt.core.member.service;
 
+import com.pjt.core.member.entity.Member;
+import com.pjt.core.member.entity.MemberDetails;
+import com.pjt.core.member.repository.MemberRepository;
 import com.pjt.core.member.dto.CustomUserInfoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;

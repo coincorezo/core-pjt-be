@@ -1,4 +1,4 @@
-package com.pjt.core.member;
+package com.pjt.core.member.entity;
 
 import com.pjt.core.member.dto.CustomUserInfoDto;
 import lombok.Getter;

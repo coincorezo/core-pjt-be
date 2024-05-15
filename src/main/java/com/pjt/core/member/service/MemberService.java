@@ -1,12 +1,15 @@
-package com.pjt.core.member;
+package com.pjt.core.member.service;
 
 import com.pjt.core.common.error.response.ErrorCode;
+import com.pjt.core.member.entity.Member;
+import com.pjt.core.member.exception.MemberException;
+import com.pjt.core.member.repository.MemberRepository;
+import com.pjt.core.member.dto.CreateMemberRequest;
+import com.pjt.core.member.dto.CreateMemberResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
