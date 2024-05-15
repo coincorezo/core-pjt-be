@@ -2,7 +2,7 @@ package com.pjt.core.config;
 
 import com.pjt.core.user.jwt.JwtAuthFilter;
 import com.pjt.core.user.jwt.JwtUtil;
-import com.pjt.core.user.service.MemberDetailsService;
+import com.pjt.core.user.service.UserDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -23,7 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @AllArgsConstructor
 public class SecurityConfig {
 
-    private final MemberDetailsService memberDetailsService;
+    private final UserDetailsService userDetailsService;
     private final JwtUtil jwtUtil;
 //    private final CustomAccessDeniedHandler accessDeniedHandler;
 //    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
@@ -51,7 +51,7 @@ public class SecurityConfig {
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .addFilterBefore(new JwtAuthFilter(memberDetailsService, jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthFilter(userDetailsService, jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .anyRequest().authenticated());

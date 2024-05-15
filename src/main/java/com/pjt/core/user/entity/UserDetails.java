@@ -1,21 +1,20 @@
 package com.pjt.core.user.entity;
 
-import com.pjt.core.user.dto.CustomUserInfoDto;
+import com.pjt.core.user.dto.CreateUserToken;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 @Getter
-public class MemberDetails implements UserDetails {
+public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
 
-    private final CustomUserInfoDto member;
+    private final CreateUserToken member;
 
-    public MemberDetails(CustomUserInfoDto member) {
+    public UserDetails(CreateUserToken member) {
         this.member = member;
     }
 
@@ -41,22 +40,22 @@ public class MemberDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 
 }

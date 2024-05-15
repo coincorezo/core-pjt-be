@@ -4,11 +4,11 @@ import com.pjt.core.common.error.response.ErrorCode;
 import lombok.Getter;
 
 @Getter
-public class MemberException extends RuntimeException {
+public class UserException extends RuntimeException {
 
 	private final ErrorCode errorCode;
 
-	public MemberException(ErrorCode errorCode) {
+	public UserException(ErrorCode errorCode) {
 		this.errorCode = errorCode;
 	}
 

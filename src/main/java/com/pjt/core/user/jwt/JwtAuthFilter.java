@@ -1,6 +1,6 @@
 package com.pjt.core.user.jwt;
 
-import com.pjt.core.user.service.MemberDetailsService;
+import com.pjt.core.user.service.UserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +16,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-	private final MemberDetailsService memberDetailsService;
+	private final UserDetailsService userDetailsService;
 	private final JwtUtil jwtUtil;
 
 	@Override
@@ -27,7 +27,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			String token = authorization.substring(7);
 			String id = jwtUtil.getUserId(token);
 
-			UserDetails userDetails = memberDetailsService.loadUserByUsername(id);
+			UserDetails userDetails = userDetailsService.loadUserByUsername(id);
 
 			if (userDetails != null) {
 				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

@@ -1,11 +1,11 @@
 package com.pjt.core.user.controller;
 
-import com.pjt.core.user.dto.CreateMemberRequest;
-import com.pjt.core.user.dto.CreateMemberResponse;
+import com.pjt.core.user.dto.CreateUserRequest;
+import com.pjt.core.user.dto.CreateUserResponse;
 import com.pjt.core.user.dto.LoginRequestDto;
 import com.pjt.core.user.dto.LoginRequestServiceDto;
 import com.pjt.core.user.service.AuthService;
-import com.pjt.core.user.service.MemberService;
+import com.pjt.core.user.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
 	private final AuthService authService;
-	private final MemberService memberService;
+	private final UserService userService;
 
 	@PostMapping("/login")
 	public ResponseEntity<?> login(
@@ -38,8 +38,8 @@ public class AuthController {
 	}
 
 	@PostMapping("/signup")
-	public ResponseEntity<CreateMemberResponse> signup(@Valid @RequestBody CreateMemberRequest request) {
-		CreateMemberResponse response = memberService.save(request);
+	public ResponseEntity<CreateUserResponse> signup(@Valid @RequestBody CreateUserRequest request) {
+		CreateUserResponse response = userService.save(request);
 
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}

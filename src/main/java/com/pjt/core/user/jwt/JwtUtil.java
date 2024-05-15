@@ -1,8 +1,8 @@
 package com.pjt.core.user.jwt;
 
 import com.pjt.core.common.error.response.ErrorCode;
-import com.pjt.core.user.dto.CustomUserInfoDto;
-import com.pjt.core.user.exception.MemberException;
+import com.pjt.core.user.dto.CreateUserToken;
+import com.pjt.core.user.exception.UserException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -39,7 +39,7 @@ public class JwtUtil {
 	 * @param member 사용자 정보
 	 * @return Access Token
 	 */
-	public String createAccessToken(CustomUserInfoDto member) {
+	public String createAccessToken(CreateUserToken member) {
 		return createToken(member, accessTokenExpTime);
 	}
 
@@ -49,7 +49,7 @@ public class JwtUtil {
 	 * @param expireTime 만료 시간
 	 * @return JWT
 	 */
-	private String createToken(CustomUserInfoDto member, long expireTime) {
+	private String createToken(CreateUserToken member, long expireTime) {
 		Claims claims = Jwts.claims();
 		claims.put("memberId", member.getId());
 		claims.put("email", member.getEmail());
@@ -111,7 +111,7 @@ public class JwtUtil {
 		String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
 
 		if (authorization == null || !authorization.startsWith("Bearer ")) {
-			throw new MemberException(ErrorCode.NO_TOKEN);
+			throw new UserException(ErrorCode.NO_TOKEN);
 		}
 
 		return getAccessToken(authorization);

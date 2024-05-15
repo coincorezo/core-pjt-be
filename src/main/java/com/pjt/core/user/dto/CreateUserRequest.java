@@ -1,6 +1,6 @@
 package com.pjt.core.user.dto;
 
-import com.pjt.core.user.entity.Member;
+import com.pjt.core.user.entity.User;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Getter
 @AllArgsConstructor
 @Builder
-public class CreateMemberRequest {
+public class CreateUserRequest {
 
     @NotBlank(message = "아이디를 입력해주세요.")
     private String id;
@@ -22,8 +22,8 @@ public class CreateMemberRequest {
         this.password = passwordEncoder.encode(password);
     }
 
-    public static Member toEntity(CreateMemberRequest request) {
-        return Member.builder()
+    public static User toEntity(CreateUserRequest request) {
+        return User.builder()
                 .id(request.getId())
                 .password(request.getPassword())
                 .build();

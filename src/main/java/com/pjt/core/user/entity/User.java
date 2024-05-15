@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
-public class Member {
+public class User {
 
     @Id
     private String id;
@@ -22,11 +22,11 @@ public class Member {
 
     private String userLevel;
 
-    protected Member() {
+    protected User() {
     }
 
     @Builder
-    public Member(String id, String password, String email) {
+    public User(String id, String password, String email) {
         this.id = id;
         this.password = password;
         this.email = email;

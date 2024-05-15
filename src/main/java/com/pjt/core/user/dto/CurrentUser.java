@@ -1,6 +1,6 @@
 package com.pjt.core.user.dto;
 
-import com.pjt.core.user.entity.Member;
+import com.pjt.core.user.entity.User;
 import lombok.*;
 
 @Getter
@@ -27,13 +27,13 @@ public class CurrentUser {
 		this.userLevel = userLevel;
 	}
 
-	public static CurrentUser fromEntity(Member member) {
+	public static CurrentUser fromEntity(User user) {
 		return CurrentUser.builder()
-				.id(member.getId())
-				.email(member.getEmail())
-				.name(member.getName())
-				.useYn(member.getUseYn())
-				.userLevel(member.getUserLevel())
+				.id(user.getId())
+				.email(user.getEmail())
+				.name(user.getName())
+				.useYn(user.getUseYn())
+				.userLevel(user.getUserLevel())
 				.build();
 	}
 

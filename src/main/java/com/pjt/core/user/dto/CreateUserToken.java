@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CustomUserInfoDto {
+public class CreateUserToken {
 
 	private String id;
 
@@ -18,11 +18,11 @@ public class CustomUserInfoDto {
 
 	private String userLevel;
 
-	public CustomUserInfoDto() {
+	public CreateUserToken() {
 	}
 
 	@Builder
-	public CustomUserInfoDto(String id, String password, String email, String name, String userLevel) {
+	public CreateUserToken(String id, String password, String email, String name, String userLevel) {
 		this.id = id;
 		this.password = password;
 		this.email = email;
