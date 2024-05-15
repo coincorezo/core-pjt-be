@@ -1,4 +1,4 @@
-package com.pjt.core.member.exception;
+package com.pjt.core.user.exception;
 
 import com.pjt.core.common.error.response.ErrorCode;
 import lombok.Getter;

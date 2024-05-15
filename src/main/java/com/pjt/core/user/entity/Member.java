@@ -1,4 +1,4 @@
-package com.pjt.core.member.entity;
+package com.pjt.core.user.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

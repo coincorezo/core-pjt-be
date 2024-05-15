@@ -1,6 +1,6 @@
-package com.pjt.core.member.jwt;
+package com.pjt.core.user.jwt;
 
-import com.pjt.core.member.service.MemberDetailsService;
+import com.pjt.core.user.service.MemberDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

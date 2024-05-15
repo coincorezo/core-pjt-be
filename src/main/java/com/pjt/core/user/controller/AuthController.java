@@ -1,11 +1,11 @@
-package com.pjt.core.member.controller;
+package com.pjt.core.user.controller;
 
-import com.pjt.core.member.dto.CreateMemberRequest;
-import com.pjt.core.member.dto.CreateMemberResponse;
-import com.pjt.core.member.dto.LoginRequestDto;
-import com.pjt.core.member.dto.LoginRequestServiceDto;
-import com.pjt.core.member.service.AuthService;
-import com.pjt.core.member.service.MemberService;
+import com.pjt.core.user.dto.CreateMemberRequest;
+import com.pjt.core.user.dto.CreateMemberResponse;
+import com.pjt.core.user.dto.LoginRequestDto;
+import com.pjt.core.user.dto.LoginRequestServiceDto;
+import com.pjt.core.user.service.AuthService;
+import com.pjt.core.user.service.MemberService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

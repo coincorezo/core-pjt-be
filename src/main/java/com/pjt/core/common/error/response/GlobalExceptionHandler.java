@@ -2,7 +2,7 @@ package com.pjt.core.common.error.response;
 
 import com.pjt.core.common.error.exception.NoDataException;
 import com.pjt.core.common.error.exception.StorageException;
-import com.pjt.core.member.exception.MemberException;
+import com.pjt.core.user.exception.MemberException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

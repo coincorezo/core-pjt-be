@@ -1,8 +1,8 @@
 package com.pjt.core.config;
 
-import com.pjt.core.member.jwt.JwtAuthFilter;
-import com.pjt.core.member.jwt.JwtUtil;
-import com.pjt.core.member.service.MemberDetailsService;
+import com.pjt.core.user.jwt.JwtAuthFilter;
+import com.pjt.core.user.jwt.JwtUtil;
+import com.pjt.core.user.service.MemberDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;

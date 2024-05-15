@@ -1,8 +1,8 @@
-package com.pjt.core.member.jwt;
+package com.pjt.core.user.jwt;
 
 import com.pjt.core.common.error.response.ErrorCode;
-import com.pjt.core.member.dto.CustomUserInfoDto;
-import com.pjt.core.member.exception.MemberException;
+import com.pjt.core.user.dto.CustomUserInfoDto;
+import com.pjt.core.user.exception.MemberException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

@@ -1,12 +1,12 @@
-package com.pjt.core.member.service;
+package com.pjt.core.user.service;
 
 import com.pjt.core.common.error.response.ErrorCode;
-import com.pjt.core.member.jwt.JwtUtil;
-import com.pjt.core.member.entity.Member;
-import com.pjt.core.member.exception.MemberException;
-import com.pjt.core.member.repository.MemberRepository;
-import com.pjt.core.member.dto.CustomUserInfoDto;
-import com.pjt.core.member.dto.LoginRequestServiceDto;
+import com.pjt.core.user.jwt.JwtUtil;
+import com.pjt.core.user.entity.Member;
+import com.pjt.core.user.exception.MemberException;
+import com.pjt.core.user.repository.MemberRepository;
+import com.pjt.core.user.dto.CustomUserInfoDto;
+import com.pjt.core.user.dto.LoginRequestServiceDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;

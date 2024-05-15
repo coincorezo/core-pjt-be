@@ -1,6 +1,6 @@
-package com.pjt.core.member.entity;
+package com.pjt.core.user.entity;
 
-import com.pjt.core.member.dto.CustomUserInfoDto;
+import com.pjt.core.user.dto.CustomUserInfoDto;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

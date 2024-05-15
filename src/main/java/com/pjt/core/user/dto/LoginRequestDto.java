@@ -1,4 +1,4 @@
-package com.pjt.core.member.dto;
+package com.pjt.core.user.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;

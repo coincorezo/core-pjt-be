@@ -1,6 +1,6 @@
-package com.pjt.core.member.dto;
+package com.pjt.core.user.dto;
 
-import com.pjt.core.member.entity.Member;
+import com.pjt.core.user.entity.Member;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
