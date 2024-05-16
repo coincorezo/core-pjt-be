@@ -3,6 +3,7 @@ package com.pjt.core.common.error.response;
 import com.pjt.core.board.exception.BoardException;
 import com.pjt.core.common.error.exception.NoDataException;
 import com.pjt.core.common.error.exception.StorageException;
+import com.pjt.core.user.exception.UserException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,13 @@ public class GlobalExceptionHandler {
 		log.error("::handleStorageException::", e);
 		ExceptionResponse exceptionResponse = ExceptionResponse.of(e.getErrorCode());
 		return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@ExceptionHandler(UserException.class)
+	public ResponseEntity<ExceptionResponse> handleMemberException(UserException e) {
+		log.error("::handleMemberException::", e);
+		ExceptionResponse exceptionResponse = ExceptionResponse.of(e.getErrorCode());
+		return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(Exception.class)
