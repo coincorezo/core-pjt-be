@@ -1,4 +1,4 @@
-package com.pjt.core.config;
+package com.pjt.core.config.security;
 
 import com.pjt.core.user.jwt.JwtAuthFilter;
 import com.pjt.core.user.jwt.JwtUtil;
@@ -25,8 +25,8 @@ public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
     private final JwtUtil jwtUtil;
-//    private final CustomAccessDeniedHandler accessDeniedHandler;
-//    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
     private static final String[] AUTH_WHITELIST = {
             "/api/auth/**",
@@ -55,9 +55,11 @@ public class SecurityConfig {
                 .addFilterBefore(new JwtAuthFilter(userDetailsService, jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(AUTH_WHITELIST).permitAll()
-                        .anyRequest().authenticated());
-//                .exceptionHandling(exceptionHandling -> exceptionHandling
-
+                        .requestMatchers("/api/common/**").hasRole("ADMIN")
+                        .anyRequest().authenticated())
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .accessDeniedHandler(accessDeniedHandler)
+                        .authenticationEntryPoint(authenticationEntryPoint));
         return http.build();
     }
 
