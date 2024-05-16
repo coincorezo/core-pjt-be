@@ -55,6 +55,7 @@ public class SecurityConfig {
                 .addFilterBefore(new JwtAuthFilter(userDetailsService, jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(AUTH_WHITELIST).permitAll()
+                        .requestMatchers("/api/common/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .accessDeniedHandler(accessDeniedHandler)
