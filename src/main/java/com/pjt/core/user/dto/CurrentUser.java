@@ -5,7 +5,6 @@ import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
 public class CurrentUser {
 
 	private String id;
