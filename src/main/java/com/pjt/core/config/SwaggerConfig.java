@@ -40,6 +40,22 @@ public class SwaggerConfig {
     }
 
     @Bean
+    public GroupedOpenApi commonCodeApi() {
+        return GroupedOpenApi.builder()
+                .group("common")
+                .packagesToScan("com.pjt.core.common.code")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi boardApi() {
+        return GroupedOpenApi.builder()
+                .group("board")
+                .packagesToScan("com.pjt.core.board")
+                .build();
+    }
+
+    @Bean
     public GroupedOpenApi storageApi() {
         return GroupedOpenApi.builder()
                 .group("storage")
