@@ -8,6 +8,8 @@ import com.pjt.core.board.exception.BoardException;
 import com.pjt.core.common.ApiResponse;
 import com.pjt.core.common.error.exception.NoDataException;
 import com.pjt.core.common.error.response.ErrorCode;
+import com.pjt.core.user.dto.CurrentUser;
+import com.pjt.core.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,10 @@ import com.pjt.core.common.util.FileUploadUtile;
 public class BoardService {
     @Autowired
     private BoardMapper boardMapper;
+
+    @Autowired
+    private UserService userService;
+
 
     /**
      * <pre>
@@ -137,7 +143,8 @@ public class BoardService {
      */
     public CreateBoardResDto deleteBoard(UpdateBoardReqDto updateBoardReqDto) {
         //todo : 로그인정보 맞는 확인 후  삭제
-
+        CurrentUser currentUser = userService.getLoginUser();
+        //if(id === id) {}
         this.checkValid(updateBoardReqDto.getBoardId());
         /* 게시글 여부 확인 후 boardStatus DELETE 변경*/
         CreateBoardResDto updateBoard = new CreateBoardResDto();
@@ -197,6 +204,7 @@ public class BoardService {
      */
     public CreateBoardResDto updateReply(UpdateReplyReqDto replyReqDto) {
         // todo : 등록자 id정보 맞는지 확인 후 수정 & 삭제
+
         /* 게시글 여부 확인 */
         ReadBoardDtlResDto readBoardDtlResDto = this.checkValid(replyReqDto.getBoardId());
 
