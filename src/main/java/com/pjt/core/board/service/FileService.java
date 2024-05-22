@@ -12,9 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.pjt.core.board.dto.FileRequestDto;
 import com.pjt.core.board.dto.FileResponseDto;
-import com.pjt.core.board.mapper.BoardMapper;
+import com.pjt.core.board.mapper.BoardJMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,7 +27,7 @@ public class FileService {
 //	@Value("${file.dir}")
 //    private String rootPath;
 	
-	private final BoardMapper boardMapper;
+	private final BoardJMapper boardJMapper;
 	
 	public List<FileResponseDto> uploadFile(Integer boardId, List<MultipartFile> files) throws IllegalStateException, IOException {
 		
@@ -92,7 +91,7 @@ public class FileService {
 	public void deleteImg(List<String> deleteImgNo) {
 		// 저장 경로 찾기
 		for(String imgNo : deleteImgNo) {
-			String fileUrlPath = boardMapper.getFileUrlPath(imgNo);
+			String fileUrlPath = boardJMapper.getFileUrlPath(imgNo);
 			// 물리적 삭제
 			File file = new File(fileUrlPath);
 			boolean isDeleted = file.delete();
