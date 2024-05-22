@@ -16,4 +16,8 @@ public class CategoryCoin {
 
 	private int coin;
 
+	public void updateCoin(int coin) {
+		this.coin = coin;
+	}
+
 }
