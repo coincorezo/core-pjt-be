@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pjt.core.coin.coinMapper">
+
+    <insert id="saveCoin" parameterType="com.pjt.core.coin.dto.CreateCoinReqDto">
+
+        insert into points_history
+        ( user_id
+        , points_change
+        , points_amount
+        , reson
+        , reg_dt)
+        values ( #{userId}
+               , #{pointsChange}
+               , #{points_amount}
+               , #{reson}
+               , now())
+
+    </insert>
+</mapper>
