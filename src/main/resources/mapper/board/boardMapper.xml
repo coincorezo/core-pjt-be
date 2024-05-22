@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pjt.core.board.BoardMapper">
+    <select id="getBoardList" parameterType="com.pjt.core.board.dto.CreateBoardReqDto"
+            resultType="com.pjt.core.board.dto.BoardDto">
+        /*게시판 리스트 (메인 조회시 mainFlg 넣기 ) */
+        select
+        board_id
+        , board_title
+        , board_content
+        , board_writer
+        , board_view_cnt
+        , category
+        , board_status
+        , reg_dt
+        from board
+        <!-- <where> 문 -->
+        <where>
+            and board_status ='PUBLIC'
+            <if test="category != null and category !=''">
+                and category = #{category}
+            </if>
+            <if test="searchText !=null and searchText !='' ">
+                <if test="searchFlg ==1 ">and board_title like concat('%' , #{searchText}, '%')</if>
+                <if test="searchFlg ==2 ">and ((board_title like concat('%' , #{searchText}, '%')) or (board_content
+                    like concat('%' , #{searchText}, '%')))
+                </if>
+                <if test="searchFlg ==3 ">and board_content like concat('%' , #{searchText}, '%')</if>
+            </if>
+        </where>
+        order by reg_dt desc
+
+        <if test="mainFlg =='main'">
+            limit 5
+        </if>
+    </select>
+
+    <insert id="insertBoard" parameterType="com.pjt.core.board.dto.CreateBoardReqDto">
+        /* 게시판 등록 */
+        insert
+        into board
+        (
+        board_title
+        ,board_content
+        ,board_writer
+        ,board_view_cnt
+        ,category
+        ,board_status
+        ,reg_dt
+        ,upt_dt)
+        values(
+        #{boardTitle}
+        ,#{boardContent}
+        ,#{boardWriter}
+        ,#{boardViewCnt}
+        ,#{category}
+        ,#{boardStatus}
+        ,now()
+        ,now()
+        )
+        <selectKey keyProperty="boardId" resultType="int" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+
+    </insert>
+
+    <insert id="insertBoardImg" parameterType="com.pjt.core.board.dto.CreateBoardImgReqDto">
+        /* 게시판 파일업로드 등록 */
+        insert into board_img
+        ( board_id
+        , emoticon_img_nm
+        , img_ext_nm
+        , img_file_size
+        , file_url_path
+        , emoticon_physical_nm)
+        values ( #{boardId}
+               , #{emoticonImgNm}
+               , #{imgExtNm}
+               , #{imgFileSize}
+               , #{fileUrlPath}
+               , #{emoticonPhysicalNm})
+    </insert>
+
+    <select id="getBoardDtl" parameterType="com.pjt.core.board.dto.ReadBoardDtlReqDto"
+            resultType="com.pjt.core.board.dto.ReadBoardDtlResDto">
+        /* 게시판 상세 */
+        select
+        board_title
+        ,board_id
+        , board_content
+        , board_writer
+        , board_view_cnt
+        , category
+        , board_status
+        , reg_dt
+        , upt_dt
+        from board
+        where board_id= #{boardId}
+        <!--		 and bpard_status ='PUBLIC'-->
+    </select>
+
+    <select id="getBoardDtlImg" parameterType="com.pjt.core.board.dto.ReadBoardDtlReqDto"
+            resultType="com.pjt.core.board.dto.CreateBoardImgReqDto">
+        /* 게시판 파일업로드 상세 */
+        select img_no
+             , emoticon_img_nm
+             , img_ext_nm
+             , img_file_size
+             , file_url_path
+             , emoticon_physical_nm
+        from board_img
+        where board_id = #{boardId}
+    </select>
+
+    <update id="updateBoard" parameterType="com.pjt.core.board.dto.UpdateBoardReqDto">
+        /* 게시판 수정 */
+        update board
+        set board_title   =#{boardTitle}
+          , board_content = #{boardContent}
+          , board_writer  =#{boardWriter}
+          , category      =#{category}
+          , board_status  =#{boardStatus}
+          , upt_dt        = now()
+        where board_id = #{boardId}
+    </update>
+
+    <select id="getReply" parameterType="int" resultType="com.pjt.core.board.dto.ReadReplyResDto">
+        /* 댓글 조회 */
+        SELECT reply_id
+             , board_id
+             , reply_comment
+             , DATE_FORMAT(reg_dt, '%Y-%m-%d %H:%i:%s')    AS reg_dt
+             , DATE_FORMAT(update_dt, '%Y-%m-%d %H:%i:%s') AS update_dt
+             , use_yn
+        FROM reply
+        where board_id = #{boardId}
+          and use_yn = 'Y'
+    </select>
+
+    <insert id="insertReply" parameterType="com.pjt.core.board.dto.CreateReplyReqDto">
+        /* 댓글 등록 */
+        INSERT
+        INTO reply
+        ( board_id
+        , reply_comment
+        , reg_dt
+        , update_dt
+        , use_yn)
+        VALUES ( #{boardId}
+               , #{replyComment}
+               , now()
+               , now()
+               , #{useYn})
+
+    </insert>
+
+    <update id="updateReply" parameterType="com.pjt.core.board.dto.UpdateReplyReqDto">
+        /* 댓글 수정 삭제 */
+        update reply
+        set reply_comment =#{replyComment}
+          , use_yn        =#{useYn}
+          , update_dt     = now()
+        where board_id = #{boardId}
+          and reply_id = #{replyId}
+    </update>
+</mapper>

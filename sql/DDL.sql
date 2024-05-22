@@ -37,35 +37,6 @@ CREATE TABLE `reply`
     `use_yn`        char(2)      NULL COMMENT '삭제여부'
 );
 
-DROP TABLE IF EXISTS `common_code`;
-
-CREATE TABLE `common_code`
-(
-    `common_code`             varchar(60)  NOT NULL COMMENT '공통코드',
-    `common_code_name`        varchar(60)  NULL COMMENT '공통코드명',
-    `common_code_description` varchar(255) NULL COMMENT '공통코드설명',
-    `use_yn`                  char(1)      NULL COMMENT '사용여부',
-    `reg_dt`                  date         NULL COMMENT '등록일',
-    `reg_id`                  varchar(100) NULL COMMENT '등록자',
-    `upt_dt`                  date         NULL COMMENT '수정일',
-    `upt_id`                  varchar(100) NULL COMMENT '수정자'
-);
-
-DROP TABLE IF EXISTS `group_code`;
-
-CREATE TABLE `group_code`
-(
-    `common_code`            varchar(60)  NOT NULL COMMENT '공통코드',
-    `group_code`             varchar(60)  NOT NULL COMMENT '그룹코드',
-    `group_code_name`        varchar(60)  NULL COMMENT '그룹코드명',
-    `group_code_description` varchar(255) NULL COMMENT '그룹코드설명',
-    `use_yn`                 char(1)      NULL COMMENT '사용여부',
-    `reg_dt`                 timestamp    NOT NULL COMMENT '등록일',
-    `reg_id`                 varchar(100) NOT NULL COMMENT '등록자',
-    `upt_dt`                 timestamp    NOT NULL COMMENT '수정일',
-    `upt_id`                 varchar(100) NOT NULL COMMENT '수정자'
-);
-
 DROP TABLE IF EXISTS `emoticon`;
 
 CREATE TABLE `emoticon`
@@ -111,7 +82,7 @@ DROP TABLE IF EXISTS `profile_img`;
 
 CREATE TABLE `profile_img`
 (
-    `img_no`        varchar(225) NOT NULL COMMENT '이미지번호',
+    `img_no`        int          NOT NULL COMMENT '이미지번호',
     `user_id`       varchar(100) NOT NULL COMMENT '아이디',
     `img_nm`        varchar(225) NOT NULL COMMENT '이미지이름',
     `img_ext_nm`    varchar(100) NOT NULL COMMENT '이미지 확장자',
@@ -123,7 +94,7 @@ DROP TABLE IF EXISTS `emoticon_img`;
 
 CREATE TABLE `emoticon_img`
 (
-    `emoticon_img_no`    varchar(225) NOT NULL COMMENT '이미지번호',
+    `emoticon_img_no`    int          NOT NULL COMMENT '이미지번호',
     `emoticon_detail_id` varchar(100) NOT NULL COMMENT '이모티콘상세ID',
     `emoticon_img_nm`    varchar(225) NOT NULL COMMENT '이미지이름',
     `img_ext_nm`         varchar(100) NOT NULL COMMENT '이미지 확장자',
@@ -169,13 +140,39 @@ CREATE TABLE `favorite`
     `reg_dt`      timestamp    NOT NULL COMMENT '등록일'
 );
 
+DROP TABLE IF EXISTS `common_code`;
+
+CREATE TABLE `common_code`
+(
+    `common_code`             varchar(60)  NOT NULL COMMENT '공통코드',
+    `common_code_name`        varchar(60)  NULL COMMENT '공통코드명',
+    `common_code_description` varchar(255) NULL COMMENT '공통코드설명',
+    `ref`                     varchar(60)  NULL COMMENT '참조코드',
+    `depth`                   int          NULL COMMENT '계층',
+    `use_yn`                  char(1)      NULL COMMENT '사용여부',
+    `reg_dt`                  date         NULL COMMENT '등록일',
+    `reg_id`                  varchar(100) NULL COMMENT '등록자',
+    `upt_dt`                  date         NULL COMMENT '수정일',
+    `upt_id`                  varchar(100) NULL COMMENT '수정자'
+);
+
+DROP TABLE IF EXISTS `board_img`;
+
+CREATE TABLE `board_img`
+(
+    `img_no`          int          NOT NULL COMMENT '이미지번호',
+    `board_id`        int(4)       NOT NULL COMMENT '게시판 아이디',
+    `emoticon_img_nm` varchar(225) NOT NULL COMMENT '이미지이름',
+    `img_ext_nm`      varchar(100) NOT NULL COMMENT '이미지 확장자',
+    `img_file_size`   varchar(100) NOT NULL COMMENT '파일사이즈',
+    `file_url_path`   varchar(225) NULL COMMENT '이미지 물리경로'
+);
+
 ALTER TABLE `board` ADD CONSTRAINT `PK_BOARD` PRIMARY KEY (`board_id`);
 
 ALTER TABLE `points_history` ADD CONSTRAINT `PK_POINTS_HISTORY` PRIMARY KEY (`history_id`);
 
 ALTER TABLE `reply` ADD CONSTRAINT `PK_REPLY` PRIMARY KEY (`reply_id`);
-
-ALTER TABLE `common_code` ADD CONSTRAINT `PK_COMMON_CODE` PRIMARY KEY (`common_code`);
 
 ALTER TABLE `emoticon` ADD CONSTRAINT `PK_EMOTICON` PRIMARY KEY (`emoticon_id`);
 
@@ -188,3 +185,16 @@ ALTER TABLE `profile_img` ADD CONSTRAINT `PK_PROFILE_IMG` PRIMARY KEY (`img_no`)
 ALTER TABLE `emoticon_img` ADD CONSTRAINT `PK_EMOTICON_IMG` PRIMARY KEY (`emoticon_img_no`);
 
 ALTER TABLE `emoticon_history` ADD CONSTRAINT `PK_EMOTICON_HISTORY` PRIMARY KEY (`history_id`);
+
+ALTER TABLE `common_code` ADD CONSTRAINT `PK_COMMON_CODE` PRIMARY KEY (`common_code`);
+
+ALTER TABLE `board_img` ADD CONSTRAINT `PK_BOARD_IMG` PRIMARY KEY (`img_no`);
+
+alter table board modify board_id int not null auto_increment;
+alter table board_img modify img_no int not null auto_increment;
+alter table profile_img modify img_no int not null auto_increment;
+alter table emoticon_img modify emoticon_img_no int not null auto_increment;
+alter table reply modify reply_id int not null auto_increment;
+alter table points_history modify history_id bigint not null auto_increment;
+alter table emoticon_history modify history_id bigint not null auto_increment;
+alter table emoticon modify emoticon_id int not null auto_increment;

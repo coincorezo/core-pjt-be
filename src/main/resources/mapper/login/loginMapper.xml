@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pjt.core.login.LoginMapper">
+
+	<select id="login" parameterType="com.pjt.core.login.dto.LoginReqDto" resultType="com.pjt.core.login.dto.UserResDto">
+		/*로그인 정보 조회 */
+		select
+			user_id
+			,user_password
+			,email
+			,birth
+			,phone_number
+			,address
+			,reg_dt
+			,user_level
+			,profile_picture
+		 from user
+		 where user_id = #{userId}
+		 and user_password = #{userPassword}
+
+	</select>
+
+	<insert id="insertLoginLog" parameterType="com.pjt.core.login.dto.LoginHistory" >
+		/*로그인히스토리 저장 */
+	 	insert into
+	 	 login_history
+		 	 (user_id
+		 	  , login_dt
+		 	  , login_ip
+		 	  )
+	 	  values(
+	 	  		#{userId}
+	 	  		, now()
+	 	  		, #{loginIp}
+	 	  		)
+	</insert>
+
+</mapper>
