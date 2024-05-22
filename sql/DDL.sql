@@ -22,6 +22,7 @@ CREATE TABLE `points_history`
     `points_change` int          NOT NULL COMMENT '변경포인트',
     `points_amount` int          NOT NULL COMMENT '최종포인트',
     `reason`        varchar(100) NOT NULL COMMENT '변경사유',
+    `coin_type`  	varchar(10)	 NOT NULL COMMENT '포인트 적립 내용 ',;
     `reg_dt`        timestamp    NULL COMMENT '사용일자'
 );
 
@@ -198,3 +199,6 @@ alter table reply modify reply_id int not null auto_increment;
 alter table points_history modify history_id bigint not null auto_increment;
 alter table emoticon_history modify history_id bigint not null auto_increment;
 alter table emoticon modify emoticon_id int not null auto_increment;
+
+
+alter table points_history  add coin_type varchar(10) not null COMMENT '포인트 적립 내용';

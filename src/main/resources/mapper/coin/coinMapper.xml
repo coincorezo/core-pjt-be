@@ -1,20 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.pjt.core.coin.coinMapper">
+<mapper namespace="com.pjt.core.coin.repository.CoinMapper">
 
+    <select id="getCointSearch" parameterType="com.pjt.core.coin.dto.PointsHistoryReqDto" resultType="com.pjt.core.coin.dto.PointsHistoryResDto">
+        /*포인트 이용 내역 */
+        select
+             history_id
+            , user_id
+            , points_change
+            , points_amount
+            , reason
+            , date_format(reg_dt, '%y.%m.%d')
+        from points_history
+            where reg_dt between date(#{startDate}) and date(#{endDate})
+                and user_id = #{userId}
+            <!--적립 타입 넣기 if enum -->
+    </select>
     <insert id="saveCoin" parameterType="com.pjt.core.coin.dto.CreateCoinReqDto">
 
-        insert into points_history
-        ( user_id
-        , points_change
-        , points_amount
-        , reson
-        , reg_dt)
-        values ( #{userId}
-               , #{pointsChange}
-               , #{points_amount}
-               , #{reson}
-               , now())
-
+        insert
+            into points_history
+            (
+                  user_id
+                , points_change
+                , points_amount
+                , reason
+                , reg_dt
+                , coin_type
+            )
+            select
+                  #{userId}
+                , #{pointsChange}
+                , coalesce((select
+                                    (sum(points_change)) + (#{pointsChange})
+                                  from points_history
+                                    where user_id = #{userId})
+                , #{pointsChange}) as pointsAmount
+                , #{coinReason}
+                , now()
+                , '적립'
     </insert>
 </mapper>

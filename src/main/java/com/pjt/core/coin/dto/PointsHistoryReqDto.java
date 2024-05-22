@@ -16,9 +16,9 @@ public class PointsHistoryReqDto {
     @Schema(description = "사용일자")
     private LocalDateTime regDt;
 
-    @Schema(description = "시작날짜")
+    @Schema(description = "시작날짜 / 2024-05-22")
     private LocalDateTime startDate;
 
-    @Schema(description = "종료날짜")
+    @Schema(description = "종료날짜 / 2024-05-22")
     private LocalDateTime endDate;
 }

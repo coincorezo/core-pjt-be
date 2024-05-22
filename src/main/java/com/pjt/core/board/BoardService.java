@@ -52,7 +52,15 @@ public class BoardService {
      */
     public CreateBoardResDto insertBoard(CreateBoardReqDto boardReqDto
             /*,MultipartHttpServletRequest multiRequest*/) throws Exception {
-        //todo : 아이디, 코인 적립
+        //todo : 아이디, 코인 적립 보드 등록할 때
+        //프론트에서 보내주는 값이
+        //카테고리랑
+        //코인 값 맞는지
+        //값만 확인 하면 되는거죠?
+        //CategoryCoinService.getCategoryCoinByCategory(String category)
+        //코인 적립 서비스 가져오기
+        //id비교 하기
+        
         CreateBoardResDto boardResDto = new CreateBoardResDto();
         /*insert*/
         int saveCount = boardMapper.insertBoard(boardReqDto);
