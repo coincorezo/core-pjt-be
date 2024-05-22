@@ -1,13 +1,11 @@
 package com.pjt.core.board.controller;
 
+import java.io.IOException;
 import java.util.List;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+
+import com.pjt.core.board.dto.ReplyRequestDto;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.pjt.core.board.dto.CreateBoardRequestDto;
@@ -40,6 +38,20 @@ public class BoardController {
 	public String createBoard(@Valid @RequestPart("dto") CreateBoardRequestDto dto, @RequestPart(value="files", required=false) List<MultipartFile> files) throws Exception {
 		return boardService.createBoard(dto, files);
 	}
+
+	@PostMapping("/updateBoard")
+	public String updateBoard(@Valid @RequestPart("dto") CreateBoardRequestDto dto,
+							  @RequestPart(value = "files", required=false) List<MultipartFile> files,
+							  @RequestPart(value = "deleteImgNo", required = false) List<String> deleteImgNo) throws IOException {
+		return boardService.updateBoard(dto, files, deleteImgNo);
+	}
+
+	@PostMapping("/reply")
+	public String createReply(@Valid @RequestBody ReplyRequestDto dto) {
+		return boardService.createReply(dto);
+	}
+
+
 	
 	
 

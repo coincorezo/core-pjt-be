@@ -22,7 +22,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FileService {
 
-	private final String rootPath = System.getProperty("user.dir") + "/files/";
+	// private final String rootPath = System.getProperty("user.dir") + "/files/";
+	private final String rootPath = System.getProperty("user.dir");
+
 //	@Value("${file.dir}")
 //    private String rootPath;
 	
@@ -40,8 +42,8 @@ public class FileService {
 			String absolutePath = new File("").getAbsolutePath() + File.separator + File.separator;
 			
 			// 프로젝트 내부에 폴더 생성 (files -> 현재날짜)
-			String path = rootPath +  File.separator + date;    
-
+			// String path = rootPath +  File.separator + date;
+			String path = rootPath + File.separator + "src/main/resources/upload/files" + date;
 
 			File saveFile = new File(path);
 			
@@ -62,7 +64,8 @@ public class FileService {
 				String newFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
 				
 			
-				saveFile = new File(path + File.separator + newFileName);
+				// saveFile = new File(path + File.separator + newFileName);
+				saveFile = new File(path + newFileName);
 				file.transferTo(saveFile);
 				
 				FileResponseDto save = new FileResponseDto();
@@ -84,6 +87,20 @@ public class FileService {
 		
 		
 		return savedFiles;
+	}
+
+	public void deleteImg(List<String> deleteImgNo) {
+		// 저장 경로 찾기
+		for(String imgNo : deleteImgNo) {
+			String fileUrlPath = boardMapper.getFileUrlPath(imgNo);
+			// 물리적 삭제
+			File file = new File(fileUrlPath);
+			boolean isDeleted = file.delete();
+			if(!isDeleted) {
+				isDeleted = file.delete();
+			}
+		}
+
 	}
 
 }
