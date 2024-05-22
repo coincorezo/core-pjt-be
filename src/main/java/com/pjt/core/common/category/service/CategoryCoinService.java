@@ -1,7 +1,10 @@
 package com.pjt.core.common.category.service;
 
 import com.pjt.core.common.category.entity.CategoryCoin;
+import com.pjt.core.common.category.exception.CategoryCoinException;
 import com.pjt.core.common.category.repository.CategoryCoinRepository;
+import com.pjt.core.common.code.service.CommonService;
+import com.pjt.core.common.error.response.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryCoinService {
 
+	private final CommonService commonService;
 	private final CategoryCoinRepository categoryCoinRepository;
 
 	/**
@@ -29,8 +33,16 @@ public class CategoryCoinService {
 	 * @return 카테고리별 코인
 	 */
 	public int getCategoryCoinByCategory(String category) {
+		// 공통코드 카테고리 조회
+		long count = commonService.getCommonCode(category).stream().count();
+
+		if (count == 0) {
+			throw new CategoryCoinException(ErrorCode.NOT_FOUND_CATEGORY);
+		}
+
+		// 카테코리별 코인 조회
 		CategoryCoin categoryCoin = categoryCoinRepository.findById(category)
-				.orElseThrow(() -> new RuntimeException("해당 카테고리가 존재하지 않습니다."));
+				.orElseThrow(() -> new CategoryCoinException(ErrorCode.NOT_FOUND_CATEGORY));
 
 		return categoryCoin.getCoin();
 	}
