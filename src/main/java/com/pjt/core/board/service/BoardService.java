@@ -3,9 +3,11 @@ package com.pjt.core.board.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import com.pjt.core.board.dto.*;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.stereotype.Service;
@@ -14,10 +16,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.pjt.core.board.dto.CreateBoardRequestDto;
-import com.pjt.core.board.dto.FileResponseDto;
-import com.pjt.core.board.dto.ReadBoardImgResponseDto;
-import com.pjt.core.board.dto.ReadBoardResponseDto;
 import com.pjt.core.board.mapper.BoardMapper;
 import com.pjt.core.common.error.exception.NoDataException;
 import com.pjt.core.common.error.response.ErrorCode;
@@ -32,13 +30,13 @@ public class BoardService {
 	private final BoardMapper boardMapper;
 	private final FileService fileService;
 
+
 public List<ReadBoardResponseDto> getBoard(String category) {
 		return boardMapper.getBoard(category);
 	}
 
 public ReadBoardResponseDto getDetail(String boardId) throws Exception {
 	if(!StringUtils.hasText(boardId)) {
-		// throw new NoDataException(ErrorCode.INVALID_INPUT_VALUE);
 		throw new Exception("게시글 ID가 없습니다.");
 	}
 	
@@ -49,7 +47,11 @@ public ReadBoardResponseDto getDetail(String boardId) throws Exception {
 	// 이미지 조회
 	List<ReadBoardImgResponseDto> img = boardMapper.getImage(boardId);
 	
+	// 댓글 조회
+	List<ReplyResponseDto> reply = boardMapper.getReply(boardId);
+
 	dto.setBoardImg(img);
+	dto.setReply(reply);
 	
 	return dto;
 }
@@ -93,6 +95,44 @@ public String createBoard(CreateBoardRequestDto dto, List<MultipartFile> files) 
 	return "저장완료";
 
 }
+
+public String updateBoard(CreateBoardRequestDto dto, List<MultipartFile> files, List<String> deleteImgNo) throws IOException {
+
+	List<FileResponseDto> savedFiles = new ArrayList<>();
+
+	if(dto == null) {
+		throw new NoDataException(ErrorCode.INTERNAL_SERVER_ERROR);
+	}
+
+	if(CollectionUtils.isEmpty(files)) {
+		throw new NoDataException(ErrorCode.INTERNAL_SERVER_ERROR);
+	}
+
+	// 파일 삭제
+	if(!CollectionUtils.isEmpty(deleteImgNo)) {
+		fileService.deleteImg(deleteImgNo);
+	}
+
+	// 새로운 파일 업로드
+	if(!CollectionUtils.isEmpty(files)) {
+		savedFiles = fileService.uploadFile(dto.getBoardId(), files);
+
+		for(FileResponseDto savedFile : savedFiles) {
+			boardMapper.createBoardImg(savedFile);
+		}
+	}
+
+	// 게시글 수정
+	boolean isUpdated = boardMapper.updateBoard(dto);
+
+	return null;
+}
+
+
+	public String createReply(ReplyRequestDto dto) {
+		boardMapper.createReply(dto);
+		return "저장 완료";
+	}
 
 
 

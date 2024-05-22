@@ -19,5 +19,6 @@ public class ReadBoardResponseDto {
 	private String regDt;
 	private String updDt;
 	private List<ReadBoardImgResponseDto> boardImg;
+	private List<ReplyResponseDto> reply;
 	
 }

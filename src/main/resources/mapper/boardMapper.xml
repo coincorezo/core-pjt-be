@@ -2,95 +2,150 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pjt.core.board.mapper.BoardMapper">
 
-<select id="getBoard" 
-        parameterType="string" 
-        resultType="com.pjt.core.board.dto.ReadBoardResponseDto">
-   select
-        board_id
-      , board_title
-      , board_writer
-      , board_view_cnt
-      , coalesce(upt_dt, reg_dt) as reg_dt
-    from board
-   where category = #{category}
-  /* and board_status = '' --공개만 조회(공통코드값 필요) */
-</select>
+    <select id="getBoard"
+            parameterType="string"
+            resultType="com.pjt.core.board.dto.ReadBoardResponseDto">
+       select
+            board_id
+          , board_title
+          , board_writer
+          , board_view_cnt
+          , coalesce(upt_dt, reg_dt) as reg_dt
+        from board
+       where category = #{category}
+      /* and board_status = '' --공개만 조회(공통코드값 필요) */
+    </select>
 
-<select id="getDetail" 
-        parameterType="string" 
-        resultType="com.pjt.core.board.dto.ReadBoardResponseDto">
-	 select
-          board_id
-        , board_title
-        , board_content
-        , board_writer
-        , board_view_cnt
-        , category
-        , board_status
-        , coalesce(upt_dt, reg_dt)
-     from board
-    where board_id = #{boardId}
-</select>
+    <select id="getDetail"
+            parameterType="string"
+            resultType="com.pjt.core.board.dto.ReadBoardResponseDto">
+         select
+              board_id
+            , board_title
+            , board_content
+            , board_writer
+            , board_view_cnt
+            , category
+            , board_status
+            , coalesce(upt_dt, reg_dt)
+         from board
+        where board_id = #{boardId}
+    </select>
 
-<select id="getImage" 
-        parameterType="string" 
-        resultType="com.pjt.core.board.dto.ReadBoardImgResponseDto">
- select
-       img_no
-     , board_id
-     , emoticon_img_nm
-     , img_ext_nm
-     , img_file_size
-     , file_url_path
-   from board_img
-  where board_id = #{boardId}
-</select>
+    <select id="getImage"
+            parameterType="string"
+            resultType="com.pjt.core.board.dto.ReadBoardImgResponseDto">
+     select
+           img_no
+         , board_id
+         , emoticon_img_nm
+         , img_ext_nm
+         , img_file_size
+         , file_url_path
+       from board_img
+      where board_id = #{boardId}
+    </select>
 
-<insert id="createBoard" 
-        parameterType="com.pjt.core.board.dto.CreateBoardRequestDto" 
-        useGeneratedKeys="true"
-        keyProperty="boardId">
-  insert into board
-  (
-     board_title
-   , board_content
-   , board_writer
-   , board_view_cnt
-   , category
-   , board_status
-   , reg_dt
-   , upt_dt
-  )
- values 
- (
-    #{boardTitle}
-  , #{boardContent}
-  , #{boardWriter}
-  , 0
-  , #{category}
-  , #{boardStatus}
-  , localtimestamp
-  , localtimestamp
- )
-</insert>
+    <insert id="createBoard"
+            parameterType="com.pjt.core.board.dto.CreateBoardRequestDto"
+            useGeneratedKeys="true"
+            keyProperty="boardId">
+      insert into board
+      (
+         board_title
+       , board_content
+       , board_writer
+       , board_view_cnt
+       , category
+       , board_status
+       , reg_dt
+       , upt_dt
+      )
+     values
+     (
+        #{boardTitle}
+      , #{boardContent}
+      , #{boardWriter}
+      , 0
+      , #{category}
+      , #{boardStatus}
+      , localtimestamp
+      , localtimestamp
+     )
+    </insert>
 
-<insert id="createBoardImg" 
-        parameterType="com.pjt.core.board.dto.FileResponseDto">
-	insert into board_img
-	(
-	   board_id
-	 , emoticon_img_nm
-	 , img_ext_nm
-	 , img_file_size
-	 , file_url_path
-	)
-	values
-	(
-	   #{boardId}
-	 , #{emoticonImgNm}
-	 , #{imgExtNm}
-	 , #{imgFileSize}
-	 , #{uploadFilePath}
-	)
-</insert>
+    <insert id="createBoardImg"
+            parameterType="com.pjt.core.board.dto.FileResponseDto">
+        insert into board_img
+        (
+           board_id
+         , emoticon_img_nm
+         , img_ext_nm
+         , img_file_size
+         , file_url_path
+        )
+        values
+        (
+           #{boardId}
+         , #{emoticonImgNm}
+         , #{imgExtNm}
+         , #{imgFileSize}
+         , #{uploadFilePath}
+        )
+    </insert>
+
+    <insert id="createReply"
+            parameterType="com.pjt.core.board.dto.ReplyRequestDto">
+        insert into reply
+        (
+              board_id
+            , reply_comment
+            , reg_dt
+            , update_dt
+            , use_yn
+        )
+        values
+        (
+            #{boardId}
+          , #{replyComment}
+          , localtimestamp
+          , localtimestamp
+          , 'Y'
+        )
+    </insert>
+
+    <select id="getReply"
+            parameterType="String"
+            resultType="com.pjt.core.board.dto.ReplyResponseDto">
+    select
+        reply_id
+      , board_id
+      , reply_comment
+      , reg_dt
+      , update_dt
+      , use_yn
+      from reply
+     where board_id = #{boardId}
+      and use_yn = 'Y'
+    </select>
+
+
+    <select id="getFileUrlPath"
+            parameterType="String"
+            resultType="String">
+        select
+            file_url_path
+           from board_img
+          where img_no = #{imgNo}
+    </select>
+
+    <update id="updateBoard"
+            parameterType="com.pjt.core.board.dto.CreateBoardRequestDto">
+    update board
+       set board_title = #{boardTitle}
+         , board_content = #{boardContent}
+         , board_status = #{boardStatus}
+         , upt_dt = localtimestamp
+      where board_id = #{boardId}
+    </update>
 </mapper>
