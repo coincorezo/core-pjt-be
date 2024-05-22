@@ -1,5 +1,6 @@
 package com.pjt.core.common.category.service;
 
+import com.pjt.core.common.category.dto.CreateCategoryCoinRequest;
 import com.pjt.core.common.category.entity.CategoryCoin;
 import com.pjt.core.common.category.exception.CategoryCoinException;
 import com.pjt.core.common.category.repository.CategoryCoinRepository;
@@ -45,6 +46,16 @@ public class CategoryCoinService {
 				.orElseThrow(() -> new CategoryCoinException(ErrorCode.NOT_FOUND_CATEGORY));
 
 		return categoryCoin.getCoin();
+	}
+
+	/**
+	 * 카테고리별 코인 등록
+	 * @param request 카테고리별 코인 생성
+	 */
+	public void createCategoryCoin(CreateCategoryCoinRequest request) {
+		CategoryCoin categoryCoin = CreateCategoryCoinRequest.toEntity(request);
+
+		categoryCoinRepository.save(categoryCoin);
 	}
 
 }
