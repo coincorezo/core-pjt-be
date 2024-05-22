@@ -4,7 +4,7 @@ import com.pjt.core.coin.dto.CreateCoinReqDto;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public class CoinMapper {
-    public void saveCoin(CreateCoinReqDto coinReqDto) {
-    }
+public interface CoinMapper {
+
+    void saveCoin(CreateCoinReqDto coinReqDto);
 }
