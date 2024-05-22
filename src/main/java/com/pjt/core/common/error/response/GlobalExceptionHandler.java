@@ -1,6 +1,7 @@
 package com.pjt.core.common.error.response;
 
 import com.pjt.core.board.exception.BoardException;
+import com.pjt.core.common.category.exception.CategoryCoinException;
 import com.pjt.core.common.error.exception.NoDataException;
 import com.pjt.core.common.error.exception.StorageException;
 import com.pjt.core.user.exception.UserException;
@@ -34,6 +35,13 @@ public class GlobalExceptionHandler {
 		log.error("::handleStorageException::", e);
 		ExceptionResponse exceptionResponse = ExceptionResponse.of(e.getErrorCode());
 		return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@ExceptionHandler(CategoryCoinException.class)
+	public ResponseEntity<ExceptionResponse> handleCategoryCoinException(CategoryCoinException e) {
+		log.error("::handleCategoryCoinException::", e);
+		ExceptionResponse exceptionResponse = ExceptionResponse.of(e.getErrorCode());
+		return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(UserException.class)

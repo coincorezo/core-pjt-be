@@ -13,6 +13,7 @@ public enum ErrorCode {
 	NO_DATA("common", "데이터가 존재하지 않습니다."),
 	INVALID_INPUT_VALUE("common", "유효하지 않는 입력 값입니다."),
 	INTERNAL_SERVER_ERROR("common", "서버 에러가 발생하였습니다."),
+	NOT_FOUND_CATEGORY("common", "해당 카테고리가 존재하지 않습니다."),
 
 	// file
 	CREATE_DIRECTORY_ERROR("file", "파일 디렉토리 생성 중 에러가 발생하였습니다."),
