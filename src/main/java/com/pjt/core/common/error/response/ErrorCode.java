@@ -27,7 +27,9 @@ public enum ErrorCode {
 	INVALID_PASSWORD("member", "비밀번호가 일치하지 않습니다."),
 	EXIST_MEMBER("member", "이미 존재하는 회원입니다."),
 	NO_TOKEN("member", "토큰이 존재하지 않습니다."),
-	FAIL_CREATE_MEMBER("member", "회원 가입에 실패하였습니다.")
+	FAIL_CREATE_MEMBER("member", "회원 가입에 실패하였습니다."),
+	UNAUTHORIZED("member", "접근 권한이 없습니다. 로그인 후 다시 시도해 주세요."),
+	ACCESS_DENIED("member", "필요한 권한이 없거나 접근이 제한되어 있습니다."),
 	;
 
 	private final String code;
