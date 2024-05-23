@@ -3,6 +3,7 @@ package com.pjt.core.board.mapper;
 import java.util.List;
 
 import com.pjt.core.board.dto.*;
+import com.pjt.core.board.dto.boardJ.DeleteReplyRequestDto;
 import com.pjt.core.board.dto.boardJ.UpdateReplyRequestDto;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -38,4 +39,10 @@ public interface BoardJMapper {
 
 	// 댓글 수정
 	void updateReply(UpdateReplyRequestDto dto);
+
+	// 댓글 삭제, 수정 전 존재 여부 확인
+	int getExistReply(UpdateReplyRequestDto dto);
+
+	// 댓글 삭제 (사용여부 변경)
+	void updateReplyUseYn(DeleteReplyRequestDto dto);
 }

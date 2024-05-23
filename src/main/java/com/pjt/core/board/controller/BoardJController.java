@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.pjt.core.board.dto.ReadBoardRequestDto;
 import com.pjt.core.board.dto.ReplyRequestDto;
+import com.pjt.core.board.dto.boardJ.DeleteReplyRequestDto;
 import com.pjt.core.board.dto.boardJ.UpdateReplyRequestDto;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,6 +55,11 @@ public class BoardJController {
 	@PatchMapping("/reply")
 	public String updateReply(@RequestBody UpdateReplyRequestDto dto) {
 		return boardJService.updateReply(dto);
+	}
+
+	@PostMapping("/reply/deleteReply")
+	public String deleteReply(@RequestBody DeleteReplyRequestDto dto) {
+		return boardJService.deleteReply(dto);
 	}
 
 

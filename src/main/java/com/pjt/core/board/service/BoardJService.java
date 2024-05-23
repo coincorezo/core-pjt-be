@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 import com.pjt.core.board.dto.*;
+import com.pjt.core.board.dto.boardJ.DeleteReplyRequestDto;
 import com.pjt.core.board.dto.boardJ.UpdateReplyRequestDto;
+import com.pjt.core.board.exception.BoardException;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.stereotype.Service;
@@ -136,7 +138,32 @@ public String updateBoard(CreateBoardRequestDto dto, List<MultipartFile> files, 
 
 
 	public String updateReply(UpdateReplyRequestDto dto) {
+		// 댓글 존재 여부 확인
+		int replyCount = boardJMapper.getExistReply(dto);
+
+		if(replyCount == 0) {
+			throw new BoardException(ErrorCode.NO_DATA);
+		}
+
 		boardJMapper.updateReply(dto);
 		return "저장 완료";
+	}
+
+	public String deleteReply(DeleteReplyRequestDto dto) {
+		UpdateReplyRequestDto updateDto = new UpdateReplyRequestDto();
+		updateDto.setBoardId(dto.getBoardId());
+		updateDto.setReplyId(dto.getReplyId());
+
+		// 댓글 존재 여부 확인
+		int replyCount = boardJMapper.getExistReply(updateDto);
+
+		if(replyCount == 0) {
+			throw new BoardException(ErrorCode.NO_DATA);
+		}
+
+		// 댓글 삭제(사용여부 Y -> N)
+		boardJMapper.updateReplyUseYn(dto);
+
+		return "삭제 완료";
 	}
 }
