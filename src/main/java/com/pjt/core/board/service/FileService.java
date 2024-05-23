@@ -64,7 +64,7 @@ public class FileService {
 				
 			
 				// saveFile = new File(path + File.separator + newFileName);
-				saveFile = new File(path + newFileName);
+				saveFile = new File(path + File.separator + newFileName);
 				file.transferTo(saveFile);
 				
 				FileResponseDto save = new FileResponseDto();

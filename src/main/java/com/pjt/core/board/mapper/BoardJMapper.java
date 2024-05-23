@@ -3,13 +3,14 @@ package com.pjt.core.board.mapper;
 import java.util.List;
 
 import com.pjt.core.board.dto.*;
+import com.pjt.core.board.dto.boardJ.UpdateReplyRequestDto;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface BoardJMapper {
 
 	// 리스트 조회
-	List<ReadBoardResponseDto> getBoard(String category);
+	List<ReadBoardResponseDto> getBoard(ReadBoardRequestDto dto);
 
 	// 상세 조회
 	ReadBoardResponseDto getDetail(String boardId);
@@ -34,4 +35,7 @@ public interface BoardJMapper {
 
 	// 게시글 수정
 	boolean updateBoard(CreateBoardRequestDto dto);
+
+	// 댓글 수정
+	void updateReply(UpdateReplyRequestDto dto);
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.pjt.core.board.dto.*;
+import com.pjt.core.board.dto.boardJ.UpdateReplyRequestDto;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.stereotype.Service;
@@ -30,8 +31,8 @@ public class BoardJService {
 	private final FileService fileService;
 
 
-public List<ReadBoardResponseDto> getBoard(String category) {
-		return boardJMapper.getBoard(category);
+public List<ReadBoardResponseDto> getBoard(ReadBoardRequestDto dto) {
+		return boardJMapper.getBoard(dto);
 	}
 
 public ReadBoardResponseDto getDetail(String boardId) throws Exception {
@@ -134,6 +135,8 @@ public String updateBoard(CreateBoardRequestDto dto, List<MultipartFile> files, 
 	}
 
 
-
-
+	public String updateReply(UpdateReplyRequestDto dto) {
+		boardJMapper.updateReply(dto);
+		return "저장 완료";
+	}
 }

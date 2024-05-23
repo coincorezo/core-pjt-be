@@ -2,18 +2,44 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pjt.core.board.mapper.BoardJMapper">
 
+    <sql id="boardWhere">
+        <if test=' category != null and category != "" '>
+            and category = #{category}
+        </if>
+        <if test = ' searchCode != null and searchCode != "" '>
+           <if test =' searchKeyword != null and searchKeyword != "" '>
+               <choose>
+                   <when test =" searchCode == 'title' ">
+                        and board_title like concat('%', #{searchKeyword}, '%')
+                   </when>
+                   <when test =" searchCode == 'titleAndContent' " >
+                        and ( board_title like concat('%', #{searchKeyword}, '%') )
+                        or ( board_content like concat('%', #{searchKeyword}, '%') )
+                   </when>
+                   <when test = " searchCode == 'writer' " >
+                       and board_writer like concat('%', #{searchKeyword}, '%')
+                   </when>
+               </choose>
+           </if>
+        </if>
+    </sql>
+
     <select id="getBoard"
-            parameterType="string"
+            parameterType="com.pjt.core.board.dto.ReadBoardRequestDto"
             resultType="com.pjt.core.board.dto.ReadBoardResponseDto">
        select
             board_id
           , board_title
+          , board_content
           , board_writer
           , board_view_cnt
           , coalesce(upt_dt, reg_dt) as reg_dt
         from board
-       where category = #{category}
-      /* and board_status = '' --공개만 조회(공통코드값 필요) */
+       where board_status = 'PUBLIC'
+       <include refid ="boardWhere"/>
+       <if test=" page != null and size != null ">
+            <include refid="paging.pagination" />
+       </if>
     </select>
 
     <select id="getDetail"
@@ -147,5 +173,14 @@
          , board_status = #{boardStatus}
          , upt_dt = localtimestamp
       where board_id = #{boardId}
+    </update>
+
+    <update id="updateReply"
+            parameterType="com.pjt.core.board.dto.boardJ.UpdateReplyRequestDto">
+        update reply
+           set reply_comment = #{replyComment}
+             , update_dt = localtimestamp
+         where board_id = #{boardId}
+           and reply_id = #{replyId}
     </update>
 </mapper>
