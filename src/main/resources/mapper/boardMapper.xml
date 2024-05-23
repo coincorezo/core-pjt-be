@@ -27,6 +27,7 @@
     <select id="getBoard"
             parameterType="com.pjt.core.board.dto.ReadBoardRequestDto"
             resultType="com.pjt.core.board.dto.ReadBoardResponseDto">
+        /* boardMapper.getBoard */
        select
             board_id
           , board_title
@@ -45,6 +46,7 @@
     <select id="getDetail"
             parameterType="string"
             resultType="com.pjt.core.board.dto.ReadBoardResponseDto">
+        /* boardMapper.getDetail */
          select
               board_id
             , board_title
@@ -61,6 +63,7 @@
     <select id="getImage"
             parameterType="string"
             resultType="com.pjt.core.board.dto.ReadBoardImgResponseDto">
+    /* boardMapper.getImage */
      select
            img_no
          , board_id
@@ -76,6 +79,7 @@
             parameterType="com.pjt.core.board.dto.CreateBoardRequestDto"
             useGeneratedKeys="true"
             keyProperty="boardId">
+    /* boardMapper.createBoard */
       insert into board
       (
          board_title
@@ -102,6 +106,7 @@
 
     <insert id="createBoardImg"
             parameterType="com.pjt.core.board.dto.FileResponseDto">
+        /* boardMapper.createBoardImg */
         insert into board_img
         (
            board_id
@@ -122,6 +127,7 @@
 
     <insert id="createReply"
             parameterType="com.pjt.core.board.dto.ReplyRequestDto">
+        /* boardMapper.createReply */
         insert into reply
         (
               board_id
@@ -143,6 +149,7 @@
     <select id="getReply"
             parameterType="String"
             resultType="com.pjt.core.board.dto.ReplyResponseDto">
+        /* boardMapper.getReply */
     select
         reply_id
       , board_id
@@ -159,6 +166,7 @@
     <select id="getFileUrlPath"
             parameterType="String"
             resultType="String">
+        /* boardMapper.getFileUrlPath */
         select
             file_url_path
            from board_img
@@ -167,6 +175,7 @@
 
     <update id="updateBoard"
             parameterType="com.pjt.core.board.dto.CreateBoardRequestDto">
+    /* boardMapper.updateBoard */
     update board
        set board_title = #{boardTitle}
          , board_content = #{boardContent}
@@ -175,12 +184,33 @@
       where board_id = #{boardId}
     </update>
 
+    <select id="getExistReply"
+            parameterType="com.pjt.core.board.dto.boardJ.UpdateReplyRequestDto">
+    /* boardMapper.getExistReply */
+    select
+        count(reply_id)
+      from reply
+     where reply_id = #{replyId}
+       and board_id = #{boardId}
+    </select>
+
     <update id="updateReply"
             parameterType="com.pjt.core.board.dto.boardJ.UpdateReplyRequestDto">
+        /* boardMapper.updateReply */
         update reply
            set reply_comment = #{replyComment}
              , update_dt = localtimestamp
          where board_id = #{boardId}
            and reply_id = #{replyId}
     </update>
+
+    <update id="updateReplyUseYn"
+            parameterType="com.pjt.core.board.dto.boardJ.DeleteReplyRequestDto">
+        /* boardMapper.updateReplyUseYn */
+        update reply
+           set use_yn = 'N'
+         where board_id = #{boardId}
+           and reply_id = #{replyId}
+    </update>
+
 </mapper>
