@@ -1,27 +1,14 @@
 package com.pjt.core.board.entity;
 
+import lombok.*;
 import org.hibernate.annotations.Comment;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-@Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class BoardImg {
 
-	@Id @GeneratedValue
-	@Column(name = "img_no")
 	private String imgNo;
 
 	@Comment("게시판 아이디")

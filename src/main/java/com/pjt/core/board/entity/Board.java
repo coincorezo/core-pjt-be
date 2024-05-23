@@ -1,9 +1,6 @@
 package com.pjt.core.board.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import lombok.*;
 
 @Getter
@@ -11,8 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class Board {
-	@Id @GeneratedValue
-	@Column(name = "board_id")
+
 	private int boardId;
 
 	@Schema(description = "게시판 제목")
