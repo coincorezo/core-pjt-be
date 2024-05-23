@@ -20,8 +20,17 @@ public class CoinController {
     @Autowired
     CoinService coinService;
 
+    /**
+     * <pre>
+     *  기간별,  코인 type별  코인 사용 내역
+     * </pre>
+     *
+     * @param pointsHistoryReqDto
+     * @return pointsHistoryResDto
+     * @author KangMinJi (kmj0701@coremethod.co.kr)
+     */
     @GetMapping("/user/coin")
-    @Operation(summary = "코인 조회", description = "user 코인을 조회합니다")
+    @Operation(summary = "코인 조회", description = "user 코인을 조회한다")
     public ApiResponse<PointsHistoryResDto> getCointSeach(PointsHistoryReqDto pointsHistoryReqDto) {
 
         PointsHistoryResDto pointsHistoryResDto = new PointsHistoryResDto();
@@ -29,8 +38,17 @@ public class CoinController {
         return ApiResponse.ok(pointsHistoryResDto);
     }
 
+    /**
+     * <pre>
+     *  코인 적립 & 사용  이력 저장
+     * </pre>
+     *
+     * @param coinReqDto
+     * @return CreateCoinResDto
+     * @author KangMinJi (kmj0701@coremethod.co.kr)
+     */
     @PostMapping("/user/coin")
-    @Operation(summary = "코인 조회", description = "user 코인을 조회합니다")
+    @Operation(summary = "코인 조회", description = "user 코인 적립 & 사용 이력을 저장한다")
     public ApiResponse<CreateCoinResDto> saveCoin(@RequestBody CreateCoinReqDto coinReqDto) {
 
         CreateCoinResDto coinResDto = coinService.saveCoin(coinReqDto);
