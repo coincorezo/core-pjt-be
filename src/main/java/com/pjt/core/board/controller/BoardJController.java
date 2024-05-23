@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.List;
 
 
+import com.pjt.core.board.dto.ReadBoardRequestDto;
 import com.pjt.core.board.dto.ReplyRequestDto;
+import com.pjt.core.board.dto.boardJ.UpdateReplyRequestDto;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,15 +23,14 @@ import lombok.RequiredArgsConstructor;
 public class BoardJController {
 	
 	private final BoardJService boardJService;
-	
 
 	@GetMapping("/board")
-	public List<ReadBoardResponseDto> getBoard(@Valid @RequestParam(value="category") String category) {
-		return boardJService.getBoard(category);
+	public List<ReadBoardResponseDto> getBoard(ReadBoardRequestDto dto) {
+		return boardJService.getBoard(dto);
 	}
 
-	@GetMapping("/detail")
-	public ReadBoardResponseDto getDetail(@Valid @RequestParam(value="boardId")String boardId) throws Exception {
+	@GetMapping("/detail/{boardId}")
+	public ReadBoardResponseDto getDetail(@Valid @PathVariable(value="boardId")String boardId) throws Exception {
 		return boardJService.getDetail(boardId);
 	}
 
@@ -48,6 +49,11 @@ public class BoardJController {
 	@PostMapping("/reply")
 	public String createReply(@Valid @RequestBody ReplyRequestDto dto) {
 		return boardJService.createReply(dto);
+	}
+
+	@PatchMapping("/reply")
+	public String updateReply(@RequestBody UpdateReplyRequestDto dto) {
+		return boardJService.updateReply(dto);
 	}
 
 
