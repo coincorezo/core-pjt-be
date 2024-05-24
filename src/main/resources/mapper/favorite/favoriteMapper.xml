@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pjt.core.favorite.repository.FavoriteMapper">
+
+    <select id="getFavoriteYn"
+            parameterType="com.pjt.core.favorite.dto.CreateFavoriteRequestDto"
+            resultType="string">
+        select
+            emoticon_id
+           from favorite
+          where emoticon_id = #{emoticonId}
+            and user_id = #{userId}
+    </select>
+
+    <delete id="deleteFavorite"
+            parameterType="com.pjt.core.favorite.dto.CreateFavoriteRequestDto">
+        delete from favorite
+         where emoticon_id = #{emoticonId}
+           and user_id = #{userId}
+    </delete>
+
+    <insert id="insertFavorite"
+            parameterType="com.pjt.core.favorite.dto.CreateFavoriteRequestDto">
+        insert into favorite
+        (
+            emoticon_id
+          , user_id
+          , reg_dt
+        )
+        values
+        (
+           #{emoticonId}
+         , #{userId}
+         , localtimestamp
+        )
+    </insert>
+
+
+</mapper>
