@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pjt.core.emoticon.repository.EmoticonMapper">
+
+<sql id="emoticonSort">
+    <if test=' searchCode != null and searchCode != "" '>
+        <choose>
+            <when test=' searchCode == "popularity" '>
+                <!-- 인기순 정렬(+ 가나다순) -->
+                order by favorite_count desc, emoticon_title asc
+            </when>
+            <when test=' searchCode == "latest" '>
+                <!-- 최신순 정렬(+ 가나다순) -->
+                order by reg_dt desc, emoticon_title asc
+            </when>
+        </choose>
+    </if>
+</sql>
+
+    <!-- 이모티콘 전체 목록 조회 -->
+    <select id="getEmoticonList"
+            parameterType="com.pjt.core.emoticon.dto.ReadEmoticonRequestDto"
+            resultType="com.pjt.core.emoticon.dto.ReadEmoticonResponseDto">
+        select
+               e.emoticon_id
+             , e.emoticon_title
+             , e.emoticon_price
+             , (select count(*)
+                from favorite f
+                where f.emoticon_id = e.emoticon_id
+                ) as favorite_count
+             , (select
+                    case when count(b.emoticon_id) >= 1 then 'Y'
+                         else 'N'
+                     end
+                  from favorite b
+                 where b.emoticon_id = e.emoticon_id
+                  and b.user_id = #{userId}
+                ) as favorite_yn
+         from emoticon e
+        <include refid="emoticonSort" />
+    </select>
+
+    <!-- 이모티콘 상세 정보 조회 -->
+    <select id="getDetailEmoticon"
+            parameterType="int"
+            resultType="com.pjt.core.emoticon.dto.EmoticonDetail">
+        select
+            a.emoticon_detail_id
+             , a.emoticon_id
+             , a.emoticon_nm
+             , a.reg_dt
+             , a.reg_id
+             , b.emoticon_img_no
+             , b.emoticon_detail_id
+             , b.emoticon_img_nm
+             , b.img_ext_nm
+             , b.img_file_size
+             , b.file_url_path
+        from emoticon_detail a
+        left outer join emoticon_img b
+          on a.emoticon_detail_id  = b.emoticon_detail_id
+        where emoticon_id = #{emoticonId}
+    </select>
+
+    <!-- 이모티콘 기본 정보 조회 -->
+    <select id="getEmoticonInfo"
+            parameterType="com.pjt.core.emoticon.dto.ReadEmoticonRequestDto"
+            resultType="com.pjt.core.emoticon.dto.ReadEmoticonDetailResponseDto">
+        select
+              a.emoticon_id
+            , a.emoticon_title
+            , a.emoticon_price
+            , (select
+                   count(f.emoticon_id)
+                 from favorite f
+                where f.emoticon_id = a.emoticon_id
+               ) as favorite_count
+            , (select
+                   case when count(b.emoticon_id) >= 1 then 'Y'
+                        else 'N'
+                       end
+                 from favorite b
+                where b.emoticon_id = a.emoticon_id
+                  and b.user_id = #{userId}
+               ) as favorite_yn
+          from emoticon a
+         where a.emoticon_id = #{emoticonId}
+    </select>
+
+
+
+</mapper>
