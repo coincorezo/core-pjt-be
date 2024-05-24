@@ -22,7 +22,6 @@ import com.pjt.core.common.util.FileUploadUtile;
 public class BoardService {
     @Autowired
     private BoardMapper boardMapper;
-
     @Autowired
     private UserService userService;
 
@@ -37,9 +36,7 @@ public class BoardService {
      */
     public List<BoardDto> getBoardList(ReadBoardListReqDto boardReqDto) {
 
-        List<BoardDto> boardList = boardMapper.getBoardList(boardReqDto);
-
-        return boardList;
+        return boardMapper.getBoardList(boardReqDto);
     }
 
     /**
@@ -60,7 +57,7 @@ public class BoardService {
         //CategoryCoinService.getCategoryCoinByCategory(String category)
         //코인 적립 서비스 가져오기
         //id비교 하기
-        
+
         CreateBoardResDto boardResDto = new CreateBoardResDto();
         /*insert*/
         int saveCount = boardMapper.insertBoard(boardReqDto);
@@ -174,10 +171,8 @@ public class BoardService {
      * @return ReadReplyResDto
      */
     public List<ReadReplyResDto> getReplyList(int boardId) {
-        List<ReadReplyResDto> resDto = new ArrayList<ReadReplyResDto>();
-        resDto = boardMapper.getReply(boardId);
-        return resDto;
 
+        return boardMapper.getReply(boardId);
     }
 
     /**
@@ -237,7 +232,7 @@ public class BoardService {
      * @author KangMinJi
      * @param readBoardDtlResDto
      */
-    private static void checkStatus(ReadBoardDtlResDto readBoardDtlResDto) {
+    private void checkStatus(ReadBoardDtlResDto readBoardDtlResDto) {
         if (!("PUBLIC").equals(readBoardDtlResDto.getBoardStatus())) {
             throw new BoardException(ErrorCode.NOT_SAVE);
         }

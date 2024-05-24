@@ -5,10 +5,14 @@ import com.pjt.core.coin.dto.PointsHistoryReqDto;
 import com.pjt.core.coin.dto.PointsHistoryResDto;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface CoinMapper {
 
     void saveCoin(CreateCoinReqDto coinReqDto);
 
-    PointsHistoryResDto getCointSearch(PointsHistoryReqDto pointsHistoryReqDto);
+    List<PointsHistoryResDto> getCointSearch(PointsHistoryReqDto pointsHistoryReqDto);
+    
+    PointsHistoryResDto getMyCoin(PointsHistoryReqDto pointsHistoryReqDto);
 }

@@ -34,4 +34,8 @@ public class CreateCoinReqDto {
     @Schema(description = "사용일자")
     @NotBlank(message = "사용일자 필수입니다.")
     private LocalDateTime regDt;
+
+
+    @Schema(description = "적립/차감 type")
+    private String coinType;
 }

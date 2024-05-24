@@ -202,3 +202,4 @@ alter table emoticon modify emoticon_id int not null auto_increment;
 
 
 alter table points_history  add coin_type varchar(10) not null COMMENT '포인트 적립 내용';
+alter table reply  add reg_id varchar(60) not null COMMENT '댓글 등록자';

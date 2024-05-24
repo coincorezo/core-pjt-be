@@ -3,12 +3,21 @@ package com.pjt.core.coin.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+/**
+ * <pre>
+ *  코인 이력
+ * </pre>
+ *
+ * @author :  KangMinJi
+ * @date :  2024-05-24
+ */
 @Data
 public class PointsHistoryResDto {
     @Schema(description = "히스토리 ID")
-    private int history_id;
+    private int historyId;
 
     @Schema(description = "사용자 ID")
     private String userId;
@@ -23,6 +32,10 @@ public class PointsHistoryResDto {
     private String reason;
 
     @Schema(description = "사용일자")
-    private LocalDateTime regDt;
+    private String regDt;
+
+    @Schema(description = "적립/차감 type")
+    private String coinType;
+
 
 }
