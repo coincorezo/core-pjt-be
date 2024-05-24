@@ -1,15 +1,29 @@
 package com.pjt.core.coin.service;
 
+import com.pjt.core.coin.CoinException.CoinException;
 import com.pjt.core.coin.dto.CreateCoinReqDto;
 import com.pjt.core.coin.dto.CreateCoinResDto;
 import com.pjt.core.coin.dto.PointsHistoryReqDto;
 import com.pjt.core.coin.dto.PointsHistoryResDto;
 import com.pjt.core.coin.repository.CoinMapper;
+import com.pjt.core.common.error.response.ErrorCode;
 import com.pjt.core.user.dto.CurrentUser;
 import com.pjt.core.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * <pre>
+ * 코인 조회 저장 service
+ * </pre>
+ *
+ * @author : KangMinJi
+ * @date :  2024-05-24
+ */
 @Service
 public class CoinService {
     @Autowired
@@ -26,18 +40,15 @@ public class CoinService {
      * @return pointsHistoryResDto
      * @author KangMinJi (kmj0701@coremethod.co.kr)
      */
-    public PointsHistoryResDto getCoinSearch(PointsHistoryReqDto pointsHistoryReqDto) {
-        PointsHistoryResDto pointsHistoryResDto = new PointsHistoryResDto();
-
-        CreateCoinResDto coinResDto = new CreateCoinResDto();
+    public List<PointsHistoryResDto> getCoinSearch(PointsHistoryReqDto pointsHistoryReqDto) {
+        List<PointsHistoryResDto> pointsHistoryResDto = new ArrayList<>();
         CurrentUser currentUser = userService.getLoginUser();
-        /* 코인 이력 조회 */
+
+        // 코인 이력 조회
         if (currentUser.getId().equals(pointsHistoryReqDto.getUserId())) {
             pointsHistoryResDto = coinMapper.getCointSearch(pointsHistoryReqDto);
         }
-        // todo 적립 타입(enum)만들기 적립 or차감 ?(사용) , 일정 디폴트로 최근 한달 지정
-        // todo total 코인 따로 service 빼기
-
+        //coin change값 0일 때 0 지우기
         return pointsHistoryResDto;
     }
 
@@ -50,15 +61,59 @@ public class CoinService {
      * @return CreateCoinResDto
      * @author KangMinJi (kmj0701@coremethod.co.kr)
      */
+
     public CreateCoinResDto saveCoin(CreateCoinReqDto coinReqDto) {
-        CreateCoinResDto coinResDto = new CreateCoinResDto();
         CurrentUser currentUser = userService.getLoginUser();
-        //적립 없을 경우 if문
-        if (currentUser.getId().equals(coinReqDto.getUserId())) {
-            coinReqDto.setUserId(currentUser.getId());
-            coinReqDto.setCoinReason(coinReqDto.getReason().getName());
+        // userId 일치 하는지 확인
+        currentUser.validUserId(coinReqDto.getUserId());
+
+        // 잔여 coin보다 차감될 코인이 더 클경우 exception 처리
+        PointsHistoryReqDto pointsHistoryReqDto = new PointsHistoryReqDto();
+        pointsHistoryReqDto.setUserId(coinReqDto.getUserId());
+
+        // 잔여코인 조회
+        PointsHistoryResDto pointsHistoryResDto = this.getMyCoin(pointsHistoryReqDto);
+        if (pointsHistoryResDto == null && coinReqDto.getPointsChange() < 0) {
+            throw new CoinException(ErrorCode.NO_COIN);
         }
+
+        if (pointsHistoryResDto != null && pointsHistoryResDto.getPointsAmount() >= 0) {
+            // 차감될 코인과 현재 잔여 코인 계산 하여 0보다 작을경우 exception 
+            int calculatedCoin = coinReqDto.getPointsChange() + (pointsHistoryResDto.getPointsAmount());
+            if (calculatedCoin < 0) {
+                throw new CoinException(ErrorCode.NO_COIN);
+            }
+        }
+
+        // coin
+        CreateCoinResDto coinResDto = new CreateCoinResDto();
+        coinReqDto.setUserId(currentUser.getId());
+        coinReqDto.setCoinReason(coinReqDto.getReason().getName());
+        coinReqDto.setCoinType(coinReqDto.getReason().getDescription());
         coinMapper.saveCoin(coinReqDto);
+
+        // res 코인이 적립되었습니다.
+        coinResDto.setCoin(coinReqDto.getPointsChange());
+
         return coinResDto;
+    }
+
+    /**
+     * <pre>
+     * 나의 코인 조회
+     * </pre>
+     *
+     * @param : pointsHistoryReqDto
+     * @return :PointsHistoryResDto
+     * @throws :
+     * @author : KangMinJi (kmj0701@coremethod.co.kr)
+     * @date : 2024-05-24
+     */
+    public PointsHistoryResDto getMyCoin(PointsHistoryReqDto pointsHistoryReqDto) {
+
+        CurrentUser currentUser = userService.getLoginUser();
+        currentUser.validUserId(pointsHistoryReqDto.getUserId());
+
+        return coinMapper.getMyCoin(pointsHistoryReqDto);
     }
 }
