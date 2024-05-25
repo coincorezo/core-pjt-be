@@ -1,5 +1,6 @@
 package com.pjt.core.user.mapper;
 
+import com.pjt.core.user.entity.LoginHistory;
 import com.pjt.core.user.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -21,5 +22,12 @@ public interface UserMapper {
 	 * @return 성공여부
 	 */
 	int insertUser(User user);
+
+	/**
+	 * 로그인 이력 저장
+	 * @param loginHistory 로그인 이력
+	 * @return 성공여부
+	 */
+	int insertLoginHistory(LoginHistory loginHistory);
 
 }

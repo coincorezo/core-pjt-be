@@ -13,4 +13,19 @@
         values (#{userId}, #{userPassword}, #{email}, #{birth}, #{gender}, #{phoneNumber}, #{address}, now(), 'Y', 'ROLE_USER', #{profilePicture})
     </insert>
 
+    <!-- 로그인 이력 저장 -->
+    <insert id="insertLoginHistory" parameterType="com.pjt.core.user.entity.LoginHistory">
+        insert into login_history
+                    (
+                    user_id
+                  , login_dt
+                  , login_ip
+                    )
+             values (
+                    #{userId}
+                  , now()
+                  , #{loginIp}
+                    )
+    </insert>
+
 </mapper>

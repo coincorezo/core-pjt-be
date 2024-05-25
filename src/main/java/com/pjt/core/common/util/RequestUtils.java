@@ -16,4 +16,32 @@ public class RequestUtils {
 		return ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 	}
 
+	/**
+	 * ip 주소 반환
+	 * @return ip 주소
+	 */
+	public static String getIp() {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+
+		String ip = request.getHeader("X-Forwarded-For");
+
+		if (ip == null) {
+			ip = request.getHeader("Proxy-Client-IP");
+		}
+		if (ip == null) {
+			ip = request.getHeader("WL-Proxy-Client-IP");
+		}
+		if (ip == null) {
+			ip = request.getHeader("HTTP_CLIENT_IP");
+		}
+		if (ip == null) {
+			ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+		}
+		if (ip == null) {
+			ip = request.getRemoteAddr();
+		}
+
+		return ip;
+	}
+
 }
