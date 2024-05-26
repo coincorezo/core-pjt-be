@@ -6,6 +6,7 @@ import java.util.List;
 import com.pjt.core.board.dto.*;
 import com.pjt.core.board.exception.BoardException;
 import com.pjt.core.common.ApiResponse;
+import com.pjt.core.common.category.service.CategoryCoinService;
 import com.pjt.core.common.error.exception.NoDataException;
 import com.pjt.core.common.error.response.ErrorCode;
 import com.pjt.core.user.dto.CurrentUser;
@@ -24,7 +25,8 @@ public class BoardService {
     private BoardMapper boardMapper;
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private CategoryCoinService categoryCoinService;
 
     /**
      * <pre>
@@ -58,6 +60,10 @@ public class BoardService {
         //코인 적립 서비스 가져오기
         //id비교 하기
 
+        int coin = categoryCoinService.getCategoryCoinByCategory(boardReqDto.getCategory());
+        if (coin != boardReqDto.getCoin()) {
+            throw new BoardException(ErrorCode.NOT_COIN);
+        }
         CreateBoardResDto boardResDto = new CreateBoardResDto();
         /*insert*/
         int saveCount = boardMapper.insertBoard(boardReqDto);
@@ -67,21 +73,6 @@ public class BoardService {
         }
         boardResDto.setBoardId(boardReqDto.getBoardId());
 
-
-        // 물리적파일 업로드
-        FileUploadUtile fileUploadUtile = new FileUploadUtile();
-        /*
-         * Map<String, Object> fileInfo = fileUploadUtile.fileUpload(multiRequest);
-         * CreateBoardImgReqDto boardImgDto = new CreateBoardImgReqDto();
-         * boardImgDto.setBoardId(boardReqDto.getBoardId());
-         * boardImgDto.setEmoticonImgNm((String) fileInfo.get("fileName"));
-         * boardImgDto.setEmoticonPhysicalNm((String)
-         * fileInfo.get("emoticonPhysicalNm")); boardImgDto.setFileUrlPath((String)
-         * fileInfo.get("filePath")); boardImgDto.setImgExtNm((String)
-         * fileInfo.get("extension")); System.out.println(fileInfo.get("imgFileSize"));
-         * boardImgDto.setImgFileSize((Long) fileInfo.get("imgFileSize"));
-         * boardMapper.insertBoardImg(boardImgDto);
-         */
 
         return boardResDto;
     }

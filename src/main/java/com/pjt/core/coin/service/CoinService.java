@@ -44,10 +44,11 @@ public class CoinService {
         List<PointsHistoryResDto> pointsHistoryResDto = new ArrayList<>();
         CurrentUser currentUser = userService.getLoginUser();
 
+        // userId 일치 하는지 확인
+        currentUser.validUserId(pointsHistoryReqDto.getUserId());
         // 코인 이력 조회
-        if (currentUser.getId().equals(pointsHistoryReqDto.getUserId())) {
-            pointsHistoryResDto = coinMapper.getCointSearch(pointsHistoryReqDto);
-        }
+        pointsHistoryResDto = coinMapper.getCointSearch(pointsHistoryReqDto);
+
         //coin change값 0일 때 0 지우기
         return pointsHistoryResDto;
     }
@@ -67,26 +68,26 @@ public class CoinService {
         // userId 일치 하는지 확인
         currentUser.validUserId(coinReqDto.getUserId());
 
-        // 잔여 coin보다 차감될 코인이 더 클경우 exception 처리
+        // 잔여코인 조회
         PointsHistoryReqDto pointsHistoryReqDto = new PointsHistoryReqDto();
         pointsHistoryReqDto.setUserId(coinReqDto.getUserId());
-
-        // 잔여코인 조회
         PointsHistoryResDto pointsHistoryResDto = this.getMyCoin(pointsHistoryReqDto);
+
+        // 잔여 coin보다 차감될 코인이 더 클경우 exception 처리
         if (pointsHistoryResDto == null && coinReqDto.getPointsChange() < 0) {
             throw new CoinException(ErrorCode.NO_COIN);
         }
-
+        // 잔여코인이 있는경우에 차감될 코인이  잔여코인보다  0보다 작을경우(마이너스 인경우) exception
         if (pointsHistoryResDto != null && pointsHistoryResDto.getPointsAmount() >= 0) {
-            // 차감될 코인과 현재 잔여 코인 계산 하여 0보다 작을경우 exception 
             int calculatedCoin = coinReqDto.getPointsChange() + (pointsHistoryResDto.getPointsAmount());
             if (calculatedCoin < 0) {
                 throw new CoinException(ErrorCode.NO_COIN);
             }
         }
 
-        // coin
+        // coin insert
         CreateCoinResDto coinResDto = new CreateCoinResDto();
+        
         coinReqDto.setUserId(currentUser.getId());
         coinReqDto.setCoinReason(coinReqDto.getReason().getName());
         coinReqDto.setCoinType(coinReqDto.getReason().getDescription());
