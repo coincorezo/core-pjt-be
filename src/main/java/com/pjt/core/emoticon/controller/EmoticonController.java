@@ -5,7 +5,7 @@ import com.pjt.core.emoticon.dto.CreateEmoticonRequestDto;
 import com.pjt.core.emoticon.dto.ReadEmoticonDetailResponseDto;
 import com.pjt.core.emoticon.dto.ReadEmoticonResponseDto;
 
-import com.pjt.core.emoticon.entity.EmoticonImg;
+
 import com.pjt.core.emoticon.service.EmoticonService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -117,7 +118,7 @@ public class EmoticonController {
     @PostMapping("/regist")
     public HttpEntity<String> createEmoticon(@Valid @RequestPart("dto") CreateEmoticonRequestDto dto,
                                              @RequestPart("detail") List<CreateEmoticonDetailRequestDto> detailList,
-                                             @RequestPart("files") MultipartFile[] files) {
+                                             @RequestPart("files") MultipartFile[] files) throws IOException {
 
         String result = emoticonService.createEmoticon(dto, detailList, files);
 
