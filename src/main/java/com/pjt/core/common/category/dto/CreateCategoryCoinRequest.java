@@ -1,8 +1,6 @@
 package com.pjt.core.common.category.dto;
 
 import com.pjt.core.common.category.entity.CategoryCoin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
@@ -11,15 +9,16 @@ import lombok.*;
 @Builder
 public class CreateCategoryCoinRequest {
 
-	@NotBlank(message = "카테고리를 입력해주세요.")
-	private String category;
+	private String categoryCode;
 
-	@NotNull(message = "코인을 입력해주세요.")
+	private String categoryName;
+
 	private int coin;
 
 	public static CategoryCoin toEntity(CreateCategoryCoinRequest request) {
 		return CategoryCoin.builder()
-				.category(request.getCategory())
+				.categoryCode(request.getCategoryCode())
+				.categoryName(request.getCategoryName())
 				.coin(request.getCoin())
 				.build();
 	}

@@ -12,7 +12,9 @@ import lombok.*;
 public class CategoryCoin {
 
 	@Id
-	private String category;
+	private String categoryCode;
+
+	private String categoryName;
 
 	private int coin;
 
