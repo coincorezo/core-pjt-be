@@ -31,19 +31,12 @@ public class CategoryCoinService {
 	/**
 	 * 카테고리별 코인 조회
 	 *
-	 * @param category 카테고리
+	 * @param categoryCode 카테고리
 	 * @return 카테고리별 코인
 	 */
-	public int getCategoryCoinByCategory(String category) {
-		// 공통코드 카테고리 조회
-		long count = commonService.getCommonCode(category).stream().count();
-
-		if (count == 0) {
-			throw new CategoryCoinException(ErrorCode.NOT_FOUND_CATEGORY);
-		}
-
+	public int getCategoryCoinByCategory(String categoryCode) {
 		// 카테코리별 코인 조회
-		CategoryCoin categoryCoin = categoryCoinRepository.findById(category)
+		CategoryCoin categoryCoin = categoryCoinRepository.findById(categoryCode)
 				.orElseThrow(() -> new CategoryCoinException(ErrorCode.NOT_FOUND_CATEGORY));
 
 		return categoryCoin.getCoin();
