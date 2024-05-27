@@ -21,6 +21,7 @@
     <select id="getEmoticonList"
             parameterType="com.pjt.core.emoticon.dto.ReadEmoticonRequestDto"
             resultType="com.pjt.core.emoticon.dto.ReadEmoticonResponseDto">
+        /* emoticonMapper.getEmoticonList */
         select
                e.emoticon_id
              , e.emoticon_title
@@ -45,6 +46,7 @@
     <select id="getDetailEmoticon"
             parameterType="int"
             resultType="com.pjt.core.emoticon.dto.EmoticonDetail">
+        /* emoticonMapper.getDetailEmoticon */
         select
             a.emoticon_detail_id
              , a.emoticon_id
@@ -67,6 +69,7 @@
     <select id="getEmoticonInfo"
             parameterType="com.pjt.core.emoticon.dto.ReadEmoticonRequestDto"
             resultType="com.pjt.core.emoticon.dto.ReadEmoticonDetailResponseDto">
+        /* emoticonMapper.getEmoticonInfo */
         select
               a.emoticon_id
             , a.emoticon_title
@@ -87,6 +90,90 @@
           from emoticon a
          where a.emoticon_id = #{emoticonId}
     </select>
+
+    <!-- 이모티콘 이미지 조회 -->
+    <select id="getEmoticonImg"
+            parameterType="string"
+            resultType="com.pjt.core.emoticon.entity.EmoticonImg">
+        /* emoticonMapper.getEmoticonImg */
+        select
+              emoticon_img_no
+            , emoticon_detail_id
+            , emoticon_img_nm
+            , img_ext_nm
+            , img_file_size
+            , file_url_path
+          from emoticon_img
+         where emoticon_detail_id = #{emoticonDetailId}
+    </select>
+
+    <!-- 이모티콘 등록하기 -->
+    <insert id="createEmoticon"
+            parameterType="com.pjt.core.emoticon.dto.CreateEmoticonRequestDto"
+            useGeneratedKeys="true"
+            keyProperty="emoticonId">
+        /* emoticonMapper.createEmoticon */
+        insert into emoticon
+        (
+            emoticon_title
+          , emoticon_price
+          , reg_dt
+          , reg_id
+          , upd_dt
+          , upd_id
+        )
+        values
+        (
+            #{emoticonTitle}
+          , #{emoticonPrice}
+          , localtimestamp
+          , #{userId}
+          , localtimestamp
+          , #{userId}
+        )
+    </insert>
+
+    <!-- 이모티콘 상세 등록-->
+    <insert id="createEmoticonDetail"
+            parameterType="com.pjt.core.emoticon.dto.CreateEmoticonDetailRequestDto"
+            useGeneratedKeys="true"
+            keyProperty="emoticonDetailId">
+        /* emoticonMapper.createEmoticonDetail */
+        insert into emoticon_detail
+        (
+            emoticon_id
+          , emoticon_nm
+          , reg_dt
+          , reg_id
+         )
+        values
+        (
+            #{emoticonId}
+          , #{emoticonNm}
+          , localtimestamp
+          , #{userId}
+        )
+    </insert>
+
+    <insert id="insertImoticon"
+            parameterType="com.pjt.core.board.dto.FileResponseDto">
+        insert into emoticon_img
+        (
+            emoticon_detail_id
+          , emoticon_img_nm
+          , img_ext_nm
+          , img_file_size
+          , file_url_path
+        )
+        values
+        (
+            #{emoticonDetailId}
+          , #{emoticonImgNm}
+          , #{imgExtNm}
+          , #{imgFileSize}
+          , #{fileUrlPath}
+        )
+    </insert>
 
 
 

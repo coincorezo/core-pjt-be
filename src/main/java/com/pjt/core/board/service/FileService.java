@@ -102,4 +102,54 @@ public class FileService {
 
 	}
 
+	/*
+	 * <pre>
+	 * 단일 이미지 업로드 (이모티콘)
+	 * </pre>
+	 *
+	 * @author      : jayeon
+	 * @date        : 2024-05-27
+	 * @param       :
+	 * @return      :
+	 * @throws      :
+	*/
+	public FileResponseDto uploadSingleImage(MultipartFile file) throws IOException {
+		// 반환할 dto
+		FileResponseDto dto = new FileResponseDto();
+
+
+		if(dto != null) {
+			LocalDateTime now = LocalDateTime.now();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+
+			String date = now.format(formatter);
+
+			String path = rootPath + "src/main/resources/upload/files" + date;
+
+			File saveFile = new File(path);
+
+			if(!saveFile.exists()) {
+				saveFile.mkdirs();
+			}
+
+			// 파일명 . 전까지 구하기 (.jpg/.png...etc)
+			int index = file.getOriginalFilename().indexOf(".");
+			// 원본 파일명
+			String originalFileName = file.getOriginalFilename().substring(0,index);
+			// 저장 파일명
+			String newFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+
+			saveFile = new File(path + File.separator + newFileName);
+			file.transferTo(saveFile);
+
+			dto.setUploadFilePath(saveFile.getAbsolutePath());
+			dto.setSavedName(newFileName);
+			dto.setImgFileSize(file.getSize());
+			dto.setEmoticonImgNm(originalFileName);
+			dto.setImgExtNm(file.getContentType()); //파일 type
+
+		}
+		return dto;
+	}
+
 }
