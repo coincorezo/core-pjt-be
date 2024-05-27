@@ -7,7 +7,8 @@ public enum Reason {
 
     BOARD("accumulate", "게시판 등록 적립", "적립"),
     PURCHASE("PURCHASE", "이모티콘 구매 포인트 사용", "차감"),
-    DISPEND("DISPEND", "이모티콘 판매 포인트 지급", "적립");
+    DISPEND("DISPEND", "이모티콘 판매 포인트 지급", "적립"),
+    EXPIRED("EXPIRED", "기간 만료 차감", "차감");
 
     private final String code;
     private final String name;

@@ -2,63 +2,74 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pjt.core.coin.repository.CoinMapper">
 
-    <select id="getCointSearch" parameterType="com.pjt.core.coin.dto.PointsHistoryReqDto" resultType="com.pjt.core.coin.dto.PointsHistoryResDto">
+    <select id="getCointSearch" parameterType="com.pjt.core.coin.dto.PointsHistoryReqDto"
+            resultType="com.pjt.core.coin.dto.PointsHistoryResDto">
         /*포인트 이용 내역 */
         select
-          history_id                                   /*히스토리 ID*/
+        history_id              /*히스토리 ID*/
         , user_id
-        , points_change                               /*포인트 적립,차감 값*/
-        , points_amount                              /*포인트 total */
-        , reason                                     /*포인트 내역*/
+        , points_change         /*포인트 적립,차감 값*/
+        , points_amount         /*포인트 total */
+        , reason                /*포인트 내역*/
         , date_format(reg_dt, '%y.%m.%d') as reg_dt
-        , coin_type                                 /*적립,차감 type*/
+        , reg_dt as reg_dt2
+        , coin_type             /*적립,차감 type*/
         from points_history
         <where>
             <choose> <!--start, end 날짜를 안가져 올 경우 오늘 날부터 이전 한달 조회 -->
-                <when test="(startDate !=null) and (endDate !=null )">
+                <when test="(startDate != null) and (endDate != null )">
                     reg_dt between timestamp(#{startDate}) and date_format( (#{endDate}),'%Y-%m-%d %23:%59:%59')
                 </when>
-                <when test="dateFlg ==3M"> /*조회기간 3개월 */
-                    and reg_dt between (date_add(now(), Interval -3 Month)) and now()
+                <when test="dateFlg == '3M'">/*조회기간 3개월 */
+                    reg_dt between (date_add(now(), Interval -3 Month)) and now()
                 </when>
-                <when test="dateFlg ==6M"> /*조회기간 6개월 */
-                    and reg_dt between (date_add(now(), Interval -3 Month)) and now()
+                <when test="dateFlg == '6M'">/* 조회기간 6개월 */
+                    reg_dt between (date_add(now(), Interval -6 Month)) and now()
                 </when>
-                <otherwise>/*default 값 1개월 */
-                    and reg_dt between (date_add(now(), Interval -1 Month)) and now()
+                <otherwise>/* default 값 1개월 */
+                    reg_dt between (date_add(now(), Interval -1 Month)) and now()
                 </otherwise>
             </choose>
             and user_id = #{userId}
+            and points_change not in (0) /* 0 포인트 적립 내역 제외*/
         </where>
+        order by reg_dt2 desc, history_id desc
     </select>
-    <insert id="saveCoin" parameterType="com.pjt.core.coin.dto.CreateCoinReqDto" >
-        /*포인트 적립 , 차감 이력 */
+
+    <insert id="saveCoin" parameterType="com.pjt.core.coin.dto.CreateCoinReqDto">
+        /*포인트 적립 , 차감 내역 저장 */
         insert
         into points_history
-        ( user_id
+        (
+        user_id
         , points_change
         , points_amount
         , reason
         , reg_dt
-        , coin_type)
-        select #{userId}
-             , #{pointsChange}
-             , coalesce((select (sum(points_change)) + (#{pointsChange})
-                         from points_history
-                         where user_id = #{userId})
-            , #{pointsChange}) as pointsAmount
-             , #{coinReason}
-             , now()
-             , #{coinType}
+        , coin_type
+        )
+        select
+        #{userId}
+        , #{pointsChange}
+        , coalesce((select (sum(points_change)) + (#{pointsChange})
+        from points_history
+        where user_id = #{userId})
+        , #{pointsChange}) as pointsAmount
+        , #{coinReason}
+        , now()
+        , #{coinType}
     </insert>
 
-    <select id="getMyCoin" parameterType="com.pjt.core.coin.dto.PointsHistoryReqDto" resultType="com.pjt.core.coin.dto.PointsHistoryResDto">
+    <select id="getMyCoin" parameterType="com.pjt.core.coin.dto.PointsHistoryReqDto"
+            resultType="com.pjt.core.coin.dto.PointsHistoryResDto">
+        /* 최종 포인트 조회 */
         select
-              points_amount
-            , history_id
+        points_amount
+        , history_id
+        , user_id
         from points_history
-         where user_id = #{userId}
-         order by reg_dt desc
+        where user_id = #{userId}
+        order by reg_dt desc, history_id desc
         limit 1;
     </select>
 

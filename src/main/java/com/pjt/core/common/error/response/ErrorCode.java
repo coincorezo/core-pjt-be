@@ -34,8 +34,8 @@ public enum ErrorCode {
     NOT_EQUALS_USER("member", "일치하지 않는 회원입니다."),
 
     //coin
-    NO_COIN("member", "코인이 없습니다");
-
+    NO_COIN("coin", "차감 될 코인이 없습니다."),
+    NOT_COIN("coin", "적립 될 코인 값이 맞지 않습니다.");
 
     private final String code;
     private final String message;
