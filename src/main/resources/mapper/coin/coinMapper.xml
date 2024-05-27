@@ -6,14 +6,14 @@
             resultType="com.pjt.core.coin.dto.PointsHistoryResDto">
         /*포인트 이용 내역 */
         select
-        history_id /*히스토리 ID*/
+        history_id              /*히스토리 ID*/
         , user_id
-        , points_change /*포인트 적립,차감 값*/
-        , points_amount /*포인트 total */
-        , reason /*포인트 내역*/
+        , points_change         /*포인트 적립,차감 값*/
+        , points_amount         /*포인트 total */
+        , reason                /*포인트 내역*/
         , date_format(reg_dt, '%y.%m.%d') as reg_dt
         , reg_dt as reg_dt2
-        , coin_type /*적립,차감 type*/
+        , coin_type             /*적립,차감 type*/
         from points_history
         <where>
             <choose> <!--start, end 날짜를 안가져 올 경우 오늘 날부터 이전 한달 조회 -->
@@ -35,6 +35,7 @@
         </where>
         order by reg_dt2 desc, history_id desc
     </select>
+
     <insert id="saveCoin" parameterType="com.pjt.core.coin.dto.CreateCoinReqDto">
         /*포인트 적립 , 차감 내역 저장 */
         insert

@@ -5,6 +5,9 @@ import java.util.List;
 
 import com.pjt.core.board.dto.*;
 import com.pjt.core.board.exception.BoardException;
+import com.pjt.core.coin.dto.CreateCoinReqDto;
+import com.pjt.core.coin.dto.Reason;
+import com.pjt.core.coin.service.CoinService;
 import com.pjt.core.common.ApiResponse;
 import com.pjt.core.common.category.service.CategoryCoinService;
 import com.pjt.core.common.error.exception.NoDataException;
@@ -27,6 +30,8 @@ public class BoardService {
     private UserService userService;
     @Autowired
     private CategoryCoinService categoryCoinService;
+    @Autowired
+    private CoinService coinService;
 
     /**
      * <pre>
@@ -51,28 +56,32 @@ public class BoardService {
      */
     public CreateBoardResDto insertBoard(CreateBoardReqDto boardReqDto
             /*,MultipartHttpServletRequest multiRequest*/) throws Exception {
-        //todo : 아이디, 코인 적립 보드 등록할 때
-        //프론트에서 보내주는 값이
-        //카테고리랑
-        //코인 값 맞는지
-        //값만 확인 하면 되는거죠?
-        //CategoryCoinService.getCategoryCoinByCategory(String category)
-        //코인 적립 서비스 가져오기
-        //id비교 하기
 
-        int coin = categoryCoinService.getCategoryCoinByCategory(boardReqDto.getCategory());
-        if (coin != boardReqDto.getCoin()) {
-            throw new BoardException(ErrorCode.NOT_COIN);
-        }
+        CurrentUser currentUser = userService.getLoginUser();
+        // userId 일치 하는지 확인
+        currentUser.validUserId(boardReqDto.getBoardWriter());
+
         CreateBoardResDto boardResDto = new CreateBoardResDto();
-        /*insert*/
+        // board insert
         int saveCount = boardMapper.insertBoard(boardReqDto);
         if (saveCount == 0) {
             throw new BoardException(ErrorCode.NOT_SAVE);
-
         }
-        boardResDto.setBoardId(boardReqDto.getBoardId());
 
+        // coin 값 확인하기
+        int coin = categoryCoinService.getCategoryCoinByCategory(boardReqDto.getCategory());
+        // coin insert
+        CreateCoinReqDto coinReqDto = new CreateCoinReqDto();
+        coinReqDto.setPointsChange(coin);
+        coinReqDto.setReason(Reason.valueOf("BOARD"));
+        coinReqDto.setCoinReason(coinReqDto.getReason().getName());
+        coinReqDto.setCoinType(coinReqDto.getReason().getDescription());
+        coinReqDto.setUserId(currentUser.getId());
+        coinService.saveCoin(coinReqDto);
+
+        // res 값
+        boardResDto.setBoardId(boardReqDto.getBoardId());
+        boardResDto.setCoin(coin);
 
         return boardResDto;
     }
@@ -112,7 +121,11 @@ public class BoardService {
      * @return CreateBoardResDto
      */
     public CreateBoardResDto updateBoard(UpdateBoardReqDto updateBoardReqDto) {
-        //todo : 로그인정보 맞는 확인 후 수정
+
+
+        CurrentUser currentUser = userService.getLoginUser();
+        // userId 일치 하는지 확인
+        currentUser.validUserId(updateBoardReqDto.getBoardWriter());
 
         /* 게시글 여부 확인*/
         this.checkValid(updateBoardReqDto.getBoardId());
@@ -138,10 +151,10 @@ public class BoardService {
      * @return CreateBoardResDto
      */
     public CreateBoardResDto deleteBoard(UpdateBoardReqDto updateBoardReqDto) {
-        //todo : 로그인정보 맞는 확인 후  삭제
         CurrentUser currentUser = userService.getLoginUser();
-        //if(id === id) {}
-        this.checkValid(updateBoardReqDto.getBoardId());
+        // userId 일치 하는지 확인
+        currentUser.validUserId(updateBoardReqDto.getBoardWriter());
+
         /* 게시글 여부 확인 후 boardStatus DELETE 변경*/
         CreateBoardResDto updateBoard = new CreateBoardResDto();
 
@@ -176,6 +189,10 @@ public class BoardService {
      */
     public CreateBoardResDto insertReply(CreateReplyReqDto replyReqDto) {
         // todo : 등록자 id정보 받아오기
+
+        CurrentUser currentUser = userService.getLoginUser();
+        // userId 일치 하는지 확인
+        currentUser.validUserId(replyReqDto.getRegId());
         /* 게시글 여부 확인 */
         ReadBoardDtlResDto readBoardDtlResDto = this.checkValid(replyReqDto.getBoardId());
 

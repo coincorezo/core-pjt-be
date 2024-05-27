@@ -129,8 +129,8 @@
         SELECT reply_id
              , board_id
              , reply_comment
-             , DATE_FORMAT(reg_dt, '%Y-%m-%d %H:%i:%s')    AS reg_dt
-             , DATE_FORMAT(update_dt, '%Y-%m-%d %H:%i:%s') AS update_dt
+             , reg_dt
+             , update_dt
              , use_yn
         FROM reply
         where board_id = #{boardId}
@@ -143,11 +143,13 @@
         INTO reply
         ( board_id
         , reply_comment
+        , reg_id
         , reg_dt
         , update_dt
         , use_yn)
         VALUES ( #{boardId}
                , #{replyComment}
+               , #{regId}
                , now()
                , now()
                , #{useYn})
