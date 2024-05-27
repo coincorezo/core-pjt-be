@@ -1,9 +1,8 @@
 package com.pjt.core.emoticon.service;
 
-import com.pjt.core.emoticon.dto.ReadEmoticonDetailResponseDto;
-import com.pjt.core.emoticon.dto.ReadEmoticonRequestDto;
-import com.pjt.core.emoticon.dto.ReadEmoticonResponseDto;
-import com.pjt.core.emoticon.dto.EmoticonDetail;
+import com.pjt.core.board.dto.FileResponseDto;
+import com.pjt.core.board.service.FileService;
+import com.pjt.core.emoticon.dto.*;
 import com.pjt.core.emoticon.entity.EmoticonImg;
 import com.pjt.core.emoticon.repository.EmoticonMapper;
 import com.pjt.core.favorite.dto.CreateFavoriteRequestDto;
@@ -17,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +43,8 @@ public class EmoticonService {
     private UserMapper userMapper;
     @Autowired
     private FavoriteService favoriteService;
+    @Autowired
+    private FileService fileService;
 
 
     /*
@@ -172,5 +175,64 @@ public class EmoticonService {
         favoriteService.deleteFavorite(createFavoriteRequestDto);
         
         return "삭제 되었습니다.";
+    }
+
+    /* 
+     * <pre>
+     * 이모티콘 등록
+     * </pre>
+     *
+     * @author      : jayeon
+     * @date        : 2024-05-27
+     * @param       : 
+     * @return      : 
+     * @throws      : 
+    */
+    public String createEmoticon(CreateEmoticonRequestDto dto, List<CreateEmoticonDetailRequestDto> detailList, MultipartFile[] files) throws IOException {
+        CurrentUser currentUser = userService.getLoginUser();
+        dto.setUserId(currentUser.getId());
+
+        // [1]. 이모티콘 등록
+        int insertResult = emoticonMapper.createEmoticon(dto);
+
+        if(insertResult > 0) {
+            int index = 1;
+
+            // [2]. 이모티콘 상세 등록
+            for(CreateEmoticonDetailRequestDto detail : detailList) {
+                String emoticonDetailId = dto.getEmoticonId() + "_" + index;
+
+                detail.setEmoticonId(dto.getEmoticonId());
+                detail.setEmoticonDetailId(emoticonDetailId);
+
+                // 상세 이모티콘 정보 등록
+                emoticonMapper.createEmoticonDetail(detail);
+                // 상세 이모티콘 이미지 저장 (TODO: 이렇게 index - 1 값으로 넣었을 때 혹시나 IndexOutOfBoudsException 없을지 생각해보기)
+                insertEmoticonImage(detail, files[index - 1]);
+                index++;
+            }
+        }
+
+        return "이모티콘이 등록 됐습니다.";
+    }
+
+    /*
+     * <pre>
+     * 이모티콘 파일 등록(파일 처리)
+     * </pre>
+     *
+     * @author      : jayeon
+     * @date        : 2024-05-27
+     * @param       :
+     * @return      :
+     * @throws      :
+    */
+    public void insertEmoticonImage(CreateEmoticonDetailRequestDto detail, MultipartFile file) throws IOException {
+        // [1]. 파일 물리적 저장 처리
+        FileResponseDto savedFile = fileService.uploadSingleImage(file);
+        savedFile.setEmoticonDetailId(detail.getEmoticonDetailId());
+
+        // [2]. 파일 논리적 저장 처리
+        emoticonMapper.insertImoticon(savedFile);
     }
 }
