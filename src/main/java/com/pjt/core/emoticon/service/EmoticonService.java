@@ -63,6 +63,15 @@ public class EmoticonService {
         dto.setSearchCode(searchCode);
 
         List<ReadEmoticonResponseDto> list = emoticonMapper.getEmoticonList(dto);
+
+        //TODO 대표 이미지를 가지고 오려면 detail을 조회해서 emoticon_detail_id를 찾은다음
+        //이미지를 찾아야함
+        /*
+        for(ReadEmoticonResponseDto item : list) {
+            List<EmoticonDetail> detailList = emoticonMapper.getDetailEmoticon(item.getEmoticonId());
+        }
+        */
+
         return list;
     }
 
@@ -94,6 +103,17 @@ public class EmoticonService {
         List<EmoticonDetail> detailEmoticons = emoticonMapper.getDetailEmoticon(emoticonId);
         dto.setEmoticonDetailList(detailEmoticons);
 
+        // 이미지 조회
+        for(EmoticonDetail detail : detailEmoticons) {
+            EmoticonImg img = emoticonMapper.getEmoticonImg(detail.getEmoticonDetailId());
+            detail.setEmoticonImgNo(img.getEmoticonImgNo());
+            detail.setEmoticonDetailId(img.getEmoticonDetailId());
+            detail.setEmoticonImgNm(img.getEmoticonImgNm());
+            detail.setImgExtNm(img.getImgExtNm());
+            detail.setImgFileSize(img.getImgFileSize());
+            detail.setFileUrlPath(img.getFileUrlPath());
+        }
+        
         return dto;
     }
 
@@ -130,6 +150,17 @@ public class EmoticonService {
         return "등록 되었습니다.";
     }
 
+    /* 
+     * <pre>
+     * 이모티콘 좋아요 삭제하기
+     * </pre>
+     *
+     * @author      : jayeon
+     * @date        : 2024-05-27
+     * @param       : Integer
+     * @return      : String
+     * @throws      : 
+    */
     public String deleteFavorite(Integer emoticonId) {
         // 사용자 정보
         CurrentUser currentUSer = userService.getLoginUser();

@@ -88,6 +88,20 @@
          where a.emoticon_id = #{emoticonId}
     </select>
 
+    <!-- 이모티콘 이미지 조회 -->
+    <select id="getEmoticonImg"
+            parameterType="string"
+            resultType="com.pjt.core.emoticon.entity.EmoticonImg">
+        select
+              emoticon_img_no
+            , emoticon_detail_id
+            , emoticon_img_nm
+            , img_ext_nm
+            , img_file_size
+            , file_url_path
+          from emoticon_img
+         where emoticon_detail_id = #{emoticonDetailId}
+    </select>
 
 
 </mapper>

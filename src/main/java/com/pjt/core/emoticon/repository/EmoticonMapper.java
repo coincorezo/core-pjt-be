@@ -22,5 +22,5 @@ public interface EmoticonMapper {
     List<EmoticonDetail> getDetailEmoticon(Integer emoticonId);
     
     // 이모티콘 이미지 정보 조회
-    EmoticonImg getEmoticonImg(EmoticonDetail emoticonDetail);
+    EmoticonImg getEmoticonImg(String emoticonDetailId);
 }
