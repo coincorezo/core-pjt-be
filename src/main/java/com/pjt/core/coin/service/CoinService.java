@@ -87,7 +87,7 @@ public class CoinService {
 
         // coin insert
         CreateCoinResDto coinResDto = new CreateCoinResDto();
-        
+
         coinReqDto.setUserId(currentUser.getId());
         coinReqDto.setCoinReason(coinReqDto.getReason().getName());
         coinReqDto.setCoinType(coinReqDto.getReason().getDescription());
@@ -114,7 +114,30 @@ public class CoinService {
 
         CurrentUser currentUser = userService.getLoginUser();
         currentUser.validUserId(pointsHistoryReqDto.getUserId());
+        PointsHistoryResDto pointsHistoryResDto = coinMapper.getMyCoin(pointsHistoryReqDto);
 
-        return coinMapper.getMyCoin(pointsHistoryReqDto);
+        this.getDisappearCoin(pointsHistoryReqDto);
+        return pointsHistoryResDto;
+    }
+
+    /**
+     * <pre>
+     * 나의 소멸 예정 코인 조회
+     * </pre>
+     *
+     * @param : pointsHistoryReqDto
+     * @return :PointsHistoryResDto
+     * @throws :
+     * @author : KangMinJi (kmj0701@coremethod.co.kr)
+     * @date : 2024-05-24
+     */
+    public int getDisappearCoin(PointsHistoryReqDto pointsHistoryReqDto) {
+
+        CurrentUser currentUser = userService.getLoginUser();
+        currentUser.validUserId(pointsHistoryReqDto.getUserId());
+
+        int disappearCoin = coinMapper.getDisappearCoin(pointsHistoryReqDto);
+
+        return disappearCoin;
     }
 }

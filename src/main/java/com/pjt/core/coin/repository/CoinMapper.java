@@ -13,6 +13,8 @@ public interface CoinMapper {
     void saveCoin(CreateCoinReqDto coinReqDto);
 
     List<PointsHistoryResDto> getCointSearch(PointsHistoryReqDto pointsHistoryReqDto);
-    
+
     PointsHistoryResDto getMyCoin(PointsHistoryReqDto pointsHistoryReqDto);
+
+    int getDisappearCoin(PointsHistoryReqDto pointsHistoryReqDto);
 }

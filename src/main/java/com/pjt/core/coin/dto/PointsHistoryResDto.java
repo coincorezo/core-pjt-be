@@ -28,6 +28,9 @@ public class PointsHistoryResDto {
     @Schema(description = "최종포인트")
     private int pointsAmount;
 
+    @Schema(description = "소멸 예정 포인트")
+    private int disappear;
+
     @Schema(description = "변경사유")
     private String reason;
 

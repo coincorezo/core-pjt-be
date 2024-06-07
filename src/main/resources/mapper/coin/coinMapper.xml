@@ -73,4 +73,30 @@
         limit 1;
     </select>
 
+
+    <select id="getDisappearCoin" resultType="int" parameterType="com.pjt.core.coin.dto.PointsHistoryReqDto">
+        select
+            points_amount
+             , user_id
+             , ( select
+                    sum(points_change)
+                  from points_history
+                 <where>
+                      <if test="userId !=null and userId != ''">
+                        user_id =#{userId}
+                      </if>
+                      and reg_dt between date_format(NOW() - INTERVAL 2 MONTH ,  '%Y-%m-01 00:00:00')
+                                     and LAST_DAY(NOW() -interval 2 MONTH) + interval 1 day - interval 1 SECOND
+                 </where>
+                )  as points_change
+        from points_history
+        <where>
+            <if test="userId !=null and userId != ''">
+              user_id = #{userId}
+            </if>
+        </where>
+        order by reg_dt desc, history_id desc
+        limit 1;
+    </select>
+
 </mapper>
