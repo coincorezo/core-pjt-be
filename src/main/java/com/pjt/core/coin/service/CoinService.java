@@ -1,10 +1,7 @@
 package com.pjt.core.coin.service;
 
 import com.pjt.core.coin.CoinException.CoinException;
-import com.pjt.core.coin.dto.CreateCoinReqDto;
-import com.pjt.core.coin.dto.CreateCoinResDto;
-import com.pjt.core.coin.dto.PointsHistoryReqDto;
-import com.pjt.core.coin.dto.PointsHistoryResDto;
+import com.pjt.core.coin.dto.*;
 import com.pjt.core.coin.repository.CoinMapper;
 import com.pjt.core.common.error.response.ErrorCode;
 import com.pjt.core.user.dto.CurrentUser;
@@ -115,8 +112,10 @@ public class CoinService {
         CurrentUser currentUser = userService.getLoginUser();
         currentUser.validUserId(pointsHistoryReqDto.getUserId());
         PointsHistoryResDto pointsHistoryResDto = coinMapper.getMyCoin(pointsHistoryReqDto);
-
-        this.getDisappearCoin(pointsHistoryReqDto);
+        CoinExpireReqDto coinExpireReqDto = new CoinExpireReqDto();
+        coinExpireReqDto.setUserId(pointsHistoryReqDto.getUserId());
+        List<PointsHistoryResDto> coinResDto = this.getDisappearCoin(coinExpireReqDto);
+        pointsHistoryResDto.setDisappear(coinResDto.get(0).getDisappear());
         return pointsHistoryResDto;
     }
 
@@ -131,13 +130,44 @@ public class CoinService {
      * @author : KangMinJi (kmj0701@coremethod.co.kr)
      * @date : 2024-05-24
      */
-    public int getDisappearCoin(PointsHistoryReqDto pointsHistoryReqDto) {
+    public List<PointsHistoryResDto> getDisappearCoin(CoinExpireReqDto coinExpireReqDto) {
 
-        CurrentUser currentUser = userService.getLoginUser();
-        currentUser.validUserId(pointsHistoryReqDto.getUserId());
+        // 가입자  중  총 소멸 코인, 총 코인 값  or userId 있을경우 값 비교해서 userId값 구하기
+        if (!("").equals(coinExpireReqDto.getUserId()) && coinExpireReqDto.getUserId() != null) {
+            CurrentUser currentUser = userService.getLoginUser();
+            currentUser.validUserId(coinExpireReqDto.getUserId());
+        }
+        //    소멸코인 , 총 코인 값 구하기 (ID에따라서)
+        List<PointsHistoryResDto> pointsHistoryResDto = coinMapper.getDisappearCoin(coinExpireReqDto);
 
-        int disappearCoin = coinMapper.getDisappearCoin(pointsHistoryReqDto);
+        // 총      소멸
+        //2000 -3000 => -1000   =>총 - 처리
+        //2000 -1000 => 1000 =>양수 나올 경우 소멸 포인트를 -처리
+        //2000 -2000 => 0  => 0이 나올경우 총 포인트 마이너스 처리
+        //50000 - 2000 =>48,000
+        for (PointsHistoryResDto resDto : pointsHistoryResDto) {
+            //  소멸 포인트 값 구하기  => A: 총코인 , B: 소멸예정포인트
+            int disappear = resDto.getPointsAmount() - resDto.getDisappear() <= 0 ? resDto.getPointsAmount() : resDto.getDisappear();
+            if (disappear == resDto.getPointsAmount()) {
+                resDto.setDisappear(disappear);
 
-        return disappearCoin;
+            } else {
+                resDto.setDisappear(disappear);
+
+            }
+
+        }
+        return pointsHistoryResDto;
     }
+    /**
+     * <pre>
+     *  코인 소멸 조회
+     * </pre>
+     *
+     * @param : pointsHistoryReqDto
+     * @return :PointsHistoryResDto
+     * @throws :
+     * @author : KangMinJi (kmj0701@coremethod.co.kr)
+     * @date : 2024-05-24
+     */
 }

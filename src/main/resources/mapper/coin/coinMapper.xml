@@ -6,14 +6,14 @@
             resultType="com.pjt.core.coin.dto.PointsHistoryResDto">
         /*포인트 이용 내역 */
         select
-        history_id              /*히스토리 ID*/
-        , user_id
-        , points_change         /*포인트 적립,차감 값*/
-        , points_amount         /*포인트 total */
-        , reason                /*포인트 내역*/
-        , date_format(reg_dt, '%y.%m.%d') as reg_dt
-        , reg_dt as reg_dt2
-        , coin_type             /*적립,차감 type*/
+                history_id                                      /*히스토리 ID*/
+                , user_id
+                , points_change                         /*포인트 적립,차감 값*/
+                , points_amount                        /*포인트 total */
+                , reason                                    /*포인트 내역*/
+                , date_format(reg_dt, '%y.%m.%d') as reg_dt
+                , reg_dt as reg_dt2
+                , coin_type                              /*적립,차감 type*/
         from points_history
         <where>
             <choose> <!--start, end 날짜를 안가져 올 경우 오늘 날부터 이전 한달 조회 -->
@@ -74,29 +74,55 @@
     </select>
 
 
-    <select id="getDisappearCoin" resultType="int" parameterType="com.pjt.core.coin.dto.PointsHistoryReqDto">
+    <select id="getDisappearCoin" resultType="com.pjt.core.coin.dto.PointsHistoryResDto" parameterType="com.pjt.core.coin.dto.CoinExpireReqDto">
         select
-            points_amount
-             , user_id
-             , ( select
-                    sum(points_change)
-                  from points_history
-                 <where>
-                      <if test="userId !=null and userId != ''">
-                        user_id =#{userId}
-                      </if>
-                      and reg_dt between date_format(NOW() - INTERVAL 2 MONTH ,  '%Y-%m-01 00:00:00')
-                                     and LAST_DAY(NOW() -interval 2 MONTH) + interval 1 day - interval 1 SECOND
-                 </where>
-                )  as points_change
-        from points_history
+                  points_amount
+                , user_id
+                , (select
+                        sum(points_change)
+                    from points_history c
+                    where  reg_dt between  date_format(NOW() - INTERVAL 2 MONTH ,  '%Y-%m-01 00:00:00')
+                                                    and LAST_DAY(NOW() -interval 2 MONTH) + interval 1 day - interval 1 SECOND
+                        and c.user_id  = b.user_id
+                    group by user_id
+                ) as disappear
+        from points_history b
+        inner join ( select
+                                  a.user_id as id
+                                , Max(a.reg_dt) as regdt
+                          from points_history a
+                          group by a.user_id
+                        ) as a
+                    on a.regdt = b.reg_dt
+                 and a.id = b.user_id
         <where>
-            <if test="userId !=null and userId != ''">
-              user_id = #{userId}
-            </if>
+        <if test="userId != null  and userId !=''">
+             b.user_id = #{userId}
+        </if>
         </where>
-        order by reg_dt desc, history_id desc
-        limit 1;
+        HAVING COALESCE(disappear, 0) <![CDATA[>]]> 0;
+<!--        select-->
+<!--            points_amount-->
+<!--             , user_id-->
+<!--             , ( select-->
+<!--                    sum(points_change)-->
+<!--                  from points_history-->
+<!--                 <where>-->
+<!--                      <if test="userId !=null and userId != ''">-->
+<!--                        user_id =#{userId}-->
+<!--                      </if>-->
+<!--                      and reg_dt between date_format(NOW() - INTERVAL 2 MONTH ,  '%Y-%m-01 00:00:00')-->
+<!--                                     and LAST_DAY(NOW() -interval 2 MONTH) + interval 1 day - interval 1 SECOND-->
+<!--                 </where>-->
+<!--                )  as points_change-->
+<!--        from points_history-->
+<!--        <where>-->
+<!--            <if test="userId !=null and userId != ''">-->
+<!--              user_id = #{userId}-->
+<!--            </if>-->
+<!--        </where>-->
+<!--        order by reg_dt desc, history_id desc-->
+<!--        limit 1;-->
     </select>
 
 </mapper>

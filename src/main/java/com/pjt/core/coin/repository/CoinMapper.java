@@ -1,5 +1,6 @@
 package com.pjt.core.coin.repository;
 
+import com.pjt.core.coin.dto.CoinExpireReqDto;
 import com.pjt.core.coin.dto.CreateCoinReqDto;
 import com.pjt.core.coin.dto.PointsHistoryReqDto;
 import com.pjt.core.coin.dto.PointsHistoryResDto;
@@ -16,5 +17,6 @@ public interface CoinMapper {
 
     PointsHistoryResDto getMyCoin(PointsHistoryReqDto pointsHistoryReqDto);
 
-    int getDisappearCoin(PointsHistoryReqDto pointsHistoryReqDto);
+
+    List<PointsHistoryResDto> getDisappearCoin(CoinExpireReqDto coinExpireReqDto);
 }
