@@ -4,8 +4,10 @@ import com.pjt.core.coin.CoinException.CoinException;
 import com.pjt.core.coin.dto.*;
 import com.pjt.core.coin.repository.CoinMapper;
 import com.pjt.core.common.error.response.ErrorCode;
+import com.pjt.core.common.scheduler.service.SchedulerService;
 import com.pjt.core.user.dto.CurrentUser;
 import com.pjt.core.user.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,11 +24,15 @@ import java.util.List;
  * @date :  2024-05-24
  */
 @Service
+@RequiredArgsConstructor
 public class CoinService {
-    @Autowired
-    CoinMapper coinMapper;
-    @Autowired
-    UserService userService;
+
+    private final CoinMapper coinMapper;
+
+    private final UserService userService;
+
+    private final SchedulerService schedulerService;
+
 
     /**
      * <pre>
@@ -115,7 +121,9 @@ public class CoinService {
         CoinExpireReqDto coinExpireReqDto = new CoinExpireReqDto();
         coinExpireReqDto.setUserId(pointsHistoryReqDto.getUserId());
         List<PointsHistoryResDto> coinResDto = this.getDisappearCoin(coinExpireReqDto);
-        pointsHistoryResDto.setDisappear(coinResDto.get(0).getDisappear());
+        if (coinResDto.size() > 0) {
+            pointsHistoryResDto.setDisappear(coinResDto.get(0).getDisappear());
+        }
         return pointsHistoryResDto;
     }
 
@@ -131,6 +139,7 @@ public class CoinService {
      * @date : 2024-05-24
      */
     public List<PointsHistoryResDto> getDisappearCoin(CoinExpireReqDto coinExpireReqDto) {
+        // scheduler
 
         // 가입자  중  총 소멸 코인, 총 코인 값  or userId 있을경우 값 비교해서 userId값 구하기
         if (!("").equals(coinExpireReqDto.getUserId()) && coinExpireReqDto.getUserId() != null) {

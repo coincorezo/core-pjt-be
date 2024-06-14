@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pjt.core.common.scheduler.mapper.SchedulerMapper">
+
+<select id="getSchedulerData" parameterType="com.pjt.core.common.scheduler.dto.SchedulerDto">
+
+    SELECT
+        data
+    FROM
+        schedul_data
+    WHERE
+        type = 'expire'
+      AND reg_dt = (SELECT MAX(reg_dt) FROM schedul_data WHERE type = 'expire');
+
+
+</select>
+</mapper>

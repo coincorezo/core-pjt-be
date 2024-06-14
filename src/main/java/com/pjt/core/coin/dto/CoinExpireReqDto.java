@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.time.LocalDate;
+
 @Data
 public class CoinExpireReqDto {
 
@@ -16,6 +17,6 @@ public class CoinExpireReqDto {
     @Schema(description = "종료날짜 / 2024-05-22")
     private LocalDate endDate;
 
-    @Schema(description = "조회기간 /1M/3M/6M")
-    private String dateFlg;
+    @Schema(description = "조회기간 /1/3/6")
+    private int dateFlg;
 }
